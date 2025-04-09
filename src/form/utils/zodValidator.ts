@@ -1,6 +1,6 @@
 import { ZodTypeAny } from 'zod';
 
-const zodValidator = (schema: ZodTypeAny) => {
+export const zodValidator = (schema: ZodTypeAny) => {
   return (values: any) => {
     const result = schema.safeParse(values);
     if (result.success) return;
@@ -11,5 +11,3 @@ const zodValidator = (schema: ZodTypeAny) => {
     return firstError?.message;
   };
 };
-
-export default zodValidator;

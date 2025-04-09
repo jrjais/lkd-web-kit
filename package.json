@@ -1,6 +1,5 @@
 {
   "name": "lkd-web-kit",
-  "private": true,
   "version": "0.0.0",
   "description": "A template for creating React component libraries with Vite.",
   "author": "LKD",
@@ -62,6 +61,7 @@
   "peerDependencies": {
     "@mantine/core": "^7.17.4",
     "@mantine/hooks": "^7.17.4",
+    "ky": "^1.8.0",
     "next": "^15.2.5",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
