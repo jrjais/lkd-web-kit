@@ -2,10 +2,9 @@ import { InfiniteData } from '@tanstack/react-query';
 import { RefObject, useEffect } from 'react';
 import { InfiniteQueryHookResult } from 'react-query-kit';
 import { useOnScrollProgress } from './useOnScrollProgress';
-import ApiPagination from 'src/types/api-pagination';
 
 export const useFetchNextPageOnScroll = (
-  infinity: InfiniteQueryHookResult<InfiniteData<ApiPagination<unknown>, number>, Error>,
+  infinity: InfiniteQueryHookResult<InfiniteData<{ data: unknown[] }, number>, Error>,
   elementRef?: RefObject<HTMLElement | null>,
 ) => {
   useOnScrollProgress(
