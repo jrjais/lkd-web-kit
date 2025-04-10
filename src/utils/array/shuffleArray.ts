@@ -1,4 +1,4 @@
-const shuffleArray = <T>(array: T[]) => {
+export const shuffleArray = <T>(array: T[]) => {
   const shuffledArray = [...array];
   let currentIndex = shuffledArray.length,
     randomIndex;
@@ -12,11 +12,9 @@ const shuffleArray = <T>(array: T[]) => {
     // And swap it with the current element.
     [shuffledArray[currentIndex], shuffledArray[randomIndex]] = [
       shuffledArray[randomIndex],
-      shuffledArray[currentIndex]
+      shuffledArray[currentIndex],
     ];
   }
 
   return shuffledArray;
 };
-
-export default shuffleArray;

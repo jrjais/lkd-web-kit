@@ -2,7 +2,7 @@ interface PageParams extends Record<string, string | string[] | undefined> {
   // shared params
 }
 
-export default interface PageProps {
+export interface PageProps {
   params: Promise<PageParams>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
