@@ -22,9 +22,8 @@ export default defineConfig({
     minify: false,
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
-      fileName: (format, entryName) => `${entryName}.${format}.js`,
-      cssFileName: 'style',
-      formats: ['es', 'cjs'],
+      fileName: 'index',
+      name: 'lkd-web-kit',
     },
     rollupOptions: {
       // Exclude peer dependencies from the bundle to reduce bundle size
