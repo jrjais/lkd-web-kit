@@ -1,12 +1,14 @@
 /// <reference types="vitest/config" />
-import { join, resolve, dirname } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import react from '@vitejs/plugin-react-swc';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 
 import { peerDependencies } from './package.json';
+import { fileURLToPath } from 'node:url';
 
-console.log(['react/jsx-runtime', ...Object.keys(peerDependencies)]);
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
 export default defineConfig({
   plugins: [
     react(),
@@ -20,18 +22,18 @@ export default defineConfig({
     minify: false,
     lib: {
       entry: {
-        components: resolve(dirname(''), join('src', 'components', 'index.ts')),
-        consts: resolve(dirname(''), join('src', 'consts', 'index.ts')),
-        contexts: resolve(dirname(''), join('src', 'contexts', 'index.ts')),
-        form: resolve(dirname(''), join('src', 'form', 'index.ts')),
-        hocs: resolve(dirname(''), join('src', 'hocs', 'index.ts')),
-        hooks: resolve(dirname(''), join('src', 'hooks', 'index.ts')),
-        mantine: resolve(dirname(''), join('src', 'mantine', 'index.ts')),
-        utils: resolve(dirname(''), join('src', 'utils', 'index.ts')),
-        types: resolve(dirname(''), join('src', 'types', 'index.ts')),
+        components: resolve(__dirname, 'src/components/index.ts'),
+        consts: resolve(__dirname, 'src/consts/index.ts'),
+        contexts: resolve(__dirname, 'src/contexts/index.ts'),
+        form: resolve(__dirname, 'src/form/index.ts'),
+        hocs: resolve(__dirname, 'src/hocs/index.ts'),
+        hooks: resolve(__dirname, 'src/hooks/index.ts'),
+        mantine: resolve(__dirname, 'src/mantine/index.ts'),
+        utils: resolve(__dirname, 'src/utils/index.ts'),
+        types: resolve(__dirname, 'src/types/index.ts'),
         // Add other entry points here if needed
       },
-      fileName: 'index',
+      fileName: (format, entryName) => `${entryName}.${format}.js`,
       cssFileName: 'style',
       formats: ['es', 'cjs'],
     },

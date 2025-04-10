@@ -1,6 +1,6 @@
 {
   "name": "lkd-web-kit",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A template for creating React component libraries with Vite.",
   "author": "LKD",
   "license": "MIT",
@@ -8,104 +8,52 @@
   "files": [
     "dist"
   ],
-  "sideEffects": [
-    "**/*.css"
-  ],
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "exports": {
-    "./components": {
-      "import": {
-        "types": "./dist/components/index.d.ts",
-        "default": "./dist/components/index.js"
-      },
-      "require": {
-        "types": "./dist/components/index.d.ts",
-        "default": "./dist/components/index.cjs"
-      }
-    },
-    "./consts": {
-      "import": {
-        "types": "./dist/consts/index.d.ts",
-        "default": "./dist/consts/index.js"
-      },
-      "require": {
-        "types": "./dist/consts/index.d.ts",
-        "default": "./dist/consts/index.cjs"
-      }
-    },
-    "./contexts" :{
-      "import": {
-        "types": "./dist/contexts/index.d.ts",
-        "default": "./dist/contexts/index.js"
-      },
-      "require": {
-        "types": "./dist/contexts/index.d.ts",
-        "default": "./dist/contexts/index.cjs"
-      }
-    },
-    "./form": {
-      "import": {
-        "types": "./dist/form/index.d.ts",
-        "default": "./dist/form/index.js"
-      },
-      "require": {
-        "types": "./dist/form/index.d.ts",
-        "default": "./dist/form/index.cjs"
-      }
-    },
-    "./hocs": {
-      "import": {
-        "types": "./dist/hocs/index.d.ts",
-        "default": "./dist/hocs/index.js"
-      },
-      "require": {
-        "types": "./dist/hocs/index.d.ts",
-        "default": "./dist/hocs/index.cjs"
-      }
-    },
-
-    "./hooks": {
-      "import": {
-        "types": "./dist/hooks/index.d.ts",
-        "default": "./dist/hooks/index.js"
-      },
-      "require": {
-        "types": "./dist/hooks/index.d.ts",
-        "default": "./dist/hooks/index.cjs"
-      }
-    },
-    "./mantine":{
-      "import": {
-        "types": "./dist/mantine/index.d.ts",
-        "default": "./dist/mantine/index.js"
-      },
-      "require": {
-        "types": "./dist/mantine/index.d.ts",
-        "default": "./dist/mantine/index.cjs"
-      }
-    },
-    "./utils": {
-      "import": {
-        "types": "./dist/utils/index.d.ts",
-        "default": "./dist/utils/index.js"
-      },
-      "require": {
-        "types": "./dist/utils/index.d.ts",
-        "default": "./dist/utils/index.cjs"
-      }
-    },
-    "./types": {
-      "import": {
-        "types": "./dist/types/index.d.ts",
-        "default": "./dist/types/index.js"
-      },
-      "require": {
-        "types": "./dist/types/index.d.ts",
-        "default": "./dist/types/index.cjs"
-      }
-    }
+  "./components": {
+    "import": "./dist/components.es.js",
+    "require": "./dist/components.cjs.js",
+    "types": "./dist/components.d.ts"
+  },
+  "./consts": {
+    "import": "./dist/consts.es.js",
+    "require": "./dist/consts.cjs.js",
+    "types": "./dist/consts.d.ts"
+  },
+  "./contexts": {
+    "import": "./dist/contexts.es.js",
+    "require": "./dist/contexts.cjs.js",
+    "types": "./dist/contexts.d.ts"
+  },
+  "./form": {
+    "import": "./dist/form.es.js",
+    "require": "./dist/form.cjs.js",
+    "types": "./dist/form.d.ts"
+  },
+  "./hocs": {
+    "import": "./dist/hocs.es.js",
+    "require": "./dist/hocs.cjs.js",
+    "types": "./dist/hocs.d.ts"
+  },
+  "./hooks": {
+    "import": "./dist/hooks.es.js",
+    "require": "./dist/hooks.cjs.js",
+    "types": "./dist/hooks.d.ts"
+  },
+  "./mantine": {
+    "import": "./dist/mantine.es.js",
+    "require": "./dist/mantine.cjs.js",
+    "types": "./dist/mantine.d.ts"
+  },
+  "./utils": {
+    "import": "./dist/utils.es.js",
+    "require": "./dist/utils.cjs.js",
+    "types": "./dist/utils.d.ts"
+  },
+  "./types": {
+    "import": "./dist/types.es.js",
+    "require": "./dist/types.cjs.js",
+    "types": "./dist/types.d.ts"
+  }
   },
   "scripts": {
     "test": "vitest run",
