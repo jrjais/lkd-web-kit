@@ -1,6 +1,6 @@
 {
   "name": "lkd-web-kit",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A template for creating React component libraries with Vite.",
   "author": "LKD",
   "license": "MIT",
@@ -8,53 +8,9 @@
   "files": [
     "dist"
   ],
-  "exports": {
-  "./components": {
-    "import": "./dist/components.es.js",
-    "require": "./dist/components.cjs.js",
-    "types": "./dist/components.d.ts"
-  },
-  "./consts": {
-    "import": "./dist/consts.es.js",
-    "require": "./dist/consts.cjs.js",
-    "types": "./dist/consts.d.ts"
-  },
-  "./contexts": {
-    "import": "./dist/contexts.es.js",
-    "require": "./dist/contexts.cjs.js",
-    "types": "./dist/contexts.d.ts"
-  },
-  "./form": {
-    "import": "./dist/form.es.js",
-    "require": "./dist/form.cjs.js",
-    "types": "./dist/form.d.ts"
-  },
-  "./hocs": {
-    "import": "./dist/hocs.es.js",
-    "require": "./dist/hocs.cjs.js",
-    "types": "./dist/hocs.d.ts"
-  },
-  "./hooks": {
-    "import": "./dist/hooks.es.js",
-    "require": "./dist/hooks.cjs.js",
-    "types": "./dist/hooks.d.ts"
-  },
-  "./mantine": {
-    "import": "./dist/mantine.es.js",
-    "require": "./dist/mantine.cjs.js",
-    "types": "./dist/mantine.d.ts"
-  },
-  "./utils": {
-    "import": "./dist/utils.es.js",
-    "require": "./dist/utils.cjs.js",
-    "types": "./dist/utils.d.ts"
-  },
-  "./types": {
-    "import": "./dist/types.es.js",
-    "require": "./dist/types.cjs.js",
-    "types": "./dist/types.d.ts"
-  }
-  },
+  "main": "./dist/index.cjs.js",
+  "module": "./dist/index.es.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
@@ -75,7 +31,7 @@
     "@vitest/coverage-v8": "^3.1.1",
     "clsx": "^2.1.1",
     "eslint": "^9.24.0",
-    "eslint-config-prettier": "^10.1.1",
+    "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-jest-dom": "^5.5.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
@@ -83,7 +39,7 @@
     "jsdom": "^26.0.0",
     "prettier": "^3.5.3",
     "typescript": "^5.8.3",
-    "vite": "^6.2.5",
+    "vite": "^6.2.6",
     "vite-plugin-dts": "^4.5.3",
     "vitest": "^3.1.1"
   },

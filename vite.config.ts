@@ -21,18 +21,7 @@ export default defineConfig({
     target: 'esnext',
     minify: false,
     lib: {
-      entry: {
-        components: resolve(__dirname, 'src/components/index.ts'),
-        consts: resolve(__dirname, 'src/consts/index.ts'),
-        contexts: resolve(__dirname, 'src/contexts/index.ts'),
-        form: resolve(__dirname, 'src/form/index.ts'),
-        hocs: resolve(__dirname, 'src/hocs/index.ts'),
-        hooks: resolve(__dirname, 'src/hooks/index.ts'),
-        mantine: resolve(__dirname, 'src/mantine/index.ts'),
-        utils: resolve(__dirname, 'src/utils/index.ts'),
-        types: resolve(__dirname, 'src/types/index.ts'),
-        // Add other entry points here if needed
-      },
+      entry: resolve(__dirname, 'src/index.ts'),
       fileName: (format, entryName) => `${entryName}.${format}.js`,
       cssFileName: 'style',
       formats: ['es', 'cjs'],
