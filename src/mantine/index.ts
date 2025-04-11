@@ -1,2 +1,2 @@
 export * from './breakpointsWithPx';
-export * from './toTwColors';
+export * from './toTailwindColors';
