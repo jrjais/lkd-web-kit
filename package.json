@@ -1,6 +1,6 @@
 {
   "name": "lkd-web-kit",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "A template for creating React component libraries with Vite.",
   "author": "LKD",
   "license": "MIT",
@@ -62,5 +62,8 @@
     "react-hook-form": "^7.55.0",
     "react-query-kit": "^3.3.1",
     "zod": "^3.24.2"
+  },
+  "dependencies": {
+    "rollup-preserve-directives": "^1.1.3"
   }
 }

@@ -1,3 +1,4 @@
+'use client';
 import { Controller, ControllerProps } from 'react-hook-form';
 import { ZodTypeAny } from 'zod';
 import { zodValidator } from '../form';
