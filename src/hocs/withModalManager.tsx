@@ -1,5 +1,6 @@
-import { ModalProps } from "@mantine/core";
-import { useEffect, useState } from "react";
+'use client';
+import { ModalProps } from '@mantine/core';
+import { useEffect, useState } from 'react';
 
 export interface WithModalManagerProps {
   removeModal: () => void;
@@ -7,7 +8,7 @@ export interface WithModalManagerProps {
 }
 
 export const withModalManager = <P extends Object>(
-  WrappedComponent: React.ComponentType<P & ModalProps>
+  WrappedComponent: React.ComponentType<P & ModalProps>,
 ) => {
   const Component: React.FC<P & WithModalManagerProps & ModalProps> = ({
     removeModal,
@@ -28,7 +29,11 @@ export const withModalManager = <P extends Object>(
     }, [opened]);
 
     return (
-      <WrappedComponent {...(props as P)} opened={isOpen} onClose={onClose} />
+      <WrappedComponent
+        {...(props as P)}
+        opened={isOpen}
+        onClose={onClose}
+      />
     );
   };
 

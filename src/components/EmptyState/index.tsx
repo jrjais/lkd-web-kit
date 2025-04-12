@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { ComponentProps, ReactNode } from 'react';
-import Icon, { IconFC } from '../Icon';
+import { IconFC, Icon } from '../Icon';
 
 export interface EmptyProps extends ComponentProps<'div'> {
   label: ReactNode;
