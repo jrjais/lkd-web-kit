@@ -5,7 +5,7 @@ import { IconFC, Icon } from '../Icon';
 export interface EmptyProps extends ComponentProps<'div'> {
   label: ReactNode;
   action?: ReactNode;
-  icon: IconFC;
+  icon?: IconFC;
   size?: keyof typeof pxBySize;
 }
 
@@ -28,11 +28,13 @@ export const EmptyState = ({
       className={clsx('justfiy-center flex flex-col items-center gap-1', className)}
       {...props}
     >
-      <Icon
-        i={icon}
-        size={pxBySize[size]}
-        className="text-gray-2"
-      />
+      {icon && (
+        <Icon
+          i={icon}
+          size={pxBySize[size]}
+          className="text-gray-2"
+        />
+      )}
       <p className="text-gray-6 text-sm font-semibold">{label}</p>
       <div>{action}</div>
     </div>

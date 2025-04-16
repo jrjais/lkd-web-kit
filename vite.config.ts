@@ -17,14 +17,17 @@ const external = [
   ...Object.keys(devDependencies || {}),
 ];
 
-console.log(external);
-
 export default defineConfig({
   plugins: [
     react(),
     preserveDirectives(),
     dts({ rollupTypes: true }), // Output .d.ts files
   ],
+  resolve: {
+    alias: {
+      src: resolve(__dirname, './src'),
+    },
+  },
   build: {
     target: 'esnext',
     lib: {
