@@ -25,7 +25,10 @@ export const Form = <T extends FieldValues>({
     <FormProvider {...methods}>
       <Box
         component="form"
-        onSubmit={methods.handleSubmit(onSubmit, onSubmitError)}
+        onSubmit={(e) => {
+          e.stopPropagation();
+          methods.handleSubmit(onSubmit, onSubmitError)(e);
+        }}
         {...rest}
       />
     </FormProvider>
