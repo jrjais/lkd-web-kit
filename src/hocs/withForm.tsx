@@ -65,7 +65,7 @@ export const withForm = <P extends unknown>(
     );
   };
 
-  FormField.displayName = `withForm(${WrappedComponent.displayName})`;
+  FormField.displayName = `WithForm(${WrappedComponent.displayName})`;
 
   return FormField;
 };

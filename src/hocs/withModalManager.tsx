@@ -37,7 +37,7 @@ export const withModalManager = <P extends Object>(
     );
   };
 
-  Component.displayName = `withModalManager(${WrappedComponent.displayName})`;
+  Component.displayName = `WithModalManager(${WrappedComponent.displayName})`;
 
   return Component;
 };
