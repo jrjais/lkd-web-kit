@@ -6,6 +6,7 @@ import {
   Tooltip,
   Notification,
   MantineThemeOverride,
+  Portal,
 } from '@mantine/core';
 import { breakpointsWithPx } from './breakpoints-with-px';
 
@@ -37,6 +38,12 @@ export const myDefaultTheme: MantineThemeOverride = {
       defaultProps: {
         multiline: true,
         w: 300,
+      },
+    }),
+    // borrar en v8
+    Portal: Portal.extend({
+      defaultProps: {
+        reuseTargetNode: true,
       },
     }),
   },
