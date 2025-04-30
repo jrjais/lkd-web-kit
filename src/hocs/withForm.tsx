@@ -24,7 +24,7 @@ export type FormFieldProps<T = unknown> = Parameters<ControllerProps['render']>[
 
 export const withForm = <P extends unknown>(
   WrappedComponent: React.ComponentType<FormFieldProps<P>>,
-  getControllerProps?: (props: P) => Omit<Partial<ControllerProps>, 'render'>,
+  getControllerProps?: (fieldProps: P) => Omit<Partial<ControllerProps>, 'render'>,
 ) => {
   const FormField: React.FC<P & WithFormProps> = (props) => {
     const { validate, name = '', placeholder, label, description, ...withFormRestProps } = props;
@@ -40,7 +40,7 @@ export const withForm = <P extends unknown>(
         {...getControllerProps?.(props)}
         render={(renderProps) => {
           const {
-            fieldState: { isTouched, error },
+            fieldState: { error },
           } = renderProps;
 
           const fieldProps = {

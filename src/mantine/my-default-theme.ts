@@ -27,6 +27,8 @@ export const myDefaultTheme: MantineThemeOverride = {
     Select: Select.extend({
       defaultProps: {
         allowDeselect: false,
+        withCheckIcon: false,
+        clearable: true,
       },
     }),
     Menu: Menu.extend({
