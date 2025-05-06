@@ -12,7 +12,7 @@ export * from './base/FormNumberInput';
 export * from './base/FormRadioGroup';
 export * from './base/FormSelect';
 export * from './base/FormSelectInfinity';
-export * from './base/FormTextArea';
+export * from './base/FormTextarea';
 export * from './base/FormTextInput';
 export * from './base/FormTextInput';
 export * from './base/FormTimeInput';
