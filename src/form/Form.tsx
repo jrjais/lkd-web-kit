@@ -9,18 +9,20 @@ import {
 } from 'react-hook-form';
 
 // TODO: Completar el tipado con el schema usando z.output<schema> en el data del onSubmit
-interface FormProps<T extends FieldValues> extends BoxProps, ElementProps<'form', 'onSubmit'> {
-  methods: UseFormReturn<T, any, any>;
-  onSubmit?: SubmitHandler<T>;
-  onSubmitError?: SubmitErrorHandler<any>;
+interface FormProps<T extends FieldValues, TContext = any, TT extends T = T>
+  extends BoxProps,
+    ElementProps<'form', 'onSubmit'> {
+  methods: UseFormReturn<T, TContext, TT>;
+  onSubmit?: SubmitHandler<TT>;
+  onSubmitError?: SubmitErrorHandler<T>;
 }
 
-export const Form = <T extends FieldValues>({
+export const Form = <T extends FieldValues, TContext = any, TT extends T = T>({
   methods,
   onSubmit = () => {},
   onSubmitError,
   ...rest
-}: FormProps<T>) => {
+}: FormProps<T, TContext, TT>) => {
   return (
     <FormProvider {...methods}>
       <Box

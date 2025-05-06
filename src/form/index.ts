@@ -1,8 +1,8 @@
 export * from './Form';
 export * from './FormButtonSubmit';
 export * from './utils/zodValidator';
-export * from './utils/nullableInput';
-export * from './utils/optionalInput';
+export * from './utils/nullable-but-required';
+export * from './utils/optional-but-required';
 
 // fields
 export * from './base/FormCheckbox';
