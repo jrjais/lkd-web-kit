@@ -4,11 +4,9 @@ import { WithFormProps, withForm } from 'src/hocs';
 
 export type FormMultiSelectProps = MyMultiSelectProps & WithFormProps;
 
-const FormMultiSelect = withForm<FormMultiSelectProps>(({ field, props }) => (
+export const FormMultiSelect = withForm<FormMultiSelectProps>(({ field, props }) => (
   <MyMultiSelect
     {...field}
     {...props}
   />
 ));
-
-export default FormMultiSelect;
