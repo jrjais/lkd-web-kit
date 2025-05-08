@@ -13,3 +13,4 @@ export * from './MyTextarea';
 export * from './MyTextInput';
 export * from './MyTimeInput';
 export * from './SelectInfinity';
+export * from './MyMultiSelect';

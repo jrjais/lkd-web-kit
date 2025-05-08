@@ -1,4 +1,4 @@
-import { MySelectProps, MySelect } from 'src/components';
+import { MySelectProps, MyMultiSelect, MySelect } from 'src/components';
 import { WithFormProps, withForm } from 'src/hocs';
 
 export type FormSelectProps = MySelectProps & WithFormProps;

@@ -16,3 +16,4 @@ export * from './base/FormTextarea';
 export * from './base/FormTextInput';
 export * from './base/FormTextInput';
 export * from './base/FormTimeInput';
+export * from './base/FormMultiSelect';
