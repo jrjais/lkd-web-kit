@@ -65,9 +65,9 @@ export function SelectInfinity({
 
   const selectedOption = data.find((i) => i.value === value);
 
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-  useFetchNextPageOnScroll(infinity, scrollAreaRef);
+  useFetchNextPageOnScroll({ infinity, scrollRef });
 
   return (
     <Combobox
@@ -106,7 +106,7 @@ export function SelectInfinity({
           <ScrollArea.Autosize
             mah={200}
             type="scroll"
-            viewportRef={scrollAreaRef}
+            viewportRef={scrollRef}
           >
             {options.length > 0 ? (
               options

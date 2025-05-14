@@ -4,28 +4,37 @@ import { RefObject, useEffect } from 'react';
 import { InfiniteQueryHookResult } from 'react-query-kit';
 import { useOnScrollProgress } from './useOnScrollProgress';
 
-export const useFetchNextPageOnScroll = (
-  infinity: InfiniteQueryHookResult<InfiniteData<{ data: unknown[] }, number>, Error>,
-  elementRef?: RefObject<HTMLElement | null>,
-) => {
-  useOnScrollProgress(
-    0.9,
-    () => {
-      if (infinity.hasNextPage) {
-        infinity.fetchNextPage();
-      }
+export type FetchNextPageOnScrollOptions = {
+  infinity: InfiniteQueryHookResult<InfiniteData<{ data: unknown[] }, number>, Error>;
+  scrollRef?: RefObject<HTMLElement | null>;
+  disabled?: boolean;
+};
+
+export const useFetchNextPageOnScroll = ({
+  infinity,
+  scrollRef,
+  disabled = false,
+}: FetchNextPageOnScrollOptions) => {
+  useOnScrollProgress({
+    triggerPercentage: 0.9,
+    callback: () => {
+      if (infinity.hasNextPage) infinity.fetchNextPage();
     },
-    elementRef,
-  );
+    scrollRef,
+    disabled,
+  });
 
-  useEffect(() => {
-    const el = elementRef?.current;
-    const scrollTarget = el ?? document.documentElement;
+  // useEffect(() => {
+  //   // Si está deshabilitado o scrollRef está definido pero current es null, desactivamos el comportamiento
+  //   if (disabled || (scrollRef && scrollRef.current === null)) {
+  //     return;
+  //   }
 
-    const hasScroll = scrollTarget.scrollHeight > scrollTarget.clientHeight;
+  //   const el = scrollRef?.current;
+  //   const scrollTarget = el ?? document.documentElement;
 
-    if (!hasScroll && infinity.hasNextPage) {
-      infinity.fetchNextPage();
-    }
-  }, [infinity.data, elementRef]);
+  //   const hasScroll = scrollTarget.scrollHeight > scrollTarget.clientHeight;
+
+  //   if (!hasScroll && infinity.hasNextPage) infinity.fetchNextPage();
+  // }, [infinity.data, scrollRef, disabled]);
 };

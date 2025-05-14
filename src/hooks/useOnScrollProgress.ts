@@ -1,20 +1,30 @@
 'use client';
 import { RefObject, useEffect } from 'react';
 
-export const useOnScrollProgress = (
-  triggerPercentage: number,
-  callback: () => void,
-  elementRef?: RefObject<HTMLElement | null>,
-): void => {
-  if (triggerPercentage < 0 || triggerPercentage > 1) {
+export type OnScrollProgressOptions = {
+  triggerPercentage: number;
+  callback: () => void;
+  scrollRef?: RefObject<HTMLElement | null>;
+  disabled?: boolean;
+};
+
+export const useOnScrollProgress = ({
+  triggerPercentage,
+  callback,
+  scrollRef,
+  disabled = false,
+}: OnScrollProgressOptions): void => {
+  if (triggerPercentage < 0 || triggerPercentage > 1)
     throw new Error('El porcentaje debe estar entre 0 y 1');
-  }
 
   useEffect(() => {
+    // Si está deshabilitado o scrollRef está definido pero current es null, desactivamos el comportamiento
+    if (disabled || (scrollRef && scrollRef.current === null)) return;
+
     let hasTriggered = false;
 
     const handleScroll = () => {
-      const el = elementRef?.current;
+      const el = scrollRef?.current;
       const target = el ?? document.documentElement;
 
       const scrollHeight = target.scrollHeight - target.clientHeight;
@@ -28,12 +38,12 @@ export const useOnScrollProgress = (
       }
     };
 
-    const scrollTarget = elementRef?.current ?? window;
+    const scrollTarget = scrollRef?.current ?? window;
     scrollTarget.addEventListener('scroll', handleScroll);
     handleScroll();
 
     return () => {
       scrollTarget.removeEventListener('scroll', handleScroll);
     };
-  }, [triggerPercentage, callback, elementRef]);
+  }, [triggerPercentage, callback, scrollRef, disabled]);
 };
