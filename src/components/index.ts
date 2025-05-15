@@ -14,3 +14,4 @@ export * from './MyTextInput';
 export * from './MyTimeInput';
 export * from './SelectInfinity';
 export * from './MyMultiSelect';
+export * from './MyMonthPickerInput';

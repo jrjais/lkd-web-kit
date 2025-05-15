@@ -42,11 +42,5 @@ export const myDefaultTheme: MantineThemeOverride = {
         w: 300,
       },
     }),
-    // borrar en v8
-    Portal: Portal.extend({
-      defaultProps: {
-        reuseTargetNode: true,
-      },
-    }),
   },
 };
