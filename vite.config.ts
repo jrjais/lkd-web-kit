@@ -29,27 +29,44 @@ export default defineConfig({
     },
   },
   build: {
-    target: 'esnext',
     lib: {
+      // Punto de entrada principal de la biblioteca
       entry: resolve(__dirname, 'src/index.ts'),
+      name: 'lkd-web-kit',
+      fileName: (format) => `index.${format}.js`,
+      // Formatos de salida
+      formats: ['es', 'cjs'],
     },
-    sourcemap: true,
+    // sourcemap: true,
     rollupOptions: {
       external: external,
-      output: [
-        {
-          format: 'es',
-          entryFileNames: '[name].mjs',
-          preserveModules: true,
+      output: {
+        // Preserva los módulos ESM para que funcione "use client"
+        preserveModules: true,
+        preserveModulesRoot: 'src',
+
+        // Configura exports globales para las dependencias externas
+        globals: {
+          react: 'React',
+          'react-dom': 'ReactDOM',
+          'react/jsx-runtime': 'jsxRuntime',
         },
-        {
-          format: 'cjs',
-          entryFileNames: '[name].cjs',
-          preserveModules: true,
-          interop: 'auto',
-        },
-      ],
+      },
     },
+    // Importante: Este ajuste asegura compatibilidad con Next.js
+    target: 'esnext',
+
+    // No minificar para mejor compatibilidad
+    minify: false,
+
+    // Asegura que los módulos se mantengan separados
+    cssCodeSplit: true,
+
+    // Directorio de salida
+    outDir: 'dist',
+
+    // No genera un archivo de tipos de construcción
+    emptyOutDir: true,
   },
   test: {
     environment: 'jsdom',
