@@ -2,12 +2,13 @@
 import { Controller, ControllerProps } from 'react-hook-form';
 import { ZodTypeAny } from 'zod';
 import { zodValidator } from '../form';
+import { ReactNode } from 'react';
 
 export interface WithFormProps {
   name?: string;
-  label?: React.ReactNode;
+  label?: ReactNode;
   placeholder?: string;
-  description?: React.ReactNode;
+  description?: ReactNode;
   validate?: ZodTypeAny;
   disabled?: boolean;
 }
@@ -15,7 +16,7 @@ export interface WithFormProps {
 export type FormFieldProps<T = unknown> = Parameters<ControllerProps['render']>[0] & {
   props: T;
   field: {
-    label?: React.ReactNode;
+    label?: ReactNode;
     placeholder?: string;
     description?: React.ReactNode;
     error?: string;

@@ -8,7 +8,6 @@ import {
   UseFormReturn,
 } from 'react-hook-form';
 
-// TODO: Completar el tipado con el schema usando z.output<schema> en el data del onSubmit
 interface FormProps<T extends FieldValues, TContext = any, TT extends T = T>
   extends BoxProps,
     ElementProps<'form', 'onSubmit'> {

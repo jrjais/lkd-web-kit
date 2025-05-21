@@ -6,6 +6,7 @@ export interface MyDateTimePickerProps extends DateTimePickerProps {}
 export const MyDateTimePicker = (props: MyDateTimePickerProps) => (
   <DateTimePicker
     leftSection={<CalendarIcon size={props.size} />}
+    leftSectionPointerEvents="none"
     variant={props.readOnly ? 'filled' : 'default'}
     {...props}
   />

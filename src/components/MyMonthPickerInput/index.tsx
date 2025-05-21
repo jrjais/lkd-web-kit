@@ -11,6 +11,7 @@ export interface MyMonthPickerInputProps extends MonthPickerInputProps<any> {}
 export const MyMonthPickerInput = (props: MyMonthPickerInputProps) => (
   <MonthPickerInput
     leftSection={<CalendarIcon size={props.size} />}
+    leftSectionPointerEvents="none"
     variant={props.readOnly ? 'filled' : 'default'}
     {...props}
   />
