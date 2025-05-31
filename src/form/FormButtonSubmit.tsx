@@ -7,9 +7,9 @@ export interface FormButtonSubmitProps
     ElementProps<'button', keyof ButtonProps> {}
 
 export const FormButtonSubmit = (props: FormButtonSubmitProps) => {
-  const { formState } = useFormContext();
-
-  const { isSubmitting } = formState;
+  const {
+    formState: { isSubmitting },
+  } = useFormContext();
 
   return (
     <Button

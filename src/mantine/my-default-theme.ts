@@ -39,7 +39,7 @@ export const myDefaultTheme: MantineThemeOverride = {
     Tooltip: Tooltip.extend({
       defaultProps: {
         multiline: true,
-        w: 300,
+        maw: 300,
       },
     }),
   },
