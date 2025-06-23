@@ -1,4 +1,4 @@
-import queryString from 'query-string';
+import qs from 'qs';
 import { QP_BACK_URL_NAME } from 'src/contexts';
 
 export type TParams = Record<string, any> | unknown;
@@ -28,12 +28,11 @@ export const newHref =
           );
 
     if (args?.searchParams) {
-      const qs = queryString.stringify(args.searchParams, {
-        skipEmptyString: true,
-        skipNull: true,
+      const stringify = qs.stringify(args.searchParams, {
+        skipNulls: true,
       });
 
-      return `${href}${qs ? `?${qs}` : ''}`;
+      return `${href}${stringify ? `?${stringify}` : ''}`;
     }
 
     return href;

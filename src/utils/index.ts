@@ -5,3 +5,5 @@ export * from './array/groupBy';
 export * from './array/shuffleArray';
 export * from './newHref';
 export * from './isInfinityEmpty';
+export * from './query-stringify';
+export * from './new-route';

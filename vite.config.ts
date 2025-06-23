@@ -33,7 +33,7 @@ export default defineConfig({
       // Punto de entrada principal de la biblioteca
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'lkd-web-kit',
-      fileName: (format) => `index.${format === 'es' ? 'mjs' : 'cjs'}`,
+      fileName: (format, entryName) => `${entryName}.${format === 'es' ? 'js' : 'cjs'}`,
       // Formatos de salida
       formats: ['es', 'cjs'],
     },

@@ -1,17 +1,18 @@
 {
   "name": "lkd-web-kit",
-  "version": "0.3.17",
+  "version": "0.3.21",
   "description": "A template for creating React component libraries with Vite.",
   "author": "LKD",
   "license": "MIT",
+  "type": "module",
   "main": "./dist/index.cjs",
-  "module": "./dist/index.mjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
     }
   },
   "sideEffects": false,
@@ -31,6 +32,7 @@
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
     "@types/node": "^22.15.21",
+    "@types/qs": "^6.14.0",
     "@types/react": "^19.1.5",
     "@types/react-dom": "^19.1.5",
     "@typescript-eslint/eslint-plugin": "^8.32.1",
@@ -60,7 +62,7 @@
     "clsx": "^2.1.1",
     "ky": "^1.8.1",
     "next": "^15.3.3",
-    "query-string": "^9.2.1",
+    "qs": "^6.14.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-hook-form": "^7.58.1",
