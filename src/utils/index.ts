@@ -6,3 +6,4 @@ export * from './array/shuffleArray';
 export * from './isInfinityEmpty';
 export * from './query-stringify';
 export * from './new-route';
+export * from './virtual-styles';

@@ -4,16 +4,18 @@ import { useFormContext } from 'react-hook-form';
 
 export interface FormButtonSubmitProps
   extends ButtonProps,
-    ElementProps<'button', keyof ButtonProps> {}
+    ElementProps<'button', keyof ButtonProps> {
+  disabledWhenSuccess?: boolean;
+}
 
-export const FormButtonSubmit = (props: FormButtonSubmitProps) => {
+export const FormButtonSubmit = ({ disabled, ...props }: FormButtonSubmitProps) => {
   const {
-    formState: { isSubmitting },
+    formState: { isSubmitting, isSubmitSuccessful },
   } = useFormContext();
 
   return (
     <Button
-      // disabled={isSubmitSuccessful}
+      disabled={disabled ?? (isSubmitSuccessful && props.disabledWhenSuccess)}
       loading={isSubmitting}
       type="submit"
       {...props}

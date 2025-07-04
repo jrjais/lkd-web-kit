@@ -1,11 +1,18 @@
-import { SelectInfinityProps, SelectInfinity } from 'src/components';
-import { WithFormProps, withForm } from 'src/hocs';
+import { withForm, WithFormProps } from 'lkd-web-kit';
+import { ReactNode } from 'react';
+import { InfinitySelectProps, InfinitySelect } from 'src/components';
 
-export type FormSelectInfinityProps = SelectInfinityProps & WithFormProps;
+export type FormInfinitySelectProps<T = unknown> = InfinitySelectProps<T> & WithFormProps;
 
-export const FormSelectInfinity = withForm<SelectInfinityProps>(({ field, props }) => (
-  <SelectInfinity
-    {...field}
-    {...props}
-  />
-));
+export const FormInfinitySelect = withForm<FormInfinitySelectProps>(({ field, props }) => {
+  return (
+    <InfinitySelect
+      {...field}
+      {...props}
+      onChange={(e) => {
+        field.onChange(e);
+        props.onChange?.(e);
+      }}
+    />
+  );
+}) as <T>(props: FormInfinitySelectProps<T>) => ReactNode;
