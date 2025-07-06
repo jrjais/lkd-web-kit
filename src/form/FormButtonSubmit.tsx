@@ -8,14 +8,18 @@ export interface FormButtonSubmitProps
   disabledWhenSuccess?: boolean;
 }
 
-export const FormButtonSubmit = ({ disabled, ...props }: FormButtonSubmitProps) => {
+export const FormButtonSubmit = ({
+  disabled,
+  disabledWhenSuccess,
+  ...props
+}: FormButtonSubmitProps) => {
   const {
     formState: { isSubmitting, isSubmitSuccessful },
   } = useFormContext();
 
   return (
     <Button
-      disabled={disabled ?? (isSubmitSuccessful && props.disabledWhenSuccess)}
+      disabled={disabled ?? (isSubmitSuccessful && disabledWhenSuccess)}
       loading={isSubmitting}
       type="submit"
       {...props}
