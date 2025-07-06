@@ -1,6 +1,6 @@
-import { ZodTypeAny } from 'zod';
+import { ZodType } from 'zod/v4';
 
-export const zodValidator = (schema: ZodTypeAny) => {
+export const zodValidator = (schema: ZodType) => {
   return (values: any) => {
     const result = schema.safeParse(values);
     if (result.success) return;

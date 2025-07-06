@@ -1,11 +1,12 @@
-import { z, ZodTypeAny } from 'zod';
+import { z, ZodType } from 'zod/v4';
 
-export const nullableButRequired = <T extends ZodTypeAny>(schema: T, message = 'Campo requerido') =>
-  schema.nullable().superRefine((val, ctx) => {
-    if (val === null) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+export const nullableButRequired = <T extends ZodType>(schema: T, message = 'Campo requerido') =>
+  schema.nullable().check((ctx) => {
+    if (ctx.value === null) {
+      ctx.issues.push({
+        code: 'custom',
         message,
+        input: ctx.value,
       });
     }
   });

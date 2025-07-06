@@ -1,11 +1,12 @@
-import { ZodTypeAny, z } from 'zod';
+import { ZodType, z } from 'zod/v4';
 
-export const optionalButRequired = <T extends ZodTypeAny>(schema: T, message = 'Campo requerido') =>
-  schema.optional().superRefine((val, ctx) => {
-    if (val === undefined) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+export const optionalButRequired = <T extends ZodType>(schema: T, message = 'Campo requerido') =>
+  schema.optional().check((ctx) => {
+    if (ctx.value === undefined) {
+      ctx.issues.push({
+        code: 'custom',
         message,
+        input: ctx.value,
       });
     }
   });
