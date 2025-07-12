@@ -162,7 +162,9 @@ export function InfinitySelect<T = unknown>({
       <Combobox.Dropdown>
         <Combobox.Options
           mah={200}
-          className="overflow-y-auto"
+          style={{
+            overflowY: 'auto',
+          }}
           ref={scrollRef}
         >
           {data.length > 0 ? (
@@ -186,7 +188,7 @@ export function InfinitySelect<T = unknown>({
               })}
             </div>
           ) : !infinity.isFetching ? (
-            <Combobox.Empty className="min-h-6">
+            <Combobox.Empty mih={24}>
               {nothingFoundMessage
                 ? typeof nothingFoundMessage === 'function'
                   ? nothingFoundMessage({ combobox })
@@ -198,8 +200,9 @@ export function InfinitySelect<T = unknown>({
             root={scrollRef}
             infinity={infinity}
             loaderProps={{
+              mt: 4,
+              mb: 8,
               size: 'sm',
-              className: 'mt-1 mb-2',
             }}
           />
         </Combobox.Options>

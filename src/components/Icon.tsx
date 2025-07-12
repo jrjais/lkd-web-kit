@@ -1,5 +1,4 @@
 'use client';
-import clsx from 'clsx';
 import React, { ComponentPropsWithoutRef } from 'react';
 
 export type IconFC = React.FC<ComponentPropsWithoutRef<'svg'>>;
@@ -16,12 +15,7 @@ export interface IconProps extends ComponentPropsWithoutRef<'svg'> {
   size?: keyof typeof stylesBySize | number;
 }
 
-export const Icon = ({ i: I, size = 'md', style, rotate, className, ...rest }: IconProps) => {
-  /* 
-      Para que no haya colisiones de ids al renderizar el icono en varios lados, le pasamos este id a la prop idprefix.
-      Esta prop es agregada gracias al archivo svgr-dynamic-ids.js que se encuentra en la raíz del proyecto.
-    */
-
+export const Icon = ({ i: I, size = 'md', style, rotate, ...rest }: IconProps) => {
   return (
     <I
       {...(typeof size === 'number'
@@ -33,9 +27,9 @@ export const Icon = ({ i: I, size = 'md', style, rotate, className, ...rest }: I
       viewBox="0 0 24 24"
       style={{
         ...style,
+        flexShrink: 0,
         transform: `rotate(${rotate}deg)`,
       }}
-      className={clsx('shrink-0', className)}
       {...rest}
     />
   );
