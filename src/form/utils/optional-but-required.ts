@@ -1,4 +1,4 @@
-import { ZodType, z } from 'zod/v4';
+import { ZodType, z } from 'zod';
 
 export const optionalButRequired = <T extends ZodType>(schema: T, message = 'Campo requerido') =>
   schema.optional().check((ctx) => {

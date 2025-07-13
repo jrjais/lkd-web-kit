@@ -1,4 +1,4 @@
-import { z, ZodType } from 'zod/v4';
+import { z, ZodType } from 'zod';
 
 export const nullableButRequired = <T extends ZodType>(schema: T, message = 'Campo requerido') =>
   schema.nullable().check((ctx) => {

@@ -1,4 +1,4 @@
-import { ZodType } from 'zod/v4';
+import { ZodType } from 'zod';
 
 export const zodValidator = (schema: ZodType) => {
   return (values: any) => {
