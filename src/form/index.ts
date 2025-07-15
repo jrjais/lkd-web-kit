@@ -18,3 +18,4 @@ export * from './base/FormTextInput';
 export * from './base/FormTimeInput';
 export * from './base/FormMultiSelect';
 export * from './base/FormMonthPickerInput';
+export * from './base/FormDateInput';
