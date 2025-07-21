@@ -35,6 +35,7 @@ export interface InfinitySelectProps<T = unknown>
   getOptionLabel: (option: T) => string;
   getOptionValue: (option: T) => string;
   comboboxProps?: ComboboxProps;
+  searchable?: boolean;
 }
 
 export function InfinitySelect<T = unknown>({
@@ -53,6 +54,7 @@ export function InfinitySelect<T = unknown>({
   onSelectedOptionChange,
   selectedOption,
   comboboxProps,
+  searchable = true,
   ...props
 }: InfinitySelectProps<T>) {
   const combobox = useCombobox();
@@ -75,7 +77,7 @@ export function InfinitySelect<T = unknown>({
     onChange: onSearchChange,
   });
 
-  const [searchHasChanged, setSearchHasChanged] = useState(false);
+  // const [searchHasChanged, setSearchHasChanged] = useState(false);
 
   const data = infinity.data?.pages.flatMap((page) => page.data) ?? [];
 
@@ -104,9 +106,9 @@ export function InfinitySelect<T = unknown>({
     getScrollElement: () => scrollRef.current,
   });
 
-  const openDropdown = () => {
-    if (searchHasChanged || _search === '' || !_value) combobox.openDropdown();
-  };
+  // const openDropdown = () => {
+  //   if (searchHasChanged || _search === '' || !_value) combobox.openDropdown();
+  // };
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -138,25 +140,37 @@ export function InfinitySelect<T = unknown>({
               <Combobox.Chevron />
             )
           }
+          component={'input'}
           rightSectionPointerEvents={value ? undefined : 'none'}
-          onClick={openDropdown}
-          onFocus={openDropdown}
-          value={_search}
-          onChange={(event) => {
-            if (event.currentTarget.value) combobox.openDropdown();
-            else combobox.closeDropdown();
-
-            setSearchHasChanged(true);
-            handleSearch(event.currentTarget.value);
+          readOnly={!searchable || props.readOnly}
+          pointer={!searchable}
+          value={searchable ? _search : _selectedOption ? getOptionLabel(_selectedOption) : ''}
+          onChange={
+            searchable
+              ? (event) => {
+                  if (event.currentTarget.value) combobox.openDropdown();
+                  else combobox.closeDropdown();
+                  // setSearchHasChanged(true);
+                  handleSearch(event.currentTarget.value);
+                }
+              : undefined
+          }
+          onClick={(event) => {
+            searchable ? combobox.openDropdown() : combobox.toggleDropdown();
+            props.onClick?.(event);
+          }}
+          onFocus={(event) => {
+            if (searchable) combobox.openDropdown();
+            props.onFocus?.(event);
+          }}
+          onBlur={(event) => {
+            if (_selectedOption) setSearchAndValue(_selectedOption);
+            if (searchable) combobox.closeDropdown();
+            props.onBlur?.(event);
+            // setSearchHasChanged(false);
           }}
           {...props}
           variant={props.readOnly ? 'filled' : 'default'}
-          onBlur={(e) => {
-            if (_selectedOption) setSearchAndValue(_selectedOption);
-            combobox.closeDropdown();
-            props.onBlur?.(e);
-            setSearchHasChanged(false);
-          }}
         />
       </Combobox.Target>
       <Combobox.Dropdown>
