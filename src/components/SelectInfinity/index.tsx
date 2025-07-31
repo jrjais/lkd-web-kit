@@ -12,10 +12,10 @@ import {
 import { useUncontrolled } from '@mantine/hooks';
 import { InfiniteData } from '@tanstack/react-query';
 import { useVirtualizer } from '@tanstack/react-virtual';
-import { InfinityLoader } from 'lkd-web-kit';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { InfiniteQueryHookResult } from 'react-query-kit';
 import { getVirtualContainerProps, getVirtualItemProps } from 'src/utils/virtual-styles';
+import { InfinityLoader } from '../InfinityLoader';
 
 export interface InfinitySelectProps<T = unknown>
   extends InputBaseProps,
@@ -156,11 +156,11 @@ export function InfinitySelect<T = unknown>({
               : undefined
           }
           onClick={(event) => {
-            searchable ? combobox.openDropdown() : combobox.toggleDropdown();
+            if (!props.readOnly) searchable ? combobox.openDropdown() : combobox.toggleDropdown();
             props.onClick?.(event);
           }}
           onFocus={(event) => {
-            if (searchable) combobox.openDropdown();
+            if (!props.readOnly && searchable) combobox.openDropdown();
             props.onFocus?.(event);
           }}
           onBlur={(event) => {

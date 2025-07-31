@@ -1,6 +1,6 @@
 {
   "name": "lkd-web-kit",
-  "version": "0.4.12",
+  "version": "0.5.0",
   "description": "A template for creating React component libraries with Vite.",
   "author": "LKD",
   "license": "MIT",
@@ -53,19 +53,19 @@
     "vitest": "^3.2.4"
   },
   "peerDependencies": { 
-    "@mantine/core": "^8.2.1",
-    "@mantine/dates": "^8.2.1",
-    "@mantine/hooks": "^8.2.1",
-    "@mantine/notifications": "^8.2.1",
+    "@mantine/core": "^8.2.2",
+    "@mantine/dates": "^8.2.2",
+    "@mantine/hooks": "^8.2.2",
+    "@mantine/notifications": "^8.2.2",
     "@tanstack/react-query": "^5.83.0",
     "clsx": "^2.1.1",
     "ky": "^1.8.2",
-    "next": "^15.4.2",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "react-hook-form": "^7.60.0",
+    "next": "^15.4.5",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-hook-form": "^7.61.1",
     "react-query-kit": "^3.3.1",
-    "zod": "^4.0.5"
+    "zod": "^4.0.14"
   },
   "dependencies": {
     "@tanstack/react-virtual": "^3.13.12"

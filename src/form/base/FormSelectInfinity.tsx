@@ -1,10 +1,10 @@
-import { withForm, WithFormProps } from 'lkd-web-kit';
 import { ReactNode } from 'react';
 import { InfinitySelectProps, InfinitySelect } from 'src/components';
+import { withController, WithFormProps } from 'src/hocs';
 
 export type FormInfinitySelectProps<T = unknown> = InfinitySelectProps<T> & WithFormProps;
 
-export const FormInfinitySelect = withForm<FormInfinitySelectProps>(({ field, props }) => {
+export const FormInfinitySelect = withController<FormInfinitySelectProps>(({ field, props }) => {
   return (
     <InfinitySelect
       {...field}

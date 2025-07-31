@@ -1,10 +1,10 @@
 import { TextareaProps } from '@mantine/core';
 import { MyTextareaProps, MyTextarea } from 'src/components';
-import { WithFormProps, withForm } from 'src/hocs';
+import { WithFormProps, withController } from 'src/hocs';
 
 export type FormTextareaProps = MyTextareaProps & WithFormProps;
 
-export const FormTextarea = withForm<TextareaProps>(({ field, props }) => (
+export const FormTextarea = withController<TextareaProps>(({ field, props }) => (
   <MyTextarea
     {...field}
     {...props}

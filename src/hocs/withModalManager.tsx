@@ -2,17 +2,18 @@
 import { ModalProps } from '@mantine/core';
 import { useEffect, useState } from 'react';
 
-export interface WithModalManagerProps {
+interface WithModalManagerProps {
+  // fn que desmonta el modal desde el contexto
   removeModal: () => void;
-  opened: boolean;
 }
 
-export const withModalManager = <P extends Object>(
-  WrappedComponent: React.ComponentType<P & ModalProps>,
+export type WrappedComponentProps<T = any> = T & { modalProps: ModalProps };
+
+export const withModalManager = <CustomProps extends Object>(
+  WrappedComponent: React.ComponentType<WrappedComponentProps<CustomProps>>,
 ) => {
-  const Component: React.FC<P & WithModalManagerProps & ModalProps> = ({
+  const Component: React.FC<WrappedComponentProps<CustomProps> & WithModalManagerProps> = ({
     removeModal,
-    opened,
     ...props
   }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -20,19 +21,22 @@ export const withModalManager = <P extends Object>(
     const onClose = () => {
       setIsOpen(false);
       setTimeout(() => removeModal(), 200);
-      props.onClose?.();
+      props.modalProps.onClose();
     };
 
     useEffect(() => {
-      if (opened) setTimeout(() => setIsOpen(true), 0);
+      if (props.modalProps.opened) setTimeout(() => setIsOpen(true), 0);
       else onClose();
-    }, [opened]);
+    }, [props.modalProps.opened]);
 
     return (
       <WrappedComponent
-        {...(props as P)}
-        opened={isOpen}
-        onClose={onClose}
+        {...(props as CustomProps)}
+        modalProps={{
+          ...props.modalProps,
+          opened: isOpen,
+          onClose: onClose,
+        }}
       />
     );
   };

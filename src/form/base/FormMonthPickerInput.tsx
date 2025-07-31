@@ -1,9 +1,9 @@
 import { MyMonthPickerInput, MyMonthPickerInputProps } from 'src/components';
-import { WithFormProps, withForm } from 'src/hocs';
+import { WithFormProps, withController } from 'src/hocs';
 
 export type FormMonthPickerInputProps = WithFormProps & MyMonthPickerInputProps;
 
-export const FormMonthPickerInput = withForm<MyMonthPickerInputProps>(({ field, props }) => (
+export const FormMonthPickerInput = withController<MyMonthPickerInputProps>(({ field, props }) => (
   <MyMonthPickerInput
     {...field}
     {...props}

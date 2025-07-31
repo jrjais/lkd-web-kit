@@ -23,7 +23,7 @@ export type FormFieldProps<T = unknown> = Parameters<ControllerProps['render']>[
   };
 };
 
-export const withForm = <P extends unknown>(
+export const withController = <P extends unknown>(
   WrappedComponent: React.ComponentType<FormFieldProps<P>>,
   getControllerProps?: (fieldProps: P) => Omit<Partial<ControllerProps>, 'render'>,
 ) => {
