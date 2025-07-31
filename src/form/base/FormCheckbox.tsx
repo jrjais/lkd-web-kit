@@ -1,7 +1,7 @@
 import { CheckboxProps, Checkbox } from '@mantine/core';
-import { WithFormProps, withController } from 'src/hocs';
+import { WithControllerProps, withController } from 'src/hocs';
 
-export type FormCheckboxProps = CheckboxProps & WithFormProps;
+export type FormCheckboxProps = CheckboxProps & WithControllerProps;
 
 export const FormCheckbox = withController<FormCheckboxProps>(({ field, props }) => (
   <Checkbox

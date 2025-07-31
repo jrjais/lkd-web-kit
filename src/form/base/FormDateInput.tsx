@@ -1,7 +1,7 @@
 import { MyDateInput, MyDateInputProps } from 'src/components';
-import { WithFormProps, withController } from 'src/hocs';
+import { WithControllerProps, withController } from 'src/hocs';
 
-export type FormDateInputProps = WithFormProps & MyDateInputProps;
+export type FormDateInputProps = WithControllerProps & MyDateInputProps;
 
 export const FormDateInput = withController<FormDateInputProps>(({ field, props }) => (
   <MyDateInput

@@ -1,8 +1,8 @@
 import { TimeInputProps } from '@mantine/dates';
 import { MyTimeInputProps, MyTimeInput } from 'src/components';
-import { WithFormProps, withController } from 'src/hocs';
+import { WithControllerProps, withController } from 'src/hocs';
 
-export type FormTimeInput = MyTimeInputProps & WithFormProps;
+export type FormTimeInput = MyTimeInputProps & WithControllerProps;
 
 export const FormTimeInput = withController<TimeInputProps>(({ field, props }) => (
   <MyTimeInput

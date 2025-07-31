@@ -2,26 +2,25 @@
 import { ModalProps } from '@mantine/core';
 import { useEffect, useState } from 'react';
 
-interface WithModalManagerProps {
-  // fn que desmonta el modal desde el contexto
+export type ModalManagerWrappedComponentProps<T extends object = object> = T & {
+  modalProps: ModalProps;
+};
+
+export type ModalManagerWrapperProps<T extends object = object> = T & {
+  modalProps: Partial<ModalProps>;
   removeModal: () => void;
-}
+};
 
-export type WrappedComponentProps<T = any> = T & { modalProps: ModalProps };
-
-export const withModalManager = <CustomProps extends Object>(
-  WrappedComponent: React.ComponentType<WrappedComponentProps<CustomProps>>,
+export const withModalManager = <CustomProps extends object>(
+  WrappedComponent: React.ComponentType<ModalManagerWrappedComponentProps<CustomProps>>,
 ) => {
-  const Component: React.FC<WrappedComponentProps<CustomProps> & WithModalManagerProps> = ({
-    removeModal,
-    ...props
-  }) => {
+  const Wrapper: React.FC<ModalManagerWrapperProps<CustomProps>> = ({ removeModal, ...props }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const onClose = () => {
       setIsOpen(false);
       setTimeout(() => removeModal(), 200);
-      props.modalProps.onClose();
+      props.modalProps.onClose?.();
     };
 
     useEffect(() => {
@@ -41,7 +40,7 @@ export const withModalManager = <CustomProps extends Object>(
     );
   };
 
-  Component.displayName = `WithModalManager(${WrappedComponent.displayName})`;
+  Wrapper.displayName = `WithModalManager(${WrappedComponent.displayName})`;
 
-  return Component;
+  return Wrapper;
 };

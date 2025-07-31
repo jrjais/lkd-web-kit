@@ -1,7 +1,7 @@
 import { RadioGroupProps, Radio } from '@mantine/core';
-import { WithFormProps, withController } from 'src/hocs';
+import { WithControllerProps, withController } from 'src/hocs';
 
-export type FormRadioGroupProps = RadioGroupProps & WithFormProps;
+export type FormRadioGroupProps = RadioGroupProps & WithControllerProps;
 
 export const FormRadioGroup = withController<FormRadioGroupProps>(({ field, props }) => (
   <Radio.Group

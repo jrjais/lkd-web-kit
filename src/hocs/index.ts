@@ -1,2 +1,2 @@
-export * from './withForm';
+export * from './withController';
 export * from './withModalManager';

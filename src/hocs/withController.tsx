@@ -4,7 +4,7 @@ import { ZodType } from 'zod';
 import { zodValidator } from '../form';
 import { ReactNode } from 'react';
 
-export interface WithFormProps {
+export interface WithControllerProps {
   name?: string;
   label?: ReactNode;
   placeholder?: string;
@@ -27,7 +27,7 @@ export const withController = <P extends unknown>(
   WrappedComponent: React.ComponentType<FormFieldProps<P>>,
   getControllerProps?: (fieldProps: P) => Omit<Partial<ControllerProps>, 'render'>,
 ) => {
-  const FormField: React.FC<P & WithFormProps> = (props) => {
+  const FormField: React.FC<P & WithControllerProps> = (props) => {
     const { validate, name = '', placeholder, label, description, ...withFormRestProps } = props;
 
     return (

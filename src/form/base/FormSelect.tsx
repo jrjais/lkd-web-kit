@@ -1,7 +1,7 @@
 import { MySelectProps, MyMultiSelect, MySelect } from 'src/components';
-import { WithFormProps, withController } from 'src/hocs';
+import { WithControllerProps, withController } from 'src/hocs';
 
-export type FormSelectProps = MySelectProps & WithFormProps;
+export type FormSelectProps = MySelectProps & WithControllerProps;
 
 export const FormSelect = withController<FormSelectProps>(({ field, props }) => (
   <MySelect

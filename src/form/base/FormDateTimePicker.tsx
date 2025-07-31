@@ -1,8 +1,8 @@
 import { DateTimePickerProps } from '@mantine/dates';
 import { MyDateTimePickerProps, MyDateTimePicker } from 'src/components';
-import { WithFormProps, withController } from 'src/hocs';
+import { WithControllerProps, withController } from 'src/hocs';
 
-export type FormDateTimePickerProps = WithFormProps & MyDateTimePickerProps;
+export type FormDateTimePickerProps = WithControllerProps & MyDateTimePickerProps;
 
 export const FormDateTimePicker = withController<DateTimePickerProps>(({ field, props }) => (
   <MyDateTimePicker

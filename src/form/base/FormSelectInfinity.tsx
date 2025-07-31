@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
 import { InfinitySelectProps, InfinitySelect } from 'src/components';
-import { withController, WithFormProps } from 'src/hocs';
+import { withController, WithControllerProps } from 'src/hocs';
 
-export type FormInfinitySelectProps<T = unknown> = InfinitySelectProps<T> & WithFormProps;
+export type FormInfinitySelectProps<T = unknown> = InfinitySelectProps<T> & WithControllerProps;
 
 export const FormInfinitySelect = withController<FormInfinitySelectProps>(({ field, props }) => {
   return (
