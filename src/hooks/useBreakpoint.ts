@@ -1,11 +1,9 @@
 'use client';
-import { useMatches } from '@mantine/core';
 import { breakpointsWithPx } from '../mantine/breakpoints-with-px';
+import { useMediaQuery } from '@mantine/hooks';
 
 export const useBreakpoint = (breakpoint: keyof typeof breakpointsWithPx): boolean => {
-  const result = useMatches({
-    [breakpoint]: true,
-  });
+  const matches = useMediaQuery(`(min-width: ${breakpointsWithPx[breakpoint]})`);
 
-  return !!result;
+  return matches;
 };
