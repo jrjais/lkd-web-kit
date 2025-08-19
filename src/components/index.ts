@@ -2,6 +2,7 @@ export * from './EmptyState';
 export * from './InfinityLoader';
 export * from './NavItems';
 export * from './Icon';
+export * from './MyRadioGroup';
 
 // fields
 export * from './MyDatePickerInput';

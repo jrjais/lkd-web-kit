@@ -1,73 +1,77 @@
-# LKD Web Kit v0.5.11 - Guía de Componentes de Formularios
+# LKD Web Kit v0.5.12 - Guía de Componentes de Formularios
 
 ## Descripción General
 
-LKD Web Kit es una librería de componentes React que proporciona un **sistema completo de formularios** pre-configurado with **React Hook Form** + **Zod v4** + **Mantine v8**. Todos los campos de formulario están listos para usar con validación automática y manejo de estados.
+LKD Web Kit es una librería de componentes React que proporciona un **sistema completo de formularios** pre-configurado con **React Hook Form** + **Zod v4** + **Mantine v8**. Todos los campos de formulario están listos para usar con validación automática, manejo de estados, y mensajes de error en español.
 
 **Documentación de referencia:**
 
 - Zod v4: https://zod.dev/llms.txt
 - Mantine v8: https://mantine.dev/llms.txt
 
-## Componentes Disponibles
+## Componentes de Formulario Disponibles
 
-### Campos de Formulario
+### Entrada de Texto
 
-Todos los componentes `Form*` están pre-configurados con React Hook Form y soportan validación Zod automática:
+- **`FormTextInput`** - Campo de texto simple
+- **`FormTextarea`** - Área de texto multilínea
+- **`FormNumberInput`** - Campo numérico con controles
 
-#### Entrada de Texto
+### Selección
 
-- `FormTextInput` - Campo de texto simple
-- `FormTextarea` - Área de texto multilínea
-- `FormNumberInput` - Campo numérico con controles
+- **`FormSelect`** - Select simple
+- **`FormMultiSelect`** - Select múltiple
+- **`FormSelectInfinity`** - Select con scroll infinito para APIs
+- **`FormRadioGroup`** - Grupo de radio buttons
 
-#### Selección
+### Fecha y Hora
 
-- `FormSelect` - Select simple
-- `FormMultiSelect` - Select múltiple
-- `FormInfinitySelect` - Select con scroll infinito (para APIs)
-- `FormRadioGroup` - Grupo de radio buttons
+- **`FormDateInput`** - Selector de fecha simple
+- **`FormDatePickerInput`** - Date picker con calendario
+- **`FormDateTimePicker`** - Selector de fecha y hora
+- **`FormMonthPickerInput`** - Selector de mes/año
+- **`FormTimeInput`** - Campo de tiempo (HH:MM) con utilidades de conversión
 
-#### Fecha y Hora
+### Otros Componentes
 
-- `FormDateInput` - Selector de fecha
-- `FormDatePickerInput` - Date picker con calendario
-- `FormDateTimePicker` - Selector de fecha y hora
-- `FormMonthPickerInput` - Selector de mes/año
-- `FormTimeInput` - Campo de tiempo (HH:MM)
+- **`FormCheckbox`** - Checkbox
+- **`Form`** - Wrapper principal del formulario
+- **`FormButtonSubmit`** - Botón de submit con estados automáticos
 
-#### Otros
+## Props Comunes de Campos de Formulario
 
-- `FormCheckbox` - Checkbox
-- `Form` - Wrapper principal del formulario
-- `FormButtonSubmit` - Botón de submit con estados automáticos
-
-### Props Comunes para Todos los Campos
+Todos los componentes `Form*` comparten la interfaz `WithControllerProps`:
 
 ```typescript
-interface CommonFormProps {
-  name: string; // Campo requerido para React Hook Form
+interface WithControllerProps {
+  name: string; // ✅ Requerido para React Hook Form
   label?: ReactNode; // Etiqueta del campo
   placeholder?: string; // Placeholder
-  description?: ReactNode; // Texto de ayuda
-  validate?: ZodType; // Schema de validación Zod
-  disabled?: boolean; // Deshabilitado
-  readOnly?: boolean; // Solo lectura (aplica variant="filled")
+  description?: ReactNode; // Texto de ayuda debajo del campo
+  validate?: ZodType; // Schema de validación Zod individual
+  disabled?: boolean; // Campo deshabilitado
   // + todas las props del componente Mantine base
 }
 ```
 
-## Uso Básico
+**Nota importante:** Los campos en modo `readOnly` automáticamente usan `variant="filled"` para diferenciación visual.
 
-### Formulario Simple
+## Ejemplos Prácticos
+
+### Formulario Simple con Validación Individual
 
 ```tsx
 import { Form, FormTextInput, FormNumberInput, FormButtonSubmit } from 'lkd-web-kit';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-const MyForm = () => {
-  const methods = useForm();
+const SimpleForm = () => {
+  const methods = useForm({
+    defaultValues: {
+      name: '',
+      age: 0,
+    },
+  });
 
   const handleSubmit = (data) => {
     console.log('Datos del formulario:', data);
@@ -88,6 +92,8 @@ const MyForm = () => {
       <FormNumberInput
         name="age"
         label="Edad"
+        min={0}
+        max={120}
         validate={z.number().min(18, 'Debes ser mayor de edad')}
       />
 
@@ -97,193 +103,280 @@ const MyForm = () => {
 };
 ```
 
-### Formulario con Validación Avanzada
+### Formulario Avanzado con ZodResolver
 
 ```tsx
-import { Form, FormTextInput, FormSelect, FormCheckbox } from 'lkd-web-kit';
+import { Form, FormTextInput, FormSelect, FormCheckbox, FormButtonSubmit } from 'lkd-web-kit';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
-// Schema completo del formulario
-const userSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-  country: z.string().min(1, 'Selecciona un país'),
-  acceptTerms: z.boolean().refine((val) => val, 'Debes aceptar los términos'),
-});
+// Schema completo del formulario con validaciones cruzadas
+const userSchema = z
+  .object({
+    email: z.string().email('Email inválido'),
+    password: z.string().min(8, 'Mínimo 8 caracteres'),
+    country: z.string().min(1, 'Selecciona un país'),
+    acceptTerms: z.boolean(),
+  })
+  .check((data) => {
+    if (!data.acceptTerms) {
+      return {
+        issues: [
+          {
+            code: 'custom',
+            message: 'Debes aceptar los términos y condiciones',
+            path: ['acceptTerms'],
+          },
+        ],
+      };
+    }
+  });
 
-const UserForm = () => {
+const AdvancedForm = () => {
   const methods = useForm({
     resolver: zodResolver(userSchema),
     defaultValues: {
+      email: '',
+      password: '',
+      country: '',
       acceptTerms: false,
     },
   });
 
+  const handleSubmit = async (data) => {
+    try {
+      await registerUser(data);
+      console.log('Usuario registrado:', data);
+    } catch (error) {
+      methods.setError('root', {
+        message: 'Error del servidor al registrar usuario',
+      });
+    }
+  };
+
   return (
     <Form
       methods={methods}
-      onSubmit={(data) => console.log(data)}
+      onSubmit={handleSubmit}
     >
       <FormTextInput
         name="email"
-        label="Email"
+        label="Correo Electrónico"
         type="email"
+        placeholder="tu@email.com"
       />
 
       <FormTextInput
         name="password"
         label="Contraseña"
         type="password"
+        description="Mínimo 8 caracteres"
       />
 
       <FormSelect
         name="country"
-        label="País"
+        label="País de Residencia"
+        placeholder="Selecciona tu país"
         data={[
           { value: 'ar', label: 'Argentina' },
           { value: 'mx', label: 'México' },
           { value: 'co', label: 'Colombia' },
+          { value: 'es', label: 'España' },
         ]}
       />
 
       <FormCheckbox
         name="acceptTerms"
-        label="Acepto términos y condiciones"
+        label="Acepto los términos y condiciones de uso"
       />
 
-      <FormButtonSubmit>Registrarse</FormButtonSubmit>
+      <FormButtonSubmit disabledWhenSuccess={true}>Crear Cuenta</FormButtonSubmit>
     </Form>
   );
 };
 ```
 
-### Select con Datos Infinitos (API)
+### FormSelectInfinity con React Query
 
 ```tsx
-import { FormInfinitySelect } from 'lkd-web-kit';
+import { FormSelectInfinity } from 'lkd-web-kit';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 const UserSelector = () => {
-  // Hook de React Query para cargar datos con paginación
+  const methods = useForm();
+
+  // Hook para cargar usuarios con paginación
   const usersQuery = useInfiniteQuery({
     queryKey: ['users'],
-    queryFn: ({ pageParam = 1 }) => fetch(`/api/users?page=${pageParam}`).then((res) => res.json()),
+    queryFn: ({ pageParam = 1 }) =>
+      fetch(`/api/users?page=${pageParam}&limit=20`).then((res) => res.json()),
     getNextPageParam: (lastPage) => lastPage.nextPage,
+    initialPageParam: 1,
   });
 
   return (
-    <FormInfinitySelect
-      name="userId"
-      label="Seleccionar Usuario"
-      infinity={usersQuery}
-      getOptionLabel={(user) => `${user.name} (${user.email})`}
-      getOptionValue={(user) => user.id.toString()}
-      renderOption={({ option }) => (
-        <div>
-          <div>{option.name}</div>
-          <div style={{ fontSize: '12px', color: 'gray' }}>{option.email}</div>
-        </div>
-      )}
-      validate={z.string().min(1, 'Selecciona un usuario')}
-    />
+    <Form methods={methods}>
+      <FormSelectInfinity
+        name="assignedUserId"
+        label="Asignar Usuario"
+        placeholder="Busca y selecciona un usuario..."
+        infinity={usersQuery}
+        getOptionLabel={(user) => `${user.name} (${user.email})`}
+        getOptionValue={(user) => user.id.toString()}
+        renderOption={({ option }) => (
+          <div>
+            <div style={{ fontWeight: 500 }}>{option.name}</div>
+            <div style={{ fontSize: 12, color: 'dimmed' }}>
+              {option.email} • {option.department}
+            </div>
+          </div>
+        )}
+        validate={z.string().min(1, 'Debes seleccionar un usuario')}
+        searchable
+        clearable
+      />
+    </Form>
   );
 };
 ```
 
-### Campo de Tiempo con Utilidades
+### FormTimeInput con Utilidades de Conversión
 
 ```tsx
 import { FormTimeInput, timeInputToNumber, numberToTimeInput } from 'lkd-web-kit';
+import { useForm } from 'react-hook-form';
 
-const TimeForm = () => {
+const TimeBasedForm = () => {
   const methods = useForm({
     defaultValues: {
       startTime: '09:00',
-      duration: 2.5, // 2 horas y 30 minutos
+      endTime: '17:30',
+      duration: 2.5, // 2 horas y 30 minutos como número
     },
   });
 
-  // Convertir número a formato tiempo para mostrar
+  // Convertir duración numérica a formato tiempo
   const durationAsTime = numberToTimeInput(methods.watch('duration')); // "02:30"
 
+  const calculateDuration = () => {
+    const start = methods.watch('startTime');
+    const end = methods.watch('endTime');
+
+    if (start && end) {
+      const startNum = timeInputToNumber(start); // "09:00" → 9.0
+      const endNum = timeInputToNumber(end); // "17:30" → 17.5
+      const duration = endNum - startNum; // 8.5 horas
+
+      methods.setValue('duration', duration);
+    }
+  };
+
   return (
-    <Form methods={methods}>
+    <Form
+      methods={methods}
+      onSubmit={(data) => console.log('Tiempos:', data)}
+    >
       <FormTimeInput
         name="startTime"
         label="Hora de Inicio"
-        validate={z.string().min(1)}
+        onChange={calculateDuration}
+        validate={z.string().min(1, 'Hora requerida')}
       />
 
       <FormTimeInput
         name="endTime"
         label="Hora de Fin"
-        defaultValue={durationAsTime}
-        onChange={(e) => {
-          // Convertir tiempo a número para cálculos
-          const timeAsNumber = timeInputToNumber(e.target.value);
-          methods.setValue('duration', timeAsNumber);
-        }}
+        onChange={calculateDuration}
+        validate={z.string().min(1, 'Hora requerida')}
       />
+
+      <div>
+        <strong>Duración calculada:</strong> {durationAsTime}
+        <br />
+        <small>({methods.watch('duration')} horas)</small>
+      </div>
+
+      <FormButtonSubmit>Guardar Horario</FormButtonSubmit>
     </Form>
   );
 };
 ```
 
-## Validación Avanzada con Zod
+## Validación Avanzada con Zod v4
 
-### Esquemas Condicionales
+### Utilidades de Validación Personalizadas
 
 ```typescript
+import { nullableButRequired, optionalButRequired } from 'lkd-web-kit';
+import { z } from 'zod';
+
+const advancedSchema = z.object({
+  // Campo que puede ser null pero debe estar presente cuando se envía
+  category: nullableButRequired(z.string().min(1), 'La categoría es obligatoria'),
+
+  // Campo opcional pero requerido si se proporciona
+  notes: optionalButRequired(
+    z.string().min(10, 'Las notas deben tener al menos 10 caracteres'),
+    'Este campo es requerido si decides incluir notas',
+  ),
+
+  // Campo regular
+  title: z.string().min(1, 'El título es requerido'),
+});
+```
+
+### Esquemas Condicionales con .check()
+
+```typescript
+// ✅ Usar .check() para Zod v4 (NO .refine())
 const conditionalSchema = z
   .object({
     hasAddress: z.boolean(),
     address: z.string().optional(),
+    hasPhone: z.boolean(),
+    phone: z.string().optional(),
   })
   .check((data) => {
-    if (data.hasAddress && !data.address) {
-      return {
-        issues: [
-          {
-            code: 'custom',
-            message: 'La dirección es requerida',
-            path: ['address'],
-          },
-        ],
-      };
+    const issues = [];
+
+    // Validación condicional para dirección
+    if (data.hasAddress && !data.address?.trim()) {
+      issues.push({
+        code: 'custom',
+        message: 'La dirección es requerida cuando se marca esta opción',
+        path: ['address'],
+      });
+    }
+
+    // Validación condicional para teléfono
+    if (data.hasPhone && !data.phone?.trim()) {
+      issues.push({
+        code: 'custom',
+        message: 'El teléfono es requerido cuando se marca esta opción',
+        path: ['phone'],
+      });
+    }
+
+    if (issues.length > 0) {
+      return { issues };
     }
   });
-```
 
-### Validación Personalizada
-
-```typescript
-// Usar las utilidades de lkd-web-kit
-import { nullableButRequired, optionalButRequired } from 'lkd-web-kit';
-
-const schema = z.object({
-  // Campo que puede ser null pero debe estar presente
-  category: nullableButRequired(z.string()),
-
-  // Campo opcional pero requerido si existe
-  notes: optionalButRequired(z.string().min(10)),
-});
-
-// Ejemplo usando check de Zod v4
-const customValidationSchema = z
+// Ejemplo de validación cruzada de campos
+const passwordSchema = z
   .object({
-    email: z.string().email(),
-    confirmEmail: z.string().email(),
+    password: z.string().min(8, 'Mínimo 8 caracteres'),
+    confirmPassword: z.string(),
   })
   .check((data) => {
-    if (data.email !== data.confirmEmail) {
+    if (data.password !== data.confirmPassword) {
       return {
         issues: [
           {
             code: 'custom',
-            message: 'Los emails no coinciden',
-            path: ['confirmEmail'],
+            message: 'Las contraseñas no coinciden',
+            path: ['confirmPassword'],
           },
         ],
       };
@@ -291,38 +384,53 @@ const customValidationSchema = z
   });
 ```
 
-## Estados del Formulario
+## Estados del Formulario y Manejo de Errores
 
-### Botón de Submit Inteligente
+### FormButtonSubmit Inteligente
 
 ```tsx
+import { FormButtonSubmit } from 'lkd-web-kit';
+
+// El botón automáticamente maneja los estados del formulario
 <FormButtonSubmit
-  disabledWhenSuccess={true} // Se deshabilita al enviar exitosamente
-  loading={isSubmitting} // Muestra spinner automáticamente
+  disabledWhenSuccess={true} // Se deshabilita después del envío exitoso
+  // loading={isSubmitting}   // ✅ Se maneja automáticamente
+  // disabled={...}          // ✅ Se maneja automáticamente
 >
   Guardar Cambios
-</FormButtonSubmit>
+</FormButtonSubmit>;
 ```
 
-### Manejo de Errores
+### Manejo Completo de Errores
 
 ```tsx
-const MyForm = () => {
+const FormWithErrorHandling = () => {
   const methods = useForm();
 
   const handleSubmit = async (data) => {
     try {
       await saveData(data);
+      // Éxito - el botón se deshabilitará automáticamente si disabledWhenSuccess=true
     } catch (error) {
-      // Mostrar errores del servidor
-      methods.setError('root', {
-        message: 'Error del servidor',
-      });
+      if (error.status === 422) {
+        // Errores de validación del servidor
+        error.fields.forEach((field) => {
+          methods.setError(field.name, {
+            message: field.message,
+          });
+        });
+      } else {
+        // Error general del servidor
+        methods.setError('root', {
+          message: 'Error del servidor. Inténtalo de nuevo.',
+        });
+      }
     }
   };
 
   const handleSubmitError = (errors) => {
-    console.log('Errores de validación:', errors);
+    console.log('Errores de validación del cliente:', errors);
+    // Los errores ya se muestran automáticamente en cada campo
   };
 
   return (
@@ -331,25 +439,56 @@ const MyForm = () => {
       onSubmit={handleSubmit}
       onSubmitError={handleSubmitError}
     >
-      {/* campos */}
+      {/* Mostrar error general si existe */}
+      {methods.formState.errors.root && (
+        <div style={{ color: 'red', marginBottom: 16 }}>
+          {methods.formState.errors.root.message}
+        </div>
+      )}
+
+      {/* Campos del formulario */}
+      <FormTextInput
+        name="name"
+        label="Nombre"
+      />
+
+      <FormButtonSubmit disabledWhenSuccess>Enviar</FormButtonSubmit>
     </Form>
   );
 };
 ```
 
-## Características Clave
+## Características Clave del Sistema de Formularios
 
-1. **Validación Automática**: Los errores de Zod se muestran automáticamente debajo de cada campo
-2. **Estados Visuales**: Los campos `readOnly` usan `variant="filled"` automáticamente
-3. **TypeScript Completo**: Todos los componentes tienen tipado estricto
-4. **Integración Mantine**: Mantiene todas las props y funcionalidades de Mantine
-5. **Configuración Cero**: Solo instala y usa, sin configuración adicional
-6. **Mensajes en Español**: Los errores de validación están pre-configurados en español
+1. **✅ Validación Automática**: Los errores de Zod se muestran automáticamente debajo de cada campo
+2. **✅ Estados Visuales**: Los campos `readOnly` usan `variant="filled"` automáticamente
+3. **✅ TypeScript Completo**: Todos los componentes tienen tipado estricto con autocompletado
+4. **✅ Integración Mantine**: Mantiene todas las props y funcionalidades de Mantine v8
+5. **✅ Configuración Cero**: Solo instala y usa, sin configuración adicional requerida
+6. **✅ Mensajes en Español**: Los errores de validación están pre-configurados en español
+7. **✅ Extensible**: Puedes usar cualquier prop nativa del componente Mantine base
 
 ## Notas Importantes
 
-- Todos los campos requieren la prop `name` para funcionar con React Hook Form
-- La validación con `validate` prop es individual por campo
-- Para validación completa del formulario, usa `zodResolver` con `useForm`
-- Los componentes extienden completamente los componentes de Mantine, puedes usar cualquier prop de Mantine
-- El sistema está optimizado para TypeScript y proporciona autocompletado completo
+### Requisitos Obligatorios
+
+- **Todos los campos requieren la prop `name`** para funcionar con React Hook Form
+- **El componente `Form` debe recibir `methods`** de `useForm()`
+
+### Diferencias en Validación
+
+- **Validación Individual**: Usar prop `validate` con schema Zod en cada campo
+- **Validación Completa**: Usar `zodResolver` con `useForm()` para validación de todo el formulario
+- **Validación Mixta**: Puedes combinar ambos enfoques según necesidades
+
+### Compatibilidad con Zod v4
+
+- **✅ Usar `.check()`** para validaciones condicionales
+- **❌ NO usar `.refine()`** (sintaxis de Zod v3)
+- **✅ Retornar `{ issues: [...] }`** en validaciones personalizadas
+
+### Integración con Mantine
+
+- Los componentes **extienden completamente** los componentes de Mantine
+- Puedes usar **cualquier prop de Mantine** junto con las props de formulario
+- El sistema está **optimizado para TypeScript** con autocompletado completo
