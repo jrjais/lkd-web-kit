@@ -1,4 +1,4 @@
-# Generador de Prompt para LKD Web Kit Forms Guide
+# Generador de Prompt para LKD Web Kit Form Guide
 
 ## Objetivo
 
@@ -9,10 +9,15 @@ Generar y mantener actualizado el prompt de guía de formularios para LKD Web Ki
 LKD Web Kit incluye un sistema completo de formularios que proporciona:
 
 - Componentes de formulario pre-configurados (Form\*)
-- Integración automática con React Hook Form + Zod + Mantine
+- Integración automática con React Hook Form + Zod v4 + Mantine v8
 - Validación automática y manejo de estados
 - TypeScript completo
 - Mensajes de error en español
+
+**Referencias de documentación:**
+
+- Zod v4: https://zod.dev/llms.txt
+- Mantine v8: https://mantine.dev/llms.txt
 
 ## Instrucciones para Generar el Prompt de Formularios
 
@@ -22,7 +27,8 @@ Analiza específicamente el **sistema de formularios** de la librería y genera 
 
 - **Título**: Debe incluir el nombre, versión actual del package.json y "Guía de Componentes de Formularios"
 - **Descripción**: Qué es el sistema de formularios y qué problema resuelve
-- **Tecnologías**: React Hook Form + Zod + Mantine para formularios
+- **Tecnologías**: React Hook Form + Zod v4 + Mantine v8 para formularios
+- **Referencias**: Incluir enlaces a https://zod.dev/llms.txt y https://mantine.dev/llms.txt
 
 ### 2. Componentes de Formulario Disponibles
 

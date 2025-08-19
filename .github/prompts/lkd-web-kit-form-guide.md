@@ -2,7 +2,12 @@
 
 ## Descripción General
 
-LKD Web Kit es una librería de componentes React que proporciona un **sistema completo de formularios** pre-configurado con **React Hook Form** + **Zod** + **Mantine**. Todos los campos de formulario están listos para usar con validación automática y manejo de estados.
+LKD Web Kit es una librería de componentes React que proporciona un **sistema completo de formularios** pre-configurado with **React Hook Form** + **Zod v4** + **Mantine v8**. Todos los campos de formulario están listos para usar con validación automática y manejo de estados.
+
+**Documentación de referencia:**
+
+- Zod v4: https://zod.dev/llms.txt
+- Mantine v8: https://mantine.dev/llms.txt
 
 ## Componentes Disponibles
 
