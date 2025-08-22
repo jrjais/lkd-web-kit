@@ -51,6 +51,7 @@ export const withController = <P extends { onChange?: any }>(
             props: {
               ...props,
               validate: undefined,
+              onValueChange: undefined,
             },
             field: {
               ...renderProps.field,

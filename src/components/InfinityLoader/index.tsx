@@ -42,7 +42,7 @@ export const InfinityLoader = ({
   const showEndMessage = infinity.data && infinity.data.pages.length > 1 && !infinity.hasNextPage;
 
   if (!showLoader && !showEndMessage) {
-    return null;
+    return <div ref={ref} />;
   }
 
   return (
