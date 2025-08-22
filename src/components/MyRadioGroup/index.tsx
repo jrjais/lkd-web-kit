@@ -1,4 +1,5 @@
 import { Radio, RadioGroupProps, RadioProps, Stack, Group, MantineSpacing } from '@mantine/core';
+import { FormRadioGroup } from 'src/form';
 
 export interface MyRadioGroupProps extends Omit<RadioGroupProps, 'children'> {
   options: RadioProps[];
@@ -10,7 +11,7 @@ export interface MyRadioGroupProps extends Omit<RadioGroupProps, 'children'> {
 export const MyRadioGroup = ({
   options,
   orientation = 'horizontal',
-  gap = 'xs',
+  gap = 'md',
   ...radioGroupProps
 }: MyRadioGroupProps) => {
   const Container = orientation === 'horizontal' ? Group : Stack;

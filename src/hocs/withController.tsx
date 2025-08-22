@@ -23,11 +23,13 @@ export type FormFieldProps<T = unknown> = Parameters<ControllerProps['render']>[
   };
 };
 
-export const withController = <P extends unknown>(
+export const withController = <P extends { onChange?: any }>(
   WrappedComponent: React.ComponentType<FormFieldProps<P>>,
   getControllerProps?: (fieldProps: P) => Omit<Partial<ControllerProps>, 'render'>,
 ) => {
-  const FormField: React.FC<P & WithControllerProps> = (props) => {
+  const FormField: React.FC<P & WithControllerProps & { onValueChange?: P['onChange'] }> = (
+    props,
+  ) => {
     const { validate, name = '', placeholder, label, description, ...withFormRestProps } = props;
 
     return (
@@ -52,6 +54,10 @@ export const withController = <P extends unknown>(
             },
             field: {
               ...renderProps.field,
+              onChange: (...value: any[]) => {
+                renderProps.field.onChange(...value);
+                props.onValueChange?.(...value);
+              },
               label,
               placeholder,
               description,

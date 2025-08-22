@@ -26,6 +26,7 @@ export interface InfinitySelectProps<T = unknown>
   defaultSearchValue?: string;
   nothingFoundMessage?: ReactNode | ((data: { combobox: ComboboxStore }) => ReactNode);
   infinity: InfiniteQueryHookResult<InfiniteData<{ data: T[] }, number>, Error>;
+  defaultSelectedOption?: T | null;
   selectedOption?: T | null;
   onSelectedOptionChange?: (option: T | null) => void;
   onSearchChange?: (value: string) => void;
@@ -55,12 +56,13 @@ export function InfinitySelect<T = unknown>({
   selectedOption,
   comboboxProps,
   searchable = true,
+  defaultSelectedOption = null,
   ...props
 }: InfinitySelectProps<T>) {
   const combobox = useCombobox();
 
   const [_selectedOption, handleSelectedOption] = useUncontrolled({
-    defaultValue: null,
+    defaultValue: defaultSelectedOption,
     value: selectedOption,
     onChange: onSelectedOptionChange,
   });
@@ -76,8 +78,6 @@ export function InfinitySelect<T = unknown>({
     value: searchValue,
     onChange: onSearchChange,
   });
-
-  // const [searchHasChanged, setSearchHasChanged] = useState(false);
 
   const data = infinity.data?.pages.flatMap((page) => page.data) ?? [];
 
@@ -105,10 +105,6 @@ export function InfinitySelect<T = unknown>({
     overscan: 7,
     getScrollElement: () => scrollRef.current,
   });
-
-  // const openDropdown = () => {
-  //   if (searchHasChanged || _search === '' || !_value) combobox.openDropdown();
-  // };
 
   const scrollRef = useRef<HTMLDivElement>(null);
 

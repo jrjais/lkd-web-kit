@@ -38,6 +38,13 @@ export const InfinityLoader = ({
     if (!hasScroll) infinity.fetchNextPage();
   }, [entry?.isIntersecting, infinity.data?.pages.length]);
 
+  const showLoader = infinity.isLoading || infinity.isFetchingNextPage;
+  const showEndMessage = infinity.data && infinity.data.pages.length > 1 && !infinity.hasNextPage;
+
+  if (!showLoader && !showEndMessage) {
+    return null;
+  }
+
   return (
     <Center
       ref={ref}
@@ -48,11 +55,7 @@ export const InfinityLoader = ({
         ...props.style,
       }}
     >
-      {infinity.isLoading || infinity.isFetchingNextPage ? (
-        <Loader {...loaderProps} />
-      ) : infinity.data && infinity.data.pages.length > 1 && !infinity.hasNextPage ? (
-        endMessage
-      ) : null}
+      {showLoader ? <Loader {...loaderProps} /> : showEndMessage ? endMessage : null}
     </Center>
   );
 };
