@@ -37,6 +37,7 @@ export interface InfinitySelectProps<T = unknown>
   getOptionValue: (option: T) => string;
   comboboxProps?: ComboboxProps;
   searchable?: boolean;
+  ref?: React.Ref<HTMLInputElement>;
 }
 
 export function InfinitySelect<T = unknown>({

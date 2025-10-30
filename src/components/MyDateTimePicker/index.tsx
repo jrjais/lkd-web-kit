@@ -1,7 +1,9 @@
 import { DateTimePicker, DateTimePickerProps } from '@mantine/dates';
 import CalendarIcon from '../MyDatePickerInput/CalendarIcon';
 
-export interface MyDateTimePickerProps extends DateTimePickerProps {}
+export interface MyDateTimePickerProps extends DateTimePickerProps {
+  ref: React.Ref<HTMLButtonElement>;
+}
 
 export const MyDateTimePicker = (props: MyDateTimePickerProps) => (
   <DateTimePicker

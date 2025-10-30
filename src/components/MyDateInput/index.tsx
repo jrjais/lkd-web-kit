@@ -1,7 +1,9 @@
 import { DateInput, DateInputProps } from '@mantine/dates';
 import CalendarIcon from '../MyDatePickerInput/CalendarIcon';
 
-export interface MyDateInputProps extends DateInputProps {}
+export interface MyDateInputProps extends DateInputProps {
+  ref: React.Ref<HTMLInputElement>;
+}
 
 export const MyDateInput = (props: MyDateInputProps) => (
   <DateInput
