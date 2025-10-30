@@ -7,7 +7,7 @@ import {
 import CalendarIcon from '../MyDatePickerInput/CalendarIcon';
 
 export interface MyMonthPickerInputProps extends MonthPickerInputProps<any> {
-  ref: React.Ref<HTMLButtonElement>;
+  ref?: React.Ref<HTMLButtonElement>;
 }
 
 export const MyMonthPickerInput = (props: MyMonthPickerInputProps) => (
