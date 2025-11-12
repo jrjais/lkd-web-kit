@@ -1,6 +1,6 @@
 import { NumberInput, NumberInputProps } from '@mantine/core';
 
-export interface MyNumberInputProps extends NumberInputProps {
+export interface MyNumberInputProps extends Omit<NumberInputProps, "onValueChange"> {
   ref?: React.Ref<HTMLInputElement>;
 }
 
