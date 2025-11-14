@@ -17,3 +17,4 @@ export * from './SelectInfinity';
 export * from './MyMultiSelect';
 export * from './MyMonthPickerInput';
 export * from './MyDateInput';
+export * from './MyCheckboxGroup';

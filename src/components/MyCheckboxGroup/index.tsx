@@ -1,30 +1,29 @@
-import { Radio, RadioGroupProps, RadioProps, Stack, Group, MantineSpacing } from '@mantine/core';
-import { FormRadioGroup } from 'src/form';
+import { Radio, RadioProps, Stack, Group, MantineSpacing, CheckboxGroupProps, CheckboxGroup, CheckboxProps, Checkbox } from '@mantine/core';
 
-export interface MyRadioGroupProps extends Omit<RadioGroupProps, 'children'> {
-  options: RadioProps[];
+export interface MyCheckboxGroupProps extends Omit<CheckboxGroupProps, 'children'> {
+  options: CheckboxProps[];
   orientation?: 'horizontal' | 'vertical';
   gap?: MantineSpacing;
   disabled?: boolean;
 }
 
-export const MyRadioGroup = ({
+export const MyCheckboxGroup = ({
   options,
   orientation = 'horizontal',
   gap = 'md',
-  ...radioGroupProps
-}: MyRadioGroupProps) => {
+  ...checkboxGroupProps
+}: MyCheckboxGroupProps) => {
   const Container = orientation === 'horizontal' ? Group : Stack;
   return (
-    <Radio.Group {...radioGroupProps}>
+    <CheckboxGroup {...checkboxGroupProps}>
       <Container gap={gap}>
         {options.map((option, index) => (
-          <Radio
+          <Checkbox
             key={String(option.value) || String(index)}
             {...option}
           />
         ))}
       </Container>
-    </Radio.Group>
+    </CheckboxGroup>
   );
 };
