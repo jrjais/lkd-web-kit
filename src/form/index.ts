@@ -1,5 +1,5 @@
 export * from './Form';
-export * from './FormButtonSubmit';
+export * from './FormSubmitButton';
 export * from './utils/zodValidator';
 export * from './utils/nullable-but-required';
 export * from './utils/optional-but-required';

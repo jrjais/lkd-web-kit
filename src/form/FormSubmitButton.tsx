@@ -2,17 +2,17 @@
 import { Button, ButtonProps, ElementProps } from '@mantine/core';
 import { useFormContext } from 'react-hook-form';
 
-export interface FormButtonSubmitProps
+export interface FormSubmitButtonProps
   extends ButtonProps,
     ElementProps<'button', keyof ButtonProps> {
   disabledWhenSuccess?: boolean;
 }
 
-export const FormButtonSubmit = ({
+export const FormSubmitButton = ({
   disabled,
   disabledWhenSuccess,
   ...props
-}: FormButtonSubmitProps) => {
+}: FormSubmitButtonProps) => {
   const {
     formState: { isSubmitting, isSubmitSuccessful },
   } = useFormContext();

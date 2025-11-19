@@ -1,8 +1,7 @@
 export * from './EmptyState';
-export * from './InfinityLoader';
 export * from './NavItems';
 export * from './Icon';
-export * from './MyRadioGroup';
+export * from './InfinityLoadMoreButton';
 
 // fields
 export * from './MyDatePickerInput';
@@ -13,8 +12,9 @@ export * from './MySelect';
 export * from './MyTextarea';
 export * from './MyTextInput';
 export * from './MyTimeInput';
-export * from './SelectInfinity';
+export * from './InfinitySelect';
 export * from './MyMultiSelect';
 export * from './MyMonthPickerInput';
 export * from './MyDateInput';
 export * from './MyCheckboxGroup';
+export * from './MyRadioGroup';

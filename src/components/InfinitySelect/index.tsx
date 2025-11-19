@@ -1,30 +1,39 @@
-'use client';
+"use client";
 import {
+  Center,
   Combobox,
-  ComboboxProps,
-  ComboboxStore,
-  ElementProps,
+  type ComboboxProps,
+  type ComboboxStore,
+  type ElementProps,
   Input,
   InputBase,
-  InputBaseProps,
+  type InputBaseProps,
   useCombobox,
-} from '@mantine/core';
-import { useUncontrolled } from '@mantine/hooks';
-import { InfiniteData } from '@tanstack/react-query';
-import { useVirtualizer } from '@tanstack/react-virtual';
-import { ReactNode, useEffect, useRef, useState } from 'react';
-import { InfiniteQueryHookResult } from 'react-query-kit';
-import { getVirtualContainerProps, getVirtualItemProps } from 'src/utils/virtual-styles';
-import { InfinityLoader } from '../InfinityLoader';
+} from "@mantine/core";
+import { useUncontrolled } from "@mantine/hooks";
+import type { InfiniteData } from "@tanstack/react-query";
+import { useVirtualizer } from "@tanstack/react-virtual";
+import { type ReactNode, useEffect, useRef } from "react";
+import type { InfiniteQueryHookResult } from "react-query-kit";
+import {
+  getVirtualContainerProps,
+  getVirtualItemProps,
+} from "src/utils/virtual-styles";
+import {
+  InfinityLoadMoreButton,
+  type InfinityLoadMoreButtonProps,
+} from "../InfinityLoadMoreButton";
 
 export interface InfinitySelectProps<T = unknown>
   extends InputBaseProps,
-    ElementProps<'input', keyof InputBaseProps | 'value' | 'onChange'> {
+    ElementProps<"input", keyof InputBaseProps | "value" | "onChange"> {
   value?: string | null;
   defaultValue?: string;
   searchValue?: string;
   defaultSearchValue?: string;
-  nothingFoundMessage?: ReactNode | ((data: { combobox: ComboboxStore }) => ReactNode);
+  nothingFoundMessage?:
+    | ReactNode
+    | ((data: { combobox: ComboboxStore }) => ReactNode);
   infinity: InfiniteQueryHookResult<InfiniteData<{ data: T[] }, number>, Error>;
   defaultSelectedOption?: T | null;
   selectedOption?: T | null;
@@ -35,9 +44,11 @@ export interface InfinitySelectProps<T = unknown>
   onOptionSubmit?: (value: string, option: T) => void;
   getOptionLabel: (option: T) => string;
   getOptionValue: (option: T) => string;
+  resetPageParam?: () => Promise<void>;
   comboboxProps?: ComboboxProps;
   searchable?: boolean;
   ref?: React.Ref<HTMLInputElement>;
+  loadMoreButtonProps?: Partial<InfinityLoadMoreButtonProps<T>>;
 }
 
 export function InfinitySelect<T = unknown>({
@@ -58,6 +69,7 @@ export function InfinitySelect<T = unknown>({
   comboboxProps,
   searchable = true,
   defaultSelectedOption = null,
+  loadMoreButtonProps,
   ...props
 }: InfinitySelectProps<T>) {
   const combobox = useCombobox();
@@ -83,7 +95,7 @@ export function InfinitySelect<T = unknown>({
   const data = infinity.data?.pages.flatMap((page) => page.data) ?? [];
 
   const _reset = () => {
-    handleSearch('');
+    handleSearch("");
     handleValue(null);
     handleSelectedOption(null);
   };
@@ -106,6 +118,7 @@ export function InfinitySelect<T = unknown>({
     overscan: 7,
     getScrollElement: () => scrollRef.current,
   });
+  console.log(virtualizer.getTotalSize());
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -137,11 +150,17 @@ export function InfinitySelect<T = unknown>({
               <Combobox.Chevron />
             )
           }
-          component={'input'}
-          rightSectionPointerEvents={value ? undefined : 'none'}
+          component={"input"}
+          rightSectionPointerEvents={value ? undefined : "none"}
           readOnly={!searchable || props.readOnly}
           pointer={!searchable}
-          value={searchable ? _search : _selectedOption ? getOptionLabel(_selectedOption) : ''}
+          value={
+            searchable
+              ? _search
+              : _selectedOption
+                ? getOptionLabel(_selectedOption)
+                : ""
+          }
           onChange={
             searchable
               ? (event) => {
@@ -153,7 +172,8 @@ export function InfinitySelect<T = unknown>({
               : undefined
           }
           onClick={(event) => {
-            if (!props.readOnly) searchable ? combobox.openDropdown() : combobox.toggleDropdown();
+            if (!props.readOnly)
+              searchable ? combobox.openDropdown() : combobox.toggleDropdown();
             props.onClick?.(event);
           }}
           onFocus={(event) => {
@@ -167,55 +187,64 @@ export function InfinitySelect<T = unknown>({
             // setSearchHasChanged(false);
           }}
           {...props}
-          variant={props.readOnly ? 'filled' : 'default'}
+          variant={props.readOnly ? "filled" : "default"}
         />
       </Combobox.Target>
       <Combobox.Dropdown>
         <Combobox.Options
+          mih={50}
           mah={200}
           style={{
-            overflowY: 'auto',
+            overflowY: "auto",
           }}
           ref={scrollRef}
         >
           {data.length > 0 ? (
-            <div {...getVirtualContainerProps(virtualizer)}>
-              {virtualizer.getVirtualItems().map((virtualItem) => {
-                const option = data[virtualItem.index];
-                const virtualItemProps = getVirtualItemProps(virtualItem, virtualizer);
-                return (
-                  <Combobox.Option
-                    value={getOptionValue(option)}
-                    {...virtualItemProps}
-                    key={virtualItemProps.key}
-                    style={{
-                      ...virtualItemProps.style,
-                      fontWeight: 400,
-                    }}
-                  >
-                    {renderOption ? renderOption({ option }) : getOptionLabel(option)}
-                  </Combobox.Option>
-                );
-              })}
-            </div>
+            <>
+              <div {...getVirtualContainerProps(virtualizer)}>
+                {virtualizer.getVirtualItems().map((virtualItem) => {
+                  const option = data[virtualItem.index];
+                  const virtualItemProps = getVirtualItemProps(
+                    virtualItem,
+                    virtualizer,
+                  );
+                  return (
+                    <Combobox.Option
+                      value={getOptionValue(option)}
+                      {...virtualItemProps}
+                      key={virtualItemProps.key}
+                      style={{
+                        ...virtualItemProps.style,
+                        fontWeight: 400,
+                      }}
+                    >
+                      {renderOption
+                        ? renderOption({ option })
+                        : getOptionLabel(option)}
+                    </Combobox.Option>
+                  );
+                })}
+              </div>
+              {virtualizer.getTotalSize() !== 0 && (
+                <Center className="mt-2">
+                  <InfinityLoadMoreButton
+                    infinity={infinity}
+                    parentRef={scrollRef}
+                    size="compact-sm"
+                    {...loadMoreButtonProps}
+                  />
+                </Center>
+              )}
+            </>
           ) : !infinity.isFetching ? (
             <Combobox.Empty mih={24}>
               {nothingFoundMessage
-                ? typeof nothingFoundMessage === 'function'
+                ? typeof nothingFoundMessage === "function"
                   ? nothingFoundMessage({ combobox })
                   : nothingFoundMessage
-                : 'No hay resultados'}
+                : "No hay resultados"}
             </Combobox.Empty>
           ) : null}
-          <InfinityLoader
-            root={scrollRef}
-            infinity={infinity}
-            loaderProps={{
-              mt: 4,
-              mb: 8,
-              size: 'sm',
-            }}
-          />
         </Combobox.Options>
       </Combobox.Dropdown>
     </Combobox>
