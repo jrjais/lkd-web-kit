@@ -118,7 +118,6 @@ export function InfinitySelect<T = unknown>({
     overscan: 7,
     getScrollElement: () => scrollRef.current,
   });
-  console.log(virtualizer.getTotalSize());
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
