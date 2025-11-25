@@ -41,9 +41,9 @@ export const InfinityLoadMoreButton = <T,>({
     <Button
       ref={ref}
       onClick={() => fetchNextPage()}
-      className={clsx((!hasNextPage || isFetchingNextPage) && 'pointer-events-none', 'font-medium')}
+      className={clsx((!hasNextPage || showLoader) && 'pointer-events-none', 'font-medium')}
       variant="transparent"
-      color={!hasNextPage ? 'gray' : undefined}
+      color={!hasNextPage && !showLoader ? 'gray' : undefined}
       {...props}
     >
       {showLoader ? loading : hasNextPage ? loadMore : end}
