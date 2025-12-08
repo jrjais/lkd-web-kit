@@ -1,6 +1,6 @@
 {
   "name": "lkd-web-kit",
-  "version": "0.7.24",
+  "version": "0.7.25",
   "description": "A template for creating React component libraries with Vite.",
   "author": "LKD",
   "license": "MIT",

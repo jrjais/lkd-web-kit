@@ -26,7 +26,7 @@ export interface InfinitySelectProps<T = unknown>
   searchValue?: string
   defaultSearchValue?: string
   nothingFoundMessage?: ReactNode | ((data: { combobox: ComboboxStore }) => ReactNode)
-  infinity: InfiniteQueryHookResult<InfiniteData<{ data: T[] }, number>, Error>
+  infinity: InfiniteQueryHookResult<InfiniteData<{ data?: T[] }, number>, Error>
   defaultSelectedOption?: T | null
   selectedOption?: T | null
   onSelectedOptionChange?: (option: T | null) => void
@@ -122,7 +122,7 @@ export function InfinitySelect<T = unknown>({
         },
       }}
       onOptionSubmit={(val) => {
-        const selectedOption = data.find((i) => getOptionValue(i) === val)
+        const selectedOption = data.find((i) => i && getOptionValue(i) === val)
         if (selectedOption) {
           setSearchAndValue(selectedOption)
           handleSelectedOption(selectedOption)
@@ -189,6 +189,8 @@ export function InfinitySelect<T = unknown>({
                 {virtualizer.getVirtualItems().map((virtualItem) => {
                   const option = data[virtualItem.index]
                   const virtualItemProps = getVirtualItemProps(virtualItem, virtualizer)
+                  if(!option) return null
+
                   return (
                     <Combobox.Option
                       value={getOptionValue(option)}

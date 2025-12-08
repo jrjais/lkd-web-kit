@@ -6,11 +6,11 @@ import { type RefObject, useEffect } from 'react'
 import type { InfiniteQueryHookResult } from 'react-query-kit'
 
 export interface InfinityLoadMoreButtonProps<T> extends ButtonProps {
-  infinity: InfiniteQueryHookResult<InfiniteData<{ data: T[] }, number>, Error>
+  infinity: InfiniteQueryHookResult<InfiniteData<{ data?: T[] }, number>, Error>
   parentRef?: RefObject<HTMLElement | null>
+  loader?: React.ReactNode
   labels?: {
     loadMore?: string
-    loading?: string
     end?: string
   }
 }
@@ -19,6 +19,7 @@ export const InfinityLoadMoreButton = <T,>({
   infinity,
   labels,
   parentRef,
+  loader,
   ...props
 }: InfinityLoadMoreButtonProps<T>) => {
   const { entry, ref } = useIntersection({
@@ -27,7 +28,7 @@ export const InfinityLoadMoreButton = <T,>({
     threshold: 0.5,
   })
 
-  const { loadMore = 'Cargar más', loading = 'Cargando...', end = 'Fin de la lista' } = labels || {}
+  const { loadMore = 'Cargar más', end = 'Fin de la lista' } = labels || {}
 
   const { hasNextPage, isFetchingNextPage, fetchNextPage } = infinity
 
@@ -41,12 +42,13 @@ export const InfinityLoadMoreButton = <T,>({
     <Button
       ref={ref}
       onClick={() => fetchNextPage()}
-      className={clsx((!hasNextPage || showLoader) && 'pointer-events-none', 'font-medium')}
+      loading={showLoader}
+      className={clsx(!hasNextPage && 'pointer-events-none', 'font-medium')}
       variant="transparent"
-      color={!hasNextPage && !showLoader ? 'gray' : undefined}
+      color={!hasNextPage ? 'gray' : undefined}
       {...props}
     >
-      {showLoader ? loading : hasNextPage ? loadMore : end}
+      {hasNextPage ? loadMore : end}
     </Button>
   )
 }
