@@ -4,6 +4,7 @@ import { breakpointsWithPx } from './breakpoints-with-px';
 export const myDefaultTheme: MantineThemeOverride = {
   breakpoints: breakpointsWithPx,
   cursorType: 'pointer',
+  defaultRadius: 'sm',
   components: {
     Notification: Notification.extend({
       defaultProps: {

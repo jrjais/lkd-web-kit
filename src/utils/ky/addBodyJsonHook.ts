@@ -1,13 +1,18 @@
-import { BeforeErrorHook, HTTPError } from 'ky';
-import { parseJSON } from './parseJson';
+import { BeforeErrorHook, HTTPError, isHTTPError } from 'ky'
 
 export type KyError<T> = HTTPError<T> & {
   response: {
-    bodyJson?: T;
-  };
-};
+    bodyJson?: T
+  }
+}
 
-export const addBodyJsonHook: BeforeErrorHook = async (error: KyError<unknown>) => {
-  error.response.bodyJson = await parseJSON(error.response);
-  return error;
-};
+export const addBodyJsonHook: BeforeErrorHook = async ({ error }) => {
+  if (!isHTTPError(error)) {
+    return error
+  }
+
+  const bodyJson = error.data ?? {}
+  ;(error as KyError<unknown>).response.bodyJson = bodyJson
+
+  return error
+}
