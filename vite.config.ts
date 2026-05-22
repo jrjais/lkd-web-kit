@@ -1,27 +1,45 @@
 /// <reference types="vitest/config" />
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react-swc';
-import dts from 'vite-plugin-dts';
-import preserveDirectives from 'rollup-preserve-directives';
-import { dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { peerDependencies, devDependencies } from './package.json';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+import { dirname, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import react from '@vitejs/plugin-react-swc'
+import preserveDirectives from 'rollup-preserve-directives'
+import type { Plugin } from 'vite'
+import { defineConfig } from 'vite'
+import dts from 'vite-plugin-dts'
+import { dependencies, peerDependencies } from './package.json'
 
-const external = [
-  'next/link',
-  'next/navigation',
-  'react/jsx-runtime',
+const __dirname = dirname(fileURLToPath(import.meta.url))
+const srcRoot = resolve(__dirname, 'src').replaceAll('\\', '/')
+
+const stripSrcPrefix = (): Plugin => ({
+  name: 'strip-src-prefix',
+  generateBundle(_, bundle) {
+    for (const item of Object.values(bundle)) {
+      if (item.fileName.startsWith('src/')) {
+        item.fileName = item.fileName.slice('src/'.length)
+      }
+    }
+  },
+})
+
+const externalPackages = [
   ...Object.keys(peerDependencies || {}),
-  ...Object.keys(devDependencies || {}),
-];
+  ...Object.keys(dependencies || {}),
+]
+
+const isExternal = (id: string): boolean => {
+  return externalPackages.some(
+    (packageName) => id === packageName || id.startsWith(`${packageName}/`),
+  )
+}
 
 export default defineConfig({
   plugins: [
     react(),
     preserveDirectives(),
-    dts({ rollupTypes: true }), // Output .d.ts files
+    stripSrcPrefix(),
+    dts({ bundleTypes: true }), // Output .d.ts files
   ],
   resolve: {
     alias: {
@@ -39,11 +57,11 @@ export default defineConfig({
     },
     // sourcemap: true,
     rollupOptions: {
-      external: external,
+      external: isExternal,
       output: {
         // Preserva los módulos ESM para que funcione "use client"
         preserveModules: true,
-        preserveModulesRoot: 'src',
+        preserveModulesRoot: srcRoot,
 
         // Configura exports globales para las dependencias externas
         globals: {
@@ -72,8 +90,7 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './src/test/setup.ts',
     coverage: {
-      all: false,
       enabled: true,
     },
   },
-});
+})

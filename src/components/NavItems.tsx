@@ -2,7 +2,6 @@
 import { NavLink, Stack } from '@mantine/core';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import path from 'path';
 import { MouseEvent, ReactNode } from 'react';
 
 export interface NavItemsProps {
