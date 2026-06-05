@@ -1,14 +1,14 @@
-'use client';
-import { InfiniteData } from '@tanstack/react-query';
-import { RefObject, useEffect } from 'react';
-import { InfiniteQueryHookResult } from 'react-query-kit';
-import { useOnScrollProgress } from './useOnScrollProgress';
+'use client'
+import { InfiniteData } from '@tanstack/react-query'
+import { RefObject, useEffect } from 'react'
+import { InfiniteQueryHookResult } from 'react-query-kit'
+import { useOnScrollProgress } from './useOnScrollProgress'
 
 export type FetchNextPageOnScrollOptions = {
-  infinity: InfiniteQueryHookResult<InfiniteData<{ data: unknown[] }, number>, Error>;
-  scrollRef?: RefObject<HTMLElement | null>;
-  disabled?: boolean;
-};
+  infinity: InfiniteQueryHookResult<InfiniteData<{ data: unknown[] }, number>, Error>
+  scrollRef?: RefObject<HTMLElement | null>
+  disabled?: boolean
+}
 
 export const useFetchNextPageOnScroll = ({
   infinity,
@@ -18,11 +18,11 @@ export const useFetchNextPageOnScroll = ({
   useOnScrollProgress({
     triggerPercentage: 0.9,
     callback: () => {
-      if (infinity.hasNextPage) infinity.fetchNextPage();
+      if (infinity.hasNextPage) infinity.fetchNextPage()
     },
     scrollRef,
     disabled,
-  });
+  })
 
   // useEffect(() => {
   //   // Si está deshabilitado o scrollRef está definido pero current es null, desactivamos el comportamiento
@@ -37,4 +37,4 @@ export const useFetchNextPageOnScroll = ({
 
   //   if (!hasScroll && infinity.hasNextPage) infinity.fetchNextPage();
   // }, [infinity.data, scrollRef, disabled]);
-};
+}

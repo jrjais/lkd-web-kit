@@ -1,34 +1,122 @@
-# ¿Cómo regenerar autogenerar la documentación (lkd-web-kit.md)?
+# Como regenerar la documentacion autogenerada de lkd-web-kit
 
-El archivo `docs/generated/lkd-web-kit.md` actúa como la principal fuente de verdad y referencia rápida generada de este paquete interno de UI. Actualmente, este documento es **construido (y reconstruido) mediante un flujo de trabajo asistido por IA** leyendo directamente la carpeta `src/`.
+`docs/generated/lkd-web-kit.md` es la fuente de verdad rapida del API publico de esta libreria interna. Se regenera con un flujo asistido por IA leyendo directamente `src/`.
 
-Si la estructura base de componentes de `lkd-web-kit` cambia dramáticamente (nuevos componentes `My*`, nuevos `Form*`, o nuevos `hooks`), no necesitas actualizar `lkd-web-kit.md` a mano componente por componente. Usa este proceso con tu agente de IA preferido para volver a generarlo.
+Regenera este documento cuando cambie la superficie publica: nuevos componentes `My*` o `Form*`, cambios de props, cambios de comportamiento exportado, nuevos hooks/utilidades exportadas o breaking changes de peer dependencies que obliguen a modificar wrappers, formularios o tipos publicos.
 
-## Flujo de Trabajo (Instrucciones para la IA o el Agente)
-
-Puedes solicitar a un modelo o agente (como Gemini o Claude en Cursor) el siguiente *prompt* general dentro del proyecto:
+## Prompt para el agente
 
 ```text
-Por favor, analiza la carpeta `src` de este entorno. Específicamente, inspecciona:
-1. `src/components`: Para listar todos los componentes generales (`My*`, genéricos, visuales, de navegación).
-2. `src/form/base` y `src/form/utils`: Para los componentes form-controlled (`Form*`) y utilidades con Zod.
-3. `src/hooks` y `src/utils`: Para los hooks personalizados y funciones auxiliares.
+Analiza la carpeta `src` de este entorno y regenera `docs/generated/lkd-web-kit.md`.
 
-Con esta información, regenera y sobrescribe el documento en `docs/generated/lkd-web-kit.md` siguiendo este formato:
-- Un título principal donde obligatoriamente leas el `package.json` de la raíz y escribas la versión actual del paquete (`lkd-web-kit`) en conjunto con la de `@mantine/core`.
-- Un bloque inicial para la Descripción del Paquete.
-- Una sección de "Inputs Genéricos" agrupando los componentes `My*`.
-- Una sección separada para los componentes de la capa de UI.
-- Una sección para "Formularios (React Hook Form)".
-- Secciones para Hooks y Utilidades.
+Fuentes obligatorias:
+1. `package.json`: leer la version actual de `lkd-web-kit` y el rango de `@mantine/core`.
+2. `src/index.ts`: usarlo como fuente de verdad de exportaciones publicas.
+3. `src/components`: listar componentes generales, wrappers `My*` y UI visual.
+4. `src/form/base` y `src/form/utils`: listar componentes `Form*`, HOC/controladores y utilidades de formularios.
+5. `src/hooks` y `src/utils`: listar solo hooks y utilidades exportadas publicamente.
 
-¡MUY IMPORTANTE!:
-Por cada componente en la lista, debes observar sus types o interfaces. Haz una nota explícita breve sobre las 'custom props' definidas por nuestra librería. Y reitera (en la introducción de cada categoría o en los componentes que hereden props de Mantine), que el desarrollador consulte la URL del LLM base de la UI en: https://mantine.dev/llms.txt para ver las props heredadas y las particularidades de renderizado.
+Reglas de contenido:
+- Documenta solo API publico exportado desde la raiz o desde barrels publicos.
+- Para cada componente, hook o utilidad, lee sus types/interfaces y distingue props custom de props heredadas.
+- No listes cada prop heredada de Mantine. Indica que se consulte https://mantine.dev/llms.txt.
+- Si una prop no puede confirmarse en codigo, no la inventes.
+- Si un simbolo existe en `src` pero no esta exportado publicamente, mencionalo solo en una nota final de "No exportado" si es relevante.
+
+Formato exacto:
+- Usa Markdown ASCII.
+- No uses tablas.
+- No uses emojis.
+- No uses espacios al final de linea.
+- Usa exactamente un salto de linea en blanco entre bloques.
+- No dejes lineas en blanco dentro de una ficha de componente, hook o utilidad.
+- Ordena alfabeticamente los items dentro de cada seccion por nombre exportado.
+- Mantiene nombres de secciones y orden exactamente como se indica abajo.
+- Si una seccion no tiene items, escribe una unica linea: `No hay exports publicos documentables.`
+- Cada bullet debe ser de una sola linea, salvo que el valor sea inevitablemente largo.
+
+Estructura obligatoria:
+
+# lkd-web-kit
+
+**Version lkd-web-kit:** `<version>` | **Mantine core:** `<range>`
+
+## Descripcion
+
+Un parrafo breve que describa la libreria.
+
+> **Referencia Mantine:** los componentes que extienden props de Mantine heredan su superficie nativa de props, variantes y comportamiento. Para consultar esas props heredadas y detalles de renderizado, usar https://mantine.dev/llms.txt.
+
+## Inputs Genericos
+
+Formato por componente:
+- **`NombreExportado`**: descripcion breve.
+  - Base: `ComponenteBase` o `N/A`.
+  - Props custom: `prop: Tipo`, `otraProp?: Tipo`; si no agrega props propias, escribir `ninguna`.
+  - Props heredadas: `Mantine <Nombre>Props`, `HTML <element>` o `N/A`.
+  - Notas: comportamiento relevante en una frase, o `ninguna`.
+
+## Componentes UI
+
+Usa el mismo formato por componente de "Inputs Genericos".
+
+## Formularios (React Hook Form)
+
+Formato por componente:
+- **`NombreExportado`**: descripcion breve.
+  - Base: `ComponenteBase` o `withController(...)`.
+  - Props custom: `prop: Tipo`, `otraProp?: Tipo`; si no agrega props propias, escribir `ninguna`.
+  - Control: explica como se conecta con React Hook Form en una frase.
+  - Notas: comportamiento relevante en una frase, o `ninguna`.
+
+## Hooks
+
+Formato por hook:
+- **`nombreHook`**: descripcion breve.
+  - Firma: `nombreHook(args): ReturnType`.
+  - Parametros custom: `param: Tipo`, `otro?: Tipo`; si no aplica, escribir `ninguno`.
+  - Retorno: descripcion breve.
+
+## Utilidades
+
+Formato por utilidad:
+- **`nombreUtilidad`**: descripcion breve.
+  - Firma: `nombreUtilidad(args): ReturnType` o `const nombre: Tipo`.
+  - Entrada: descripcion breve, o `N/A`.
+  - Salida: descripcion breve, o `N/A`.
+
+## Constantes y Tipos
+
+Formato:
+- **`NombreExportado`**: descripcion breve.
+  - Tipo: `type`, `interface`, `enum`, `const` o `namespace`.
+  - Uso: descripcion breve.
+
+## Notas de Uso
+
+Lista numerada corta con reglas de consumo:
+1. Importar desde la raiz del paquete: `import { FormTextInput, MySelect } from 'lkd-web-kit';`.
+2. Usar componentes `Form*` solo dentro de formularios controlados por React Hook Form.
+3. Consultar https://mantine.dev/llms.txt para props heredadas de Mantine.
+
+## No Exportado
+
+Incluye solo simbolos relevantes que existen en `src` pero no estan exportados publicamente. Si no hay casos relevantes, escribir `No hay simbolos relevantes no exportados.`
 ```
 
-## Recomendaciones Técnicas
+## Reglas de estabilidad de diff
 
-- Procura que el agente haga lecturas explícitas de las cabeceras e interfaces (e.g. `FormTextInputProps` o `MyCheckboxGroupProps`) para inferir adecuadamente las props expuestas y diferenciarlas así de las de Mantine.
-- Este proceso preserva que la IA conozca los estándares nativos de `react-hook-form` gracias al HOC `withController.tsx`. No es necesario que liste _cada_ prop inherente si es manejada por Mantine.
-- Si surge un conflicto durante la regeneración, simplemente utiliza un git diff o revisa el estado anterior desde tu control de versiones (`git restore docs/generated/lkd-web-kit.md`).
-- **Nota Especial sobre AGENTS.md:** No dupliques ni agendes generar esta documentación a nivel de componentes dentro de `AGENTS.md`. Aquel archivo está reservado exclusivamente para la arquitectura general y delegará siempre en `lkd-web-kit.md` la información detallada que generes aquí.
+- No reordenes secciones.
+- No cambies titulos si no cambia esta guia.
+- No agregues separadores horizontales.
+- No cambies comillas simples por dobles dentro de ejemplos existentes salvo que el codigo fuente lo exija.
+- Normaliza listas: cada item empieza con `- **\`Nombre\`**:`.
+- Normaliza versiones: copiar exactamente el valor de `package.json`.
+- Despues de regenerar, revisa `git diff -- docs/generated/lkd-web-kit.md` y elimina cambios que sean solo espacios, enters, reflow de texto o reordenamiento no justificado.
+
+## Recomendaciones tecnicas
+
+- Lee explicitamente interfaces como `FormTextInputProps`, `MyCheckboxGroupProps` o equivalentes antes de describir props.
+- Considera `withController.tsx` como la pieza central para componentes `Form*`.
+- Si el cambio viene de peer dependency breaking, documenta solo la nueva superficie publica resultante, no el historial de migracion.
+- No dupliques estas reglas dentro de `AGENTS.md`; ese archivo debe delegar la documentacion detallada en `docs/generated/lkd-web-kit.md`.

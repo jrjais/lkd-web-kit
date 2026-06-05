@@ -1,12 +1,9 @@
-import { Textarea, TextareaProps } from '@mantine/core';
+import { Textarea, TextareaProps } from '@mantine/core'
 
 export interface MyTextareaProps extends TextareaProps {
-  ref?: React.Ref<HTMLTextAreaElement>;
+  ref?: React.Ref<HTMLTextAreaElement>
 }
 
 export const MyTextarea = (props: MyTextareaProps) => (
-  <Textarea
-    variant={props.readOnly ? 'filled' : 'default'}
-    {...props}
-  />
-);
+  <Textarea variant={props.readOnly ? 'filled' : 'default'} {...props} />
+)

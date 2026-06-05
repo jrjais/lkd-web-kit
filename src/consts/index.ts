@@ -1,2 +1,2 @@
-export * from './http-status';
-export * from './revalidate';
+export * from './http-status'
+export * from './revalidate'

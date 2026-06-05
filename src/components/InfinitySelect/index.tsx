@@ -189,7 +189,7 @@ export function InfinitySelect<T = unknown>({
                 {virtualizer.getVirtualItems().map((virtualItem) => {
                   const option = data[virtualItem.index]
                   const virtualItemProps = getVirtualItemProps(virtualItem, virtualizer)
-                  if(!option) return null
+                  if (!option) return null
 
                   return (
                     <Combobox.Option

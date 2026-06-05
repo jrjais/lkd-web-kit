@@ -1,11 +1,11 @@
-'use client';
-import { Button, ButtonProps, ElementProps } from '@mantine/core';
-import { useFormContext } from 'react-hook-form';
+'use client'
+import { Button, ButtonProps, ElementProps } from '@mantine/core'
+import { useFormContext } from 'react-hook-form'
 
 export interface FormSubmitButtonProps
   extends ButtonProps,
     ElementProps<'button', keyof ButtonProps> {
-  disabledWhenSuccess?: boolean;
+  disabledWhenSuccess?: boolean
 }
 
 export const FormSubmitButton = ({
@@ -15,7 +15,7 @@ export const FormSubmitButton = ({
 }: FormSubmitButtonProps) => {
   const {
     formState: { isSubmitting, isSubmitSuccessful },
-  } = useFormContext();
+  } = useFormContext()
 
   return (
     <Button
@@ -24,5 +24,5 @@ export const FormSubmitButton = ({
       type="submit"
       {...props}
     />
-  );
-};
+  )
+}

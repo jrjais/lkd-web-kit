@@ -1,0 +1,4 @@
+interface:
+  display_name: "Publicar LKD Web Kit"
+  short_description: "Versiona y publica el kit en npm"
+  default_prompt: "Usa $publish-lkd-web-kit para versionar lkd-web-kit y publicarlo en npm mediante Trusted Publishing."

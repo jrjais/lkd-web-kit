@@ -3,5 +3,5 @@ export enum Revalidate {
   OneDay = 86400,
   OneWeek = 604800,
   OneMonth = 2592000,
-  OneYear = 31536000
+  OneYear = 31536000,
 }

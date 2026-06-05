@@ -1,20 +1,20 @@
 export const shuffleArray = <T>(array: T[]) => {
-  const shuffledArray = [...array];
+  const shuffledArray = [...array]
   let currentIndex = shuffledArray.length,
-    randomIndex;
+    randomIndex
 
   // While there remain elements to shuffle.
   while (currentIndex > 0) {
     // Pick a remaining element.
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
+    randomIndex = Math.floor(Math.random() * currentIndex)
+    currentIndex--
 
     // And swap it with the current element.
-    [shuffledArray[currentIndex], shuffledArray[randomIndex]] = [
+    ;[shuffledArray[currentIndex], shuffledArray[randomIndex]] = [
       shuffledArray[randomIndex],
       shuffledArray[currentIndex],
-    ];
+    ]
   }
 
-  return shuffledArray;
-};
+  return shuffledArray
+}

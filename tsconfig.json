@@ -22,10 +22,8 @@
     "useDefineForClassFields": true,
     "strict": true,
     "paths": {
-      "src/*": [
-        "./src/*"
-      ]
-    },
+      "src/*": ["./src/*"]
+    }
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
 }

@@ -1,2 +1,2 @@
-export * from './withController';
-export * from './withModalManager';
+export * from './withController'
+export * from './withModalManager'

@@ -1,5 +1,5 @@
-import { AppShell, Menu, Select, Tooltip, Notification, MantineThemeOverride } from '@mantine/core';
-import { breakpointsWithPx } from './breakpoints-with-px';
+import { AppShell, MantineThemeOverride, Menu, Notification, Select, Tooltip } from '@mantine/core'
+import { breakpointsWithPx } from './breakpoints-with-px'
 
 export const myDefaultTheme: MantineThemeOverride = {
   breakpoints: breakpointsWithPx,
@@ -35,4 +35,4 @@ export const myDefaultTheme: MantineThemeOverride = {
       },
     }),
   },
-};
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Actualizar dependencias LKD"
+  short_description: "Audita y actualiza peer deps del kit"
+  default_prompt: "Usa $update-lkd-dependencies para auditar y actualizar solo las peerDependencies de lkd-web-kit con cautela."

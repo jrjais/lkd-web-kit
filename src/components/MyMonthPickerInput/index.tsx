@@ -3,11 +3,11 @@ import {
   DateTimePickerProps,
   MonthPickerInput,
   MonthPickerInputProps,
-} from '@mantine/dates';
-import CalendarIcon from '../MyDatePickerInput/CalendarIcon';
+} from '@mantine/dates'
+import CalendarIcon from '../MyDatePickerInput/CalendarIcon'
 
 export interface MyMonthPickerInputProps extends MonthPickerInputProps<any> {
-  ref?: React.Ref<HTMLButtonElement>;
+  ref?: React.Ref<HTMLButtonElement>
 }
 
 export const MyMonthPickerInput = (props: MyMonthPickerInputProps) => (
@@ -17,4 +17,4 @@ export const MyMonthPickerInput = (props: MyMonthPickerInputProps) => (
     variant={props.readOnly ? 'filled' : 'default'}
     {...props}
   />
-);
+)

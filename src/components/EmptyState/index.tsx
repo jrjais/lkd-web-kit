@@ -1,22 +1,22 @@
-import { ComponentProps, ReactNode } from 'react';
-import { IconFC, Icon } from '../Icon';
-import { Text, useMantineTheme } from '@mantine/core';
+import { Text, useMantineTheme } from '@mantine/core'
+import { ComponentProps, ReactNode } from 'react'
+import { Icon, IconFC } from '../Icon'
 
 export interface EmptyProps extends ComponentProps<'div'> {
-  label: ReactNode;
-  action?: ReactNode;
-  icon?: IconFC;
-  size?: keyof typeof pxBySize;
+  label: ReactNode
+  action?: ReactNode
+  icon?: IconFC
+  size?: keyof typeof pxBySize
 }
 
 const pxBySize = {
   sm: 48,
   md: 60,
   lg: 84,
-};
+}
 
 export const EmptyState = ({ label, action, icon, size = 'md', ...props }: EmptyProps) => {
-  const { colors } = useMantineTheme();
+  const { colors } = useMantineTheme()
   return (
     <div
       style={{
@@ -48,5 +48,5 @@ export const EmptyState = ({ label, action, icon, size = 'md', ...props }: Empty
       </Text>
       <div>{action}</div>
     </div>
-  );
-};
+  )
+}

@@ -1,3 +1,3 @@
 export interface ApiList<T = unknown> {
-  data: T[];
+  data: T[]
 }

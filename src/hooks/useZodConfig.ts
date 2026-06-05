@@ -1,17 +1,17 @@
-import { useEffect } from 'react';
-import z from 'zod';
+import { useEffect } from 'react'
+import z from 'zod'
 
 export const useZodConfig = () => {
   useEffect(() => {
     z.config({
       customError: (iss) => {
         if (iss.code === 'too_small')
-          return iss.minimum === 1 ? `Campo requerido` : `Minimo ${iss.minimum} caracteres`;
+          return iss.minimum === 1 ? `Campo requerido` : `Minimo ${iss.minimum} caracteres`
 
-        if (iss.code === 'too_big') return `Maximo ${iss.maximum} caracteres`;
+        if (iss.code === 'too_big') return `Maximo ${iss.maximum} caracteres`
 
-        if (iss.code === 'invalid_format' && iss.format === 'email') return `Email invalido`;
+        if (iss.code === 'invalid_format' && iss.format === 'email') return `Email invalido`
       },
-    });
-  }, []);
-};
+    })
+  }, [])
+}

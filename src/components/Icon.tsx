@@ -1,9 +1,9 @@
-'use client';
-import React, { ComponentPropsWithoutRef } from 'react';
+'use client'
+import React, { ComponentPropsWithoutRef } from 'react'
 
-export type IconFC = React.FC<ComponentPropsWithoutRef<'svg'>>;
+export type IconFC = React.FC<ComponentPropsWithoutRef<'svg'>>
 export interface IconProps extends ComponentPropsWithoutRef<'svg'> {
-  i: IconFC;
+  i: IconFC
   /**
    * @property xs: 16px
    * @property sm: 20px
@@ -12,7 +12,7 @@ export interface IconProps extends ComponentPropsWithoutRef<'svg'> {
    * @property xl: 32px
    * @property 2xl: 40px
    */
-  size?: keyof typeof stylesBySize | number;
+  size?: keyof typeof stylesBySize | number
 }
 
 export const Icon = ({ i: I, size = 'md', style, rotate, ...rest }: IconProps) => {
@@ -32,8 +32,8 @@ export const Icon = ({ i: I, size = 'md', style, rotate, ...rest }: IconProps) =
       }}
       {...rest}
     />
-  );
-};
+  )
+}
 
 const stylesBySize = {
   xs: {
@@ -60,4 +60,4 @@ const stylesBySize = {
     height: 40,
     width: 40,
   },
-};
+}

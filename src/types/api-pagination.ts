@@ -1,5 +1,5 @@
 export interface ApiPagination<T> {
-  data: T[];
+  data: T[]
   // pageData: {
   //   total: {
   //     elements: number;

@@ -1,8 +1,8 @@
-import { MantineSize } from '@mantine/core';
-import { ComponentProps } from 'react';
+import { MantineSize } from '@mantine/core'
+import { ComponentProps } from 'react'
 
 interface CalendarIconProps {
-  size?: MantineSize;
+  size?: MantineSize
 }
 
 const CalendarIcon = ({ size = 'sm', ...props }: CalendarIconProps) => {
@@ -45,7 +45,7 @@ const CalendarIcon = ({ size = 'sm', ...props }: CalendarIconProps) => {
         fill="currentColor"
       />
     </svg>
-  );
-};
+  )
+}
 
-export default CalendarIcon;
+export default CalendarIcon

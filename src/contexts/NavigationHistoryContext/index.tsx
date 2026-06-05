@@ -1,20 +1,19 @@
-'use client';
-import { usePathname, useSearchParams } from 'next/navigation';
-import { createContext, ReactNode, RefObject, Suspense, useEffect, useRef } from 'react';
+'use client'
+import { usePathname, useSearchParams } from 'next/navigation'
+import { createContext, ReactNode, RefObject, Suspense, useEffect, useRef } from 'react'
 
 interface NavigationHistoryContextType {
-  history: string[];
+  history: string[]
 }
 
-export const NavigationHistoryContext = createContext<NavigationHistoryContextType | null>(null);
+export const NavigationHistoryContext = createContext<NavigationHistoryContextType | null>(null)
 
 interface NavigationHistoryProviderProps {
-  children: ReactNode;
+  children: ReactNode
 }
 
-
 export function NavigationHistoryProvider({ children }: NavigationHistoryProviderProps) {
-  const historyRef = useRef<string[]>([]);
+  const historyRef = useRef<string[]>([])
 
   return (
     <NavigationHistoryContext.Provider value={{ history: historyRef.current }}>
@@ -23,30 +22,29 @@ export function NavigationHistoryProvider({ children }: NavigationHistoryProvide
       </Suspense>
       {children}
     </NavigationHistoryContext.Provider>
-  );
+  )
 }
 
-
 interface HistoryTrackerProps {
-  historyRef: RefObject<string[]>;
+  historyRef: RefObject<string[]>
 }
 
 function HistoryTracker({ historyRef }: HistoryTrackerProps) {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
 
   useEffect(() => {
-    const fullPath = searchParams?.size ? `${pathname}?${searchParams.toString()}` : pathname;
+    const fullPath = searchParams?.size ? `${pathname}?${searchParams.toString()}` : pathname
 
     if (fullPath) {
-      const currentHistory = historyRef.current;
+      const currentHistory = historyRef.current
       // Evitar duplicados consecutivos
-      if (currentHistory.length > 0 && currentHistory[currentHistory.length - 1] === fullPath) 
-        return;
-      
-      historyRef.current = [...currentHistory, fullPath];
-    }
-  }, [pathname, searchParams, historyRef]);
+      if (currentHistory.length > 0 && currentHistory[currentHistory.length - 1] === fullPath)
+        return
 
-  return null;
+      historyRef.current = [...currentHistory, fullPath]
+    }
+  }, [pathname, searchParams, historyRef])
+
+  return null
 }
