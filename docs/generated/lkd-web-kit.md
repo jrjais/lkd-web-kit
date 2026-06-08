@@ -1,6 +1,6 @@
 # lkd-web-kit
 
-**Version lkd-web-kit:** `0.9.0` | **Mantine core:** `^9.3.0`
+**Version lkd-web-kit:** `0.9.1` | **Mantine core:** `^9.3.1`
 
 ## Descripcion del Paquete
 
@@ -99,9 +99,9 @@ Estos componentes son visuales o de interaccion general. Cuando envuelven Mantin
   - Uso: boton/sentinel para cargar la siguiente pagina de un `InfiniteQueryHookResult`. Usa `useIntersection` para disparar `fetchNextPage` al entrar en viewport y muestra `loading` cuando la query esta cargando o trayendo la siguiente pagina.
 
 - **`InfinitySelect`**
-  - Base: `Combobox`, `InputBase`, `useUncontrolled` y virtualizacion con `@tanstack/react-virtual`.
+  - Base: `Combobox`, `InputBase`, `useUncontrolled`, `useVirtualizedCombobox` y virtualizacion con `@tanstack/react-virtual`.
   - Custom props principales: `infinity`, `getOptionLabel`, `getOptionValue`, `renderOption?`, `onOptionSubmit?`, `selectedOption?`, `defaultSelectedOption?`, `onSelectedOptionChange?`, `value?`, `defaultValue?`, `searchValue?`, `defaultSearchValue?`, `onSearchChange?`, `nothingFoundMessage?`, `comboboxProps?`, `searchable?`, `loadMoreButtonProps?`, `resetPageParam?`, `ref?`.
-  - Uso: select asincrono con paginacion infinita, busqueda controlable/no controlable y renderizado virtualizado de opciones.
+  - Uso: select asincrono con paginacion infinita, busqueda controlable/no controlable, renderizado virtualizado de opciones y navegacion por teclado compatible con listas virtuales.
 
 - **`MyNotifications`**
   - Base: `Notifications` de `@mantine/notifications`.

@@ -8,15 +8,17 @@ import {
   Input,
   InputBase,
   type InputBaseProps,
-  useCombobox,
+  useVirtualizedCombobox,
 } from '@mantine/core'
 import { useUncontrolled } from '@mantine/hooks'
 import type { InfiniteData } from '@tanstack/react-query'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { type ReactNode, useEffect, useRef } from 'react'
+import { type ReactNode, useEffect, useMemo, useRef, useState } from 'react'
 import type { InfiniteQueryHookResult } from 'react-query-kit'
 import { getVirtualContainerProps, getVirtualItemProps } from 'src/utils/virtual-styles'
 import { InfinityLoadMoreButton, type InfinityLoadMoreButtonProps } from '../InfinityLoadMoreButton'
+
+const OPTION_HEIGHT = 40
 
 export interface InfinitySelectProps<T = unknown>
   extends InputBaseProps,
@@ -62,10 +64,9 @@ export function InfinitySelect<T = unknown>({
   searchable = true,
   defaultSelectedOption = null,
   loadMoreButtonProps,
+  resetPageParam,
   ...props
 }: InfinitySelectProps<T>) {
-  const combobox = useCombobox()
-
   const [_selectedOption, handleSelectedOption] = useUncontrolled({
     defaultValue: defaultSelectedOption,
     value: selectedOption,
@@ -84,16 +85,33 @@ export function InfinitySelect<T = unknown>({
     onChange: onSearchChange,
   })
 
-  const data = infinity.data?.pages.flatMap((page) => page.data) ?? []
+  const data = useMemo(
+    () => infinity.data?.pages.flatMap((page) => page.data ?? []) ?? [],
+    [infinity.data],
+  )
 
-  const _reset = () => {
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const [selectedOptionIndex, setSelectedOptionIndex] = useState(-1)
+  const [activeOptionIndex, setActiveOptionIndex] = useState(-1)
+
+  const resetSelection = (options?: { resetPage?: boolean }) => {
     handleSearch('')
     handleValue(null)
     handleSelectedOption(null)
+    setActiveOptionIndex(-1)
+    setSelectedOptionIndex(-1)
+
+    if (options?.resetPage) {
+      void resetPageParam?.()
+    }
+  }
+
+  const _reset = () => {
+    resetSelection({ resetPage: true })
   }
 
   const setSearchAndValue = (option: T | null) => {
-    if (option === null) _reset()
+    if (option === null) resetSelection()
     else {
       handleSearch(getOptionLabel(option))
       handleValue(getOptionValue(option))
@@ -106,12 +124,73 @@ export function InfinitySelect<T = unknown>({
 
   const virtualizer = useVirtualizer({
     count: data.length,
-    estimateSize: () => 40,
+    estimateSize: () => OPTION_HEIGHT,
+    getItemKey: (index) => getOptionValue(data[index]),
     overscan: 7,
     getScrollElement: () => scrollRef.current,
   })
 
-  const scrollRef = useRef<HTMLDivElement>(null)
+  const combobox = useVirtualizedCombobox({
+    onDropdownOpen: () => {
+      if (activeOptionIndex >= 0 && activeOptionIndex < data.length) {
+        setSelectedOptionIndex(activeOptionIndex)
+        requestAnimationFrame(() => {
+          virtualizer.scrollToIndex(activeOptionIndex, { align: 'auto' })
+        })
+      } else {
+        setSelectedOptionIndex(-1)
+      }
+    },
+    onDropdownClose: () => setSelectedOptionIndex(-1),
+    totalOptionsCount: data.length,
+    isOptionDisabled: (index) => index < 0 || index >= data.length,
+    getOptionId: (index) => {
+      return index >= 0 && index < data.length ? getOptionValue(data[index]) : null
+    },
+    selectedOptionIndex,
+    activeOptionIndex,
+    setSelectedOptionIndex: (index) => {
+      setSelectedOptionIndex(index)
+
+      if (index !== -1) {
+        virtualizer.scrollToIndex(index, { align: 'auto' })
+      }
+    },
+    onSelectedOptionSubmit: handleOptionSubmit,
+  })
+
+  useEffect(() => {
+    const nextActiveOptionIndex = _value
+      ? data.findIndex((option) => getOptionValue(option) === _value)
+      : -1
+
+    setActiveOptionIndex(nextActiveOptionIndex)
+  }, [_value, data, getOptionValue])
+
+  useEffect(() => {
+    setSelectedOptionIndex(-1)
+    scrollRef.current?.scrollTo({ top: 0 })
+  }, [_search])
+
+  useEffect(() => {
+    if (selectedOptionIndex >= data.length) {
+      setSelectedOptionIndex(-1)
+    }
+  }, [selectedOptionIndex, data.length])
+
+  function handleOptionSubmit(index: number) {
+    if (index < 0 || index >= data.length) return
+
+    const selectedOption = data[index]
+    const selectedValue = getOptionValue(selectedOption)
+
+    setSearchAndValue(selectedOption)
+    handleSelectedOption(selectedOption)
+    setActiveOptionIndex(index)
+    onOptionSubmit?.(selectedValue, selectedOption)
+    combobox.closeDropdown()
+    combobox.resetSelectedOption()
+  }
 
   return (
     <Combobox
@@ -121,28 +200,21 @@ export function InfinitySelect<T = unknown>({
           crossAxis: true,
         },
       }}
-      onOptionSubmit={(val) => {
-        const selectedOption = data.find((i) => i && getOptionValue(i) === val)
-        if (selectedOption) {
-          setSearchAndValue(selectedOption)
-          handleSelectedOption(selectedOption)
-          onOptionSubmit?.(val, selectedOption)
-        }
-        combobox.closeDropdown()
-      }}
+      resetSelectionOnOptionHover={false}
+      keepMounted
       {...comboboxProps}
     >
       <Combobox.Target>
         <InputBase
           rightSection={
-            props.readOnly ? null : value ? (
+            props.readOnly ? null : _value ? (
               <Input.ClearButton onClick={_reset} />
             ) : (
               <Combobox.Chevron />
             )
           }
           component={'input'}
-          rightSectionPointerEvents={value ? undefined : 'none'}
+          rightSectionPointerEvents={_value ? undefined : 'none'}
           readOnly={!searchable || props.readOnly}
           pointer={!searchable}
           value={searchable ? _search : _selectedOption ? getOptionLabel(_selectedOption) : ''}
@@ -152,7 +224,9 @@ export function InfinitySelect<T = unknown>({
                   if (event.currentTarget.value) combobox.openDropdown()
                   else combobox.closeDropdown()
                   // setSearchHasChanged(true);
+                  setSelectedOptionIndex(-1)
                   handleSearch(event.currentTarget.value)
+                  void resetPageParam?.()
                 }
               : undefined
           }
@@ -189,12 +263,14 @@ export function InfinitySelect<T = unknown>({
                 {virtualizer.getVirtualItems().map((virtualItem) => {
                   const option = data[virtualItem.index]
                   const virtualItemProps = getVirtualItemProps(virtualItem, virtualizer)
-                  if (!option) return null
 
                   return (
                     <Combobox.Option
                       value={getOptionValue(option)}
                       {...virtualItemProps}
+                      active={virtualItem.index === activeOptionIndex}
+                      selected={virtualItem.index === selectedOptionIndex}
+                      onClick={() => handleOptionSubmit(virtualItem.index)}
                       key={virtualItemProps.key}
                       style={{
                         ...virtualItemProps.style,
