@@ -65,8 +65,11 @@ export function InfinitySelect<T = unknown>({
   defaultSelectedOption = null,
   loadMoreButtonProps,
   resetPageParam,
+  readOnly,
   ...props
 }: InfinitySelectProps<T>) {
+  const isReadOnly = !searchable || readOnly
+
   const [_selectedOption, handleSelectedOption] = useUncontrolled({
     defaultValue: defaultSelectedOption,
     value: selectedOption,
@@ -207,15 +210,11 @@ export function InfinitySelect<T = unknown>({
       <Combobox.Target>
         <InputBase
           rightSection={
-            props.readOnly ? null : _value ? (
-              <Input.ClearButton onClick={_reset} />
-            ) : (
-              <Combobox.Chevron />
-            )
+            readOnly ? null : _value ? <Input.ClearButton onClick={_reset} /> : <Combobox.Chevron />
           }
           component={'input'}
           rightSectionPointerEvents={_value ? undefined : 'none'}
-          readOnly={!searchable || props.readOnly}
+          readOnly={isReadOnly}
           pointer={!searchable}
           value={searchable ? _search : _selectedOption ? getOptionLabel(_selectedOption) : ''}
           onChange={
@@ -231,11 +230,11 @@ export function InfinitySelect<T = unknown>({
               : undefined
           }
           onClick={(event) => {
-            if (!props.readOnly) searchable ? combobox.openDropdown() : combobox.toggleDropdown()
+            if (!readOnly) searchable ? combobox.openDropdown() : combobox.toggleDropdown()
             props.onClick?.(event)
           }}
           onFocus={(event) => {
-            if (!props.readOnly && searchable) combobox.openDropdown()
+            if (!readOnly && searchable) combobox.openDropdown()
             props.onFocus?.(event)
           }}
           onBlur={(event) => {
@@ -245,7 +244,7 @@ export function InfinitySelect<T = unknown>({
             // setSearchHasChanged(false);
           }}
           {...props}
-          variant={props.readOnly ? 'filled' : 'default'}
+          variant={readOnly ? 'filled' : 'default'}
         />
       </Combobox.Target>
       <Combobox.Dropdown>

@@ -4,6 +4,7 @@
 
 - `lkd-web-kit` sube de `0.9.0` a `0.9.1`.
 - `InfinitySelect` adopta `useVirtualizedCombobox` de Mantine para mejorar navegacion por teclado en listas virtualizadas.
+- `InfinitySelect` corrige el modo `searchable={false}` para mantener el input nativo como `readonly` aunque el consumidor envie `readOnly={false}`.
 - Se actualizan rangos minimos compatibles de Mantine y React Hook Form.
 - Riesgo esperado: bajo, centrado en validar selects infinitos, formularios y estilos Mantine en proyectos consumidores.
 
@@ -36,7 +37,9 @@ No hay cambios de API publica detectados.
 
 - Antes: `InfinitySelect` usaba `useCombobox` con renderizado virtualizado por TanStack.
 - Despues: `InfinitySelect` usa `useVirtualizedCombobox` y controla indices activos/seleccionados para que la navegacion por teclado funcione correctamente con opciones no montadas en el DOM.
-- Accion requerida en consumidores: no se esperan cambios de codigo; validar flujos que usen `InfinitySelect` y `FormInfinitySelect`.
+- Antes: cuando `searchable={false}` y `readOnly={false}` llegaban juntos, el spread de props podia pisar el `readOnly` interno y React advertia por un input con `value` sin `onChange`.
+- Despues: `InfinitySelect` calcula el estado readonly efectivo con `!searchable || readOnly`, preservando el comportamiento clickeable del combobox y evitando el warning de React.
+- Accion requerida en consumidores: no se esperan cambios de codigo; validar flujos que usen `InfinitySelect` y `FormInfinitySelect`, especialmente selects no buscables.
 
 ## Cambios requeridos por dependencias peer
 
@@ -81,6 +84,6 @@ Aun asi, despues de instalar dependencias:
 1. Ejecuta el install correspondiente del proyecto.
 2. Ejecuta `npm run lint`, `npm run test` y `npm run build` si existen.
 3. Corrige solo errores causados por el upgrade.
-4. Valida especialmente selects infinitos, navegacion por teclado en `InfinitySelect`, formularios con React Hook Form, queries con TanStack React Query y listas virtualizadas.
+4. Valida especialmente selects infinitos, selects con `searchable={false}`, navegacion por teclado en `InfinitySelect`, formularios con React Hook Form, queries con TanStack React Query y listas virtualizadas.
 5. Reporta dependencias actualizadas, archivos modificados, validaciones ejecutadas y cualquier bloqueo.
 ```
