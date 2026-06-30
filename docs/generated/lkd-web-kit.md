@@ -1,6 +1,6 @@
 # lkd-web-kit
 
-**Version lkd-web-kit:** `0.9.1` | **Mantine core:** `^9.3.1`
+**Version lkd-web-kit:** `0.9.2` | **Mantine core:** `^9.4.1`
 
 ## Descripcion del Paquete
 
@@ -78,7 +78,7 @@ Todos los componentes de esta seccion heredan props de Mantine o `@mantine/dates
 
 Estos componentes son visuales o de interaccion general. Cuando envuelven Mantine, consultar tambien https://mantine.dev/llms.txt para props heredadas.
 
-- **`EmptyState`**
+- **`EmptyState`** _(deprecated: usar `EmptyState` de `@mantine/core`)_
   - Uso: estado vacio estandar para listas, tablas o pantallas sin datos.
   - Custom props: `label: ReactNode`, `action?: ReactNode`, `icon?: IconFC`, `size?: 'sm' | 'md' | 'lg'`.
   - Tambien acepta props nativas de `div` por extender `ComponentProps<'div'>`.

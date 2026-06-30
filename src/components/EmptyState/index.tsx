@@ -2,6 +2,9 @@ import { Text, useMantineTheme } from '@mantine/core'
 import { ComponentProps, ReactNode } from 'react'
 import { Icon, IconFC } from '../Icon'
 
+/**
+ * @deprecated Use Mantine's EmptyState from @mantine/core instead.
+ */
 export interface EmptyProps extends ComponentProps<'div'> {
   label: ReactNode
   action?: ReactNode
@@ -15,6 +18,9 @@ const pxBySize = {
   lg: 84,
 }
 
+/**
+ * @deprecated Use Mantine's EmptyState from @mantine/core instead.
+ */
 export const EmptyState = ({ label, action, icon, size = 'md', ...props }: EmptyProps) => {
   const { colors } = useMantineTheme()
   return (
