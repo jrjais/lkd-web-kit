@@ -1,6 +1,6 @@
 # lkd-web-kit
 
-**Version lkd-web-kit:** `0.9.2` | **Mantine core:** `^9.4.1`
+**Version lkd-web-kit:** `0.10.0` | **Mantine core:** `^9.4.1`
 
 ## Descripcion del Paquete
 
@@ -214,6 +214,12 @@ Todos los campos controlados pueden recibir:
 
 - **`usePageData<T>()`**
   - Lee el valor de `PageDataProvider`; lanza error si se usa fuera del contexto.
+
+- **`ModalManagerProvider` / `useModalManager`**
+  - Modal manager global tipado por proyecto con module augmentation de `ModalManagerRegistryOverride`.
+  - `ModalManagerProvider` recibe `modals` y `loadModals`; `useModalManager().showModal` infiere keys y props desde el registro sobrescrito.
+  - Tipos exportados: `ModalManagerRegistryOverride`, `ModalRegistry`, `ModalRegistryRecord`, `ModalRegistryItem`, `ModalKey`, `ModalManagerProviderProps`, `ShowModalOptions`.
+  - Cada item puede exponer `component`, `load` y `path`; `loadModals` precarga por key exacta o prefijo usando `load`.
 
 ## Utilidades
 
