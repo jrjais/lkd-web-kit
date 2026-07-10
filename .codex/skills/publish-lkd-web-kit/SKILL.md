@@ -153,3 +153,20 @@ Reporta en espanol:
 - Validaciones ejecutadas.
 - Commit/tag creados o pendientes.
 - Estado del workflow de Trusted Publishing y si queda algun paso manual en npm.
+- Comandos exactos que el usuario debe ejecutar para disparar el workflow de publicacion cuando el release quede listo.
+
+Incluye siempre este bloque, ajustando `vX.Y.Z` por la version real:
+
+```bash
+git push origin HEAD
+git push origin vX.Y.Z
+```
+
+Si el commit o tag todavia no fueron creados, incluye tambien los comandos pendientes antes del push:
+
+```bash
+git commit -m "release: vX.Y.Z"
+git tag vX.Y.Z
+git push origin HEAD
+git push origin vX.Y.Z
+```
