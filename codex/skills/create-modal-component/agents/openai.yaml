@@ -1,0 +1,4 @@
+interface:
+  display_name: "Create Modal Component"
+  short_description: "Create project modals with manager registration."
+  default_prompt: "Use $create-modal-component to create a modal following this project's modal manager pattern."
