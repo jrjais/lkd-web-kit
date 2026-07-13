@@ -14,9 +14,10 @@ Usar este skill para crear o refactorizar tablas del proyecto.
 3. Revisar un ejemplo cercano antes de editar; preferir `Table{EntityPlural}.tsx`.
 4. Crear o mantener la tabla en un componente encapsulado junto a la vista/feature que la consume.
 5. Usar `createColumnHelper<RowData>()`; no declarar `any`.
-6. Usar `MyTable` para renderizar la tabla.
-7. Usar `TableWrapper` como raiz visual de la tabla.
-8. No usar `MyTablePagination` para nuevas tablas.
+6. Importar `MyTable` y `TableWrapper*` desde `lkd-web-kit`.
+7. Usar `MyTable` para renderizar la tabla.
+8. Usar `TableWrapper` como raiz visual de la tabla.
+9. No usar `MyTablePagination` para nuevas tablas.
 
 ## Checklist antes de escribir columnas
 
@@ -107,14 +108,15 @@ const columns = [
 "use client";
 
 import { createColumnHelper } from "@tanstack/react-table";
-import { useMemo, useState } from "react";
-import MyTable from "src/components/ui/MyTable";
-import TableWrapper, {
+import {
+  MyTable,
+  TableWrapper,
   TableWrapperFooter,
   TableWrapperHeader,
   TableWrapperPagination,
   TableWrapperTitle,
-} from "src/components/ui/TableWrapper";
+} from "lkd-web-kit";
+import { useMemo, useState } from "react";
 
 type ItemTableData = {
   id: string;

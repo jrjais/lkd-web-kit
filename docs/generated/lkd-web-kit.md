@@ -1,6 +1,6 @@
 # lkd-web-kit
 
-**Version lkd-web-kit:** `0.10.0` | **Mantine core:** `^9.4.1`
+**Version lkd-web-kit:** `0.10.2` | **Mantine core:** `^9.4.1`
 
 ## Descripcion del Paquete
 
@@ -92,6 +92,14 @@ Estos componentes son visuales o de interaccion general. Cuando envuelven Mantin
   - Uso: lista vertical de `NavLink` compatible con Next.js.
   - Custom props: `items` con `label`, `href?`, `isActive?`, `leftSection?`, `rightSection?`, `onClick?`, `disabled?`, `className?`, `children?`; `activeStrategy?: 'equals' | 'includes'`.
   - Comportamiento propio: si un item tiene `href`, renderiza `NavLink` como `Link` con `prefetch={false}`; si no, lo renderiza como `button`. Calcula `active` con `usePathname`.
+
+- **`MyTable`**
+  - Base: `Table` de `@mantine/core` y `@tanstack/react-table`.
+  - Uso: renderizado tabular horizontal o `variant="vertical"` con columnas tipadas, loading overlay, empty state, click por fila y sorting opcional.
+
+- **`TableWrapper` / `TableWrapperHeader` / `TableWrapperFooter` / `TableWrapperTitle` / `TableWrapperPagination`**
+  - Uso: estructura visual estandar para tablas, encabezados, pies y paginacion compacta o completa.
+  - `TableWrapperPagination` soporta `variant="short"` con texto calculado desde `totalRows`, `pageSize` y `currentRows`.
 
 - **`InfinityLoadMoreButton`**
   - Base: `Button` de Mantine.
