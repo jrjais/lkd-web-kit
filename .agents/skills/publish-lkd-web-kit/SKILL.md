@@ -15,12 +15,14 @@ Para actualizar dependencias antes del release, usa `$update-lkd-dependencies`.
 
 Antes de cambiar version o crear tags:
 
-1. Lee `AGENTS.md`, `package.json`, `package-lock.json` y `docs/generated/lkd-web-kit.md`.
-2. Ejecuta `git status --short` y confirma que el worktree esta limpio o que solo contiene cambios esperados para el release.
-3. Verifica que `package.json` y `package-lock.json` declaran la misma version del paquete.
-4. Revisa si existe `.github/workflows/publish.yml`.
-5. Si Trusted Publishing no esta configurado en npm, lee `references/npm-trusted-publishing.md` y detente antes de publicar hasta que un maintainer/admin lo habilite.
-6. Identifica la version anterior publicada/local y la version nueva objetivo; las necesitaras para la upgrade guide.
+1. Pregunta siempre al usuario a que version quiere subir. No infieras ni elijas version por tu cuenta.
+2. Valida que la version objetivo sea SemVer y mayor que la version publicada/local.
+3. Lee `AGENTS.md`, `package.json`, `package-lock.json` y `docs/generated/lkd-web-kit.md`.
+4. Ejecuta `git status --short` y confirma que el worktree esta limpio o que solo contiene cambios esperados para el release.
+5. Verifica que `package.json` y `package-lock.json` declaran la misma version del paquete.
+6. Revisa si existe `.github/workflows/publish.yml`.
+7. Si Trusted Publishing no esta configurado en npm, lee `references/npm-trusted-publishing.md` y detente antes de publicar hasta que un maintainer/admin lo habilite.
+8. Identifica la version anterior publicada/local y la version nueva objetivo; las necesitaras para la upgrade guide.
 
 ## Versionado SemVer cauteloso
 
@@ -30,7 +32,7 @@ Elige el bump por impacto publico:
 - `minor`: agrega soporte compatible, nuevos componentes, nuevas props compatibles o amplia peers sin romper consumers.
 - `patch`: mantenimiento, fixes internos, ajustes de build o dependencia compatible sin impacto publico.
 
-Si el usuario da una version exacta, usala solo si es SemVer valida y mayor que la version publicada/local.
+La version exacta debe venir del usuario. Si no la dio en el mensaje inicial, pregunta y espera respuesta antes de ejecutar `npm version`.
 
 Aplica la version sin crear tag automaticamente:
 
@@ -134,7 +136,7 @@ git commit -m "release: vX.Y.Z"
 git tag vX.Y.Z
 ```
 
-4. Empuja commit y tag solo cuando el usuario haya pedido publicar:
+4. Empuja commit y tag automaticamente:
 
 ```bash
 git push origin HEAD
@@ -151,22 +153,13 @@ Reporta en espanol:
 - Tipo de bump y justificacion.
 - Ruta de la upgrade guide generada.
 - Validaciones ejecutadas.
-- Commit/tag creados o pendientes.
+- Commit/tag creados y push ejecutado, o el bloqueo exacto si fallo.
 - Estado del workflow de Trusted Publishing y si queda algun paso manual en npm.
-- Comandos exactos que el usuario debe ejecutar para disparar el workflow de publicacion cuando el release quede listo.
+- Comandos exactos ejecutados para disparar el workflow de publicacion.
 
 Incluye siempre este bloque, ajustando `vX.Y.Z` por la version real:
 
 ```bash
-git push origin HEAD
-git push origin vX.Y.Z
-```
-
-Si el commit o tag todavia no fueron creados, incluye tambien los comandos pendientes antes del push:
-
-```bash
-git commit -m "release: vX.Y.Z"
-git tag vX.Y.Z
 git push origin HEAD
 git push origin vX.Y.Z
 ```
