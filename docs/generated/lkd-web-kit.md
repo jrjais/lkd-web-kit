@@ -1,6 +1,6 @@
 # lkd-web-kit
 
-**Version lkd-web-kit:** `0.10.3` | **Mantine core:** `^9.4.1`
+**Version lkd-web-kit:** `0.10.4` | **Mantine core:** `^9.4.1`
 
 ## Descripcion del Paquete
 
@@ -277,7 +277,8 @@ Todos los campos controlados pueden recibir:
 - **`myDefaultTheme`**
   - Override base de Mantine.
   - Define `breakpoints`, `cursorType: 'pointer'`, `defaultRadius: 'sm'`.
-  - Defaults por componente: `Notification.withBorder = true`, `AppShell.padding = 0`, `Select.allowDeselect = false`, `Select.withCheckIcon = false`, `Select.clearable = true`, `Menu.position = 'bottom-end'`, `Tooltip.multiline = true`, `Tooltip.maw = 300`.
+  - Defaults por componente: `Container.size = 'xl'`, `Container.px = 'md'`, `Notification.withBorder = true`, `AppShell.padding = 0`, `Select.allowDeselect = false`, `Select.withCheckIcon = false`, `Select.clearable = true`, `Menu.position = 'bottom-end'`, `Tooltip.multiline = true`, `Tooltip.maw = 300`.
+  - `Container` define tamanos custom: `xs: 960px`, `sm: 1024px`, `md: 1152px`, `lg: 1280px`, `xl: 1652px`; para ancho completo usar `fluid`.
 
 - **`breakpointsWithPx`**
   - Valores: `xs: 540px`, `sm: 640px`, `md: 768px`, `lg: 1024px`, `xl: 1280px`, `2xl: 1536px`, `3xl: 1680px`.
