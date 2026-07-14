@@ -1,6 +1,6 @@
 {
   "name": "lkd-web-kit",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "description": "A template for creating React component libraries with Vite.",
   "author": "LKD",
   "license": "MIT",
@@ -20,13 +20,13 @@
     }
   },
   "bin": {
-    "lkd-install-codex-skills": "./scripts/install-codex-skills.mjs"
+    "lkd-install-agent-skills": "./scripts/install-agent-skills.mjs"
   },
   "sideEffects": false,
   "engines": {
     "node": ">=22.12.0"
   },
-  "files": ["dist", "codex/skills", "scripts/install-codex-skills.mjs"],
+  "files": ["dist", ".agents/skills", "scripts/install-agent-skills.mjs"],
   "scripts": {
     "test": "vitest run --passWithNoTests",
     "test:watch": "vitest",

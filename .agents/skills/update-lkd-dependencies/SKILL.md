@@ -36,7 +36,7 @@ npm view <pkg> version peerDependencies dependencies engines --json
 3. Para un reporte inicial no mutante, puedes ejecutar:
 
 ```bash
-node .codex/skills/update-lkd-dependencies/scripts/collect-npm-metadata.mjs
+node .agents/skills/update-lkd-dependencies/scripts/collect-npm-metadata.mjs
 ```
 
 4. Actualiza solo a versiones estables publicadas. Evita prereleases, canary, alpha, beta, rc y next salvo instruccion explicita.

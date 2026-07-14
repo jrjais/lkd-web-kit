@@ -4,7 +4,7 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const scriptDir = dirname(fileURLToPath(import.meta.url))
-const source = join(scriptDir, '..', 'codex', 'skills')
+const source = join(scriptDir, '..', '.agents', 'skills')
 const target = join(process.cwd(), '.agents', 'skills')
 
 if (!existsSync(source)) {

@@ -1,6 +1,6 @@
 # lkd-web-kit
 
-**Version lkd-web-kit:** `0.10.2` | **Mantine core:** `^9.4.1`
+**Version lkd-web-kit:** `0.10.3` | **Mantine core:** `^9.4.1`
 
 ## Descripcion del Paquete
 
@@ -280,7 +280,7 @@ Todos los campos controlados pueden recibir:
   - Defaults por componente: `Notification.withBorder = true`, `AppShell.padding = 0`, `Select.allowDeselect = false`, `Select.withCheckIcon = false`, `Select.clearable = true`, `Menu.position = 'bottom-end'`, `Tooltip.multiline = true`, `Tooltip.maw = 300`.
 
 - **`breakpointsWithPx`**
-  - Valores: `xs: 576px`, `sm: 640px`, `md: 768px`, `lg: 1024px`, `xl: 1280px`, `2xl: 1536px`.
+  - Valores: `xs: 540px`, `sm: 640px`, `md: 768px`, `lg: 1024px`, `xl: 1280px`, `2xl: 1536px`, `3xl: 1680px`.
 
 - **`toTailwindColors(colors)`**
   - Convierte `MantineThemeColors` en un mapa compatible con escalas numericas estilo Tailwind.
