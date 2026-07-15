@@ -16,6 +16,10 @@ La arquitectura se divide principalmente en:
 - `src/hooks` y `src/utils`: Helpers y ganchos reutilizables globalmente (paginaciones asíncronas, query mappings, listeners de media queries).
 - `src/mantine`: Integración del tema base, tokens gráficos y unificación de paletas estandarizadas.
 
+## Skills de agentes
+- `src/distributed-skills`: skills públicas que se empaquetan e instala `lkd-install-agent-skills` en los proyectos consumidores.
+- `.agents/skills`: skills internas para desarrollar, mantener y publicar `lkd-web-kit`; no se empaquetan ni se instalan en consumidores.
+
 ## 📚 Catálogo y Documentación de Componentes
 Si necesitas conocer en mayor profundidad los componentes existentes, qué *custom props* implementa cada uno, y su respectiva clasificación funcional, **DEBES CONSULTAR** obligatoriamente el documento final de la librería:
 > **Documento Autogenerado:** `docs/generated/lkd-web-kit.md`
