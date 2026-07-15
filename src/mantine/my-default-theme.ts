@@ -27,6 +27,7 @@ export const myDefaultTheme: MantineThemeOverride = {
       defaultProps: {
         size: 'xl',
         px: 'md',
+        w: '100%',
       },
       vars: (_, { size, fluid }) => ({
         root: {
