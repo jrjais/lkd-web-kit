@@ -1,5 +1,5 @@
 ---
-name: lkd-rhf-lkd-forms
+name: lkd-rhf-forms
 description: Crear y revisar formularios, filtros, campos controlados, integraciones con React Hook Form, validaciones Zod, reglas superRefine, botones de submit y patrones Form* de lkd-web-kit. Usar cuando Codex trabaje en interfaces de formularios, filtros, wrappers de campos, schemas, valores iniciales, mapeo de payloads, flujos de submit o comportamiento de validación en proyectos que usan React Hook Form, Zod y lkd-web-kit.
 ---
 
