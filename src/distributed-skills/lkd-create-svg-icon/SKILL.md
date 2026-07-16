@@ -1,5 +1,5 @@
 ---
-name: create-svg-icon
+name: lkd-create-svg-icon
 description: Create SVG icon files in projects that expose SVGs from src/icons. Use when Codex must add a new icon under src/icons from user-provided SVG markup, normalize SVG colors to currentColor for Tailwind text-* styling, and export the icon alias from src/icons/index.ts.
 ---
 

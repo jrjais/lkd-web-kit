@@ -1,0 +1,3 @@
+display_name: Create SVG Icon
+short_description: Create project SVG icons with currentColor and index exports.
+default_prompt: "Use $lkd-create-svg-icon to create an SVG icon for this project from the SVG markup and icon name I provide."

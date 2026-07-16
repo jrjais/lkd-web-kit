@@ -1,3 +1,0 @@
-display_name: Create Table Component
-short_description: Create encapsulated project tables with MyTable and TableWrapper.
-default_prompt: Create or refactor a table component using this project's MyTable and TableWrapper pattern.

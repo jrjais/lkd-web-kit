@@ -1,0 +1,4 @@
+interface:
+  display_name: "Layout Mantine Tailwind"
+  short_description: "Layout UI with Mantine and Tailwind."
+  default_prompt: "Use $lkd-layout-mantine-tailwind para maquetar componentes React con Mantine Layout y Tailwind."

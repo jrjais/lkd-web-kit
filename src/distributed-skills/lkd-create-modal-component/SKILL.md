@@ -1,5 +1,5 @@
 ---
-name: create-modal-component
+name: lkd-create-modal-component
 description: Crear modales en proyectos internos con el modal manager global de lkd-web-kit. Usar cuando Codex deba agregar, modificar o registrar modales bajo src/components/modals, envolverlos con withModalManager, elegir entre un modal interno del proyecto o Modal de Mantine, organizar el modal en carpeta propia, tipar props para showModal, actualizar dynamicModals, MyModalManagerProvider, module augmentation o loadModals.
 ---
 

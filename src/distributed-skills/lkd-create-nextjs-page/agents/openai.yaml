@@ -1,0 +1,3 @@
+display_name: Create Next.js Page
+short_description: Create clean Next.js App Router pages.
+default_prompt: "Use $lkd-create-nextjs-page to create or refactor a Next.js App Router page using the clean PageProviders pattern."

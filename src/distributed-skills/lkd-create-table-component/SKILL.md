@@ -1,5 +1,5 @@
 ---
-name: create-table-component
+name: lkd-create-table-component
 description: Crear, extraer o refactorizar tablas/listados tabulares en proyectos internos usando el patron estricto de componente encapsulado con MyTable, TableWrapper y createColumnHelper. Usar cuando Codex deba mostrar datos en tabla, mover columnas/hook de servicio a un componente de tabla, agregar paginacion, header/footer de tabla, acciones por fila, tablas verticales o adaptar una vista para no usar MyTablePagination.
 ---
 
