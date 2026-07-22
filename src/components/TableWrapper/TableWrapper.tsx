@@ -7,7 +7,7 @@ export interface TableWrapperProps extends PaperProps {
 }
 
 const TableWrapper = ({ className, ...props }: TableWrapperProps) => (
-  <Paper component="section" className={clsx('flex flex-col px-1 py-0.5', className)} {...props} />
+  <Paper component="section" className={clsx('flex flex-col', className)} {...props} />
 )
 
 export default TableWrapper
