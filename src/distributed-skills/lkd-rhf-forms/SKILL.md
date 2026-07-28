@@ -48,6 +48,53 @@ Usar este skill para formularios, filtros y campos controlados construidos con R
 - El submit de filtros puede actualizar query params, estado local o estado del padre según el proyecto; no agregar una librería de estado solo por un filtro.
 - Si un campo client lee catálogos o datos cacheados, verificar que la página o el padre carguen esos datos según la convención del proyecto.
 
+## Crear componentes custom `Form{Name}`
+
+Crear un wrapper nuevo solo cuando no exista un `Form*` equivalente en `lkd-web-kit` ni en el proyecto. Usar como referencia los componentes base de `src/form/base`: son wrappers finos sobre un componente visual `My*`, Mantine o un componente local, conectados con `withController`.
+
+Patrón directo:
+
+```tsx
+import { MyCustomInput, MyCustomInputProps } from 'src/components'
+import { WithControllerProps, withController } from 'src/hocs'
+
+export type FormCustomInputProps = WithControllerProps & MyCustomInputProps
+
+export const FormCustomInput = withController<FormCustomInputProps>(({ field, props }) => (
+  <MyCustomInput {...field} {...props} />
+))
+```
+
+Usar este patrón solo si el componente visual acepta el contrato de RHF (`value`, `onChange`, `onBlur`, `name` y `ref`) sin transformaciones. Al consumirlo, siempre pasar `name`; aunque el HOC lo declare opcional, un campo sin `name` no queda vinculado al formulario.
+
+Patrón adaptado, cuando el componente emite otro valor o usa `checked`:
+
+```tsx
+export const FormCustomInput = withController<FormCustomInputProps>(({ field, props }) => (
+  <MyCustomInput
+    {...field}
+    {...props}
+    value={field.value}
+    onChange={(value) => {
+      field.onChange(value)
+      props.onChange?.(value)
+    }}
+  />
+))
+```
+
+Reglas para wrappers custom:
+
+- Nombrar siempre `Form{Name}` y exportar `Form{Name}Props`.
+- Combinar props como `WithControllerProps & PropsDelInput` o `PropsDelInput & WithControllerProps`; no redefinir `name`, `label`, `placeholder`, `description`, `validate` ni `disabled`.
+- Para wrappers directos, seguir el orden de los componentes base: `<Input {...field} {...props} />`.
+- Si `props` puede contener una prop de control (`value`, `checked`, `onChange`, `onBlur`, `name` o `ref`), declararla después de `...props` para que RHF conserve el control. En especial, el adaptador `onChange` debe ir al final y llamar siempre a `field.onChange(...)`.
+- Adaptar `onChange` solo si el input no emite el valor que React Hook Form necesita. Preservar `props.onChange?.(...)` solo si su firma sigue siendo válida para el evento o valor emitido.
+- Usar `checked={Boolean(field.value)}` para checkboxes/switches que trabajen con booleanos y declarar `checked` y el `onChange` adaptado después de `...props`.
+- Para componentes genericos, mantener el generico en el tipo de props y castear la exportacion solo cuando TypeScript lo requiera, como en `FormInfinitySelect`.
+- No usar `Controller` directamente dentro del wrapper; `withController` ya crea el controller y entrega `field` con `value`, `onChange`, `onBlur`, `name`, `ref`, `error`, `label`, `placeholder` y `description`. También gestiona `disabled`, `validate` y `onValueChange`; no reenviar `onValueChange` manualmente al input visual.
+- No agregar estado local para duplicar el valor del campo. Si hace falta transformar datos, hacerlo en el adaptador `onChange` o en `createPayload`.
+
 ## Submit y errores
 
 - Usar `FormSubmitButton` para acciones de submit. No usar aliases como `FormButtonSubmit` salvo que el proyecto realmente los exporte.
@@ -60,6 +107,7 @@ Usar este skill para formularios, filtros y campos controlados construidos con R
 
 - No usar `register` directamente para campos ya cubiertos por `Form*`.
 - No duplicar wrappers tipo `FormTextInput` o `FormSelect`.
+- No crear `Form{Name}` con `useController`, `Controller` o `register` si basta `withController`.
 - No usar `any`; tipar valores del formulario desde el schema.
 - No agregar helpers custom de validación cuando Zod ya cubre la regla.
 - No mezclar campos Mantine no controlados dentro de un formulario de React Hook Form.
