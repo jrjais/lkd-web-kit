@@ -1,5 +1,6 @@
 export * from './array/groupBy'
 export * from './array/shuffleArray'
+export * from './date-format'
 export * from './formatBytes'
 export * from './isInfinityEmpty'
 export * from './ky/addBodyJsonHook'

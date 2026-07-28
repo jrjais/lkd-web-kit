@@ -1,6 +1,6 @@
 # lkd-web-kit
 
-**Version lkd-web-kit:** `0.10.5` | **Mantine core:** `^9.4.1`
+**Version lkd-web-kit:** `0.10.12` | **Mantine core:** `^9.5.0`
 
 ## Descripcion del Paquete
 
@@ -252,6 +252,15 @@ Todos los campos controlados pueden recibir:
   - `getVirtualContainerProps(virtualizer)`: genera props del contenedor con altura total y posicion relativa.
 
 - **General**
+  - `toInputDateFormat(val?)`: formatea fechas como `YYYY-MM-DD`.
+  - `toInputDateTimeFormat(val?)`: formatea fechas como `YYYY-MM-DD HH:mm:ss`.
+  - `toInputDateMonthFormat(val?)`: formatea fechas como `YYYY-MM`.
+  - `toApiDateTimeFormat(val?)`: formatea fechas como `YYYY-MM-DDTHH:mm:ss`.
+  - `toApiDateFormat(val?)`: formatea fechas como `YYYY-MM-DD`.
+  - `toApiDateMonthFormat(val?)`: formatea fechas como `YYYY-MM`.
+  - `toDisplayDateFormat(val?)`: formatea fechas como `DD/MM/YYYY`.
+  - `toDisplayMonthFormat(val?)`: formatea fechas como `MM/YYYY`.
+  - `toDisplayDateTimeFormat(val?)`: formatea fechas como `DD/MM/YYYY HH:mm`.
   - `formatBytes(bytes, decimals = 2)`: formatea bytes en `Bytes`, `KB` o `MB`.
   - `isInfinityEmpty(data)`: verifica si la primera pagina de una `InfiniteData` no tiene registros.
   - `getPathValue(obj, path)`: helper presente en `src/utils/get-path-value.ts`, pero no exportado desde `src/utils/index.ts` al momento de esta generacion.
