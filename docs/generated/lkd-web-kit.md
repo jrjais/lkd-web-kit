@@ -1,6 +1,6 @@
 # lkd-web-kit
 
-**Version lkd-web-kit:** `0.10.12` | **Mantine core:** `^9.5.0`
+**Version lkd-web-kit:** `0.10.12` | **Mantine core:** `^9.5.1`
 
 ## Descripcion del Paquete
 
@@ -95,7 +95,8 @@ Estos componentes son visuales o de interaccion general. Cuando envuelven Mantin
 
 - **`MyTable`**
   - Base: `Table` de `@mantine/core` y `@tanstack/react-table`.
-  - Uso: renderizado tabular horizontal o `variant="vertical"` con columnas tipadas, loading overlay, empty state, click por fila y sorting opcional.
+  - Uso: renderizado tabular horizontal o `variant="vertical"` con columnas tipadas, loading overlay, empty state, click por fila, sorting opcional y columnas sticky con `pinnedColumns?: Partial<ColumnPinningState>`.
+  - Tipos auxiliares: exporta `MyTableFeatures` y `myTableFeatures` para crear columnas con `createColumnHelper<MyTableFeatures, RowData>()` en TanStack Table v9.
 
 - **`TableWrapper` / `TableWrapperHeader` / `TableWrapperFooter` / `TableWrapperTitle` / `TableWrapperPagination`**
   - Uso: estructura visual estandar para tablas, encabezados, pies y paginacion compacta o completa.
@@ -269,6 +270,10 @@ Todos los campos controlados pueden recibir:
 
 - **`HttpStatus`**
   - Enum de codigos HTTP comunes, desde respuestas informativas hasta errores de servidor.
+
+- **`MyTableFeatures` / `myTableFeatures`**
+  - Tipo: `type` / `const`.
+  - Uso: feature set de TanStack Table v9 usado por `MyTable`; permite tipar columnas con column sizing, pinning, visibility y sorting.
 
 - **`Revalidate`**
   - Enum de duraciones en segundos: `OneHour`, `OneDay`, `OneWeek`, `OneMonth`, `OneYear`.

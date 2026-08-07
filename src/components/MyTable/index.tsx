@@ -1,4 +1,4 @@
 'use client'
 
-export type { MyTableProps } from './MyTable'
-export { default as MyTable } from './MyTable'
+export type { MyTableFeatures, MyTableProps } from './MyTable'
+export { default as MyTable, myTableFeatures } from './MyTable'

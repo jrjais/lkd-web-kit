@@ -2,34 +2,51 @@
 
 import { ActionIcon, LoadingOverlay, Table, TableProps, Text, Tooltip } from '@mantine/core'
 import {
-  ColumnDef,
+  Column,
+  ColumnPinningState,
+  columnPinningFeature,
+  columnSizingFeature,
+  columnVisibilityFeature,
+  createSortedRowModel,
   flexRender,
-  getCoreRowModel,
-  getSortedRowModel,
   Header,
   OnChangeFn,
   Row,
+  RowData,
+  rowSortingFeature,
   SortingState,
   TableOptions,
-  useReactTable,
+  tableFeatures,
+  useTable,
 } from '@tanstack/react-table'
 import clsx from 'clsx'
-import { ComponentProps, ReactNode, useCallback, useState } from 'react'
+import { ComponentProps, CSSProperties, ReactNode, useCallback, useState } from 'react'
 
-export interface MyTableProps<T> extends Omit<TableProps, 'data'> {
+export const myTableFeatures = tableFeatures({
+  columnSizingFeature,
+  columnPinningFeature,
+  columnVisibilityFeature,
+  rowSortingFeature,
+  sortedRowModel: createSortedRowModel(),
+})
+
+export type MyTableFeatures = typeof myTableFeatures
+
+export interface MyTableProps<T extends RowData> extends Omit<TableProps, 'data'> {
   data: T[]
-  columns: TableOptions<T>['columns']
+  columns: TableOptions<MyTableFeatures, T>['columns']
   isLoading?: boolean
-  onRowClick?: (row: Row<T>) => void
+  onRowClick?: (row: Row<MyTableFeatures, T>) => void
   minWidth?: number
   emptyMessage?: ReactNode
   enableSorting?: boolean
   manualSorting?: boolean
   onSortingChange?: OnChangeFn<SortingState>
+  pinnedColumns?: Partial<ColumnPinningState>
   sorting?: SortingState
 }
 
-const MyTable = <T,>({
+const MyTable = <T extends RowData>({
   data,
   columns,
   highlightOnHover,
@@ -42,6 +59,7 @@ const MyTable = <T,>({
   layout,
   manualSorting,
   onSortingChange,
+  pinnedColumns,
   sorting,
   ...props
 }: MyTableProps<T>) => {
@@ -50,15 +68,17 @@ const MyTable = <T,>({
     if (node) setTheadHeight(node.offsetHeight)
   }, [])
   const isSortingEnabled = enableSorting ?? (Boolean(sorting) || Boolean(onSortingChange))
-  const table = useReactTable<T>({
+  const table = useTable<MyTableFeatures, T>({
+    features: myTableFeatures,
     data,
-    columns: columns as ColumnDef<T, unknown>[],
+    columns,
     enableSorting: isSortingEnabled,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: isSortingEnabled && !manualSorting ? getSortedRowModel() : undefined,
     manualSorting,
     onSortingChange,
-    state: sorting ? { sorting } : undefined,
+    state: {
+      columnPinning: normalizePinnedColumns(pinnedColumns),
+      ...(sorting !== undefined ? { sorting } : {}),
+    },
   })
   const rows = table.getRowModel().rows
   const isVertical = variant === 'vertical'
@@ -67,7 +87,27 @@ const MyTable = <T,>({
   )
   const cellClassName = clsx(onRowClick && 'cursor-pointer')
 
-  const renderHeaderContent = (header: Header<T, unknown>) => {
+  const getPinningStyle = (
+    column: Column<MyTableFeatures, T, unknown>,
+    zIndex: number,
+  ): CSSProperties => {
+    const pinned = column.getIsPinned()
+
+    if (!pinned) return {}
+
+    return {
+      background: 'var(--mantine-color-body)',
+      boxShadow: pinned === 'start' ? '-4px 0 4px -4px gray inset' : '4px 0 4px -4px gray inset',
+      insetInlineEnd: pinned === 'end' ? `${column.getAfter('end')}px` : undefined,
+      insetInlineStart: pinned === 'start' ? `${column.getStart('start')}px` : undefined,
+      minWidth: column.getSize(),
+      position: 'sticky',
+      width: column.getSize(),
+      zIndex,
+    }
+  }
+
+  const renderHeaderContent = (header: Header<MyTableFeatures, T, unknown>) => {
     const content = flexRender(header.column.columnDef.header, header.getContext())
 
     if (!isSortingEnabled || !header.column.getCanSort()) return content
@@ -123,7 +163,7 @@ const MyTable = <T,>({
             {table.getHeaderGroups().map((headerGroup) => (
               <Table.Tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <Table.Th key={header.id}>
+                  <Table.Th key={header.id} style={getPinningStyle(header.column, 2)}>
                     {header.isPlaceholder ? null : renderHeaderContent(header)}
                   </Table.Th>
                 ))}
@@ -146,12 +186,16 @@ const MyTable = <T,>({
 
                   return (
                     <Table.Tr key={cell.id}>
-                      <Table.Th>
+                      <Table.Th style={getPinningStyle(cell.column, 1)}>
                         {header?.isPlaceholder || !header
                           ? null
                           : flexRender(header.column.columnDef.header, header.getContext())}
                       </Table.Th>
-                      <Table.Td onClick={() => onRowClick?.(cell.row)} className={cellClassName}>
+                      <Table.Td
+                        onClick={() => onRowClick?.(cell.row)}
+                        className={cellClassName}
+                        style={getPinningStyle(cell.column, 1)}
+                      >
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </Table.Td>
                     </Table.Tr>
@@ -165,6 +209,7 @@ const MyTable = <T,>({
                       key={cell.id}
                       onClick={() => onRowClick?.(cell.row)}
                       className={cellClassName}
+                      style={getPinningStyle(cell.column, 1)}
                     >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </Table.Td>
@@ -185,6 +230,13 @@ const MyTable = <T,>({
     </Table.ScrollContainer>
   )
 }
+
+const normalizePinnedColumns = (
+  pinnedColumns?: Partial<ColumnPinningState>,
+): ColumnPinningState => ({
+  start: pinnedColumns?.start ?? [],
+  end: pinnedColumns?.end ?? [],
+})
 
 const IconOrderAscending = (props: ComponentProps<'svg'>) => (
   <svg

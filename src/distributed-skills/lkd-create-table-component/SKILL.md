@@ -13,7 +13,7 @@ Usar este skill para crear o refactorizar tablas del proyecto.
 2. Si toca Next.js, leer la documentacion relevante en `node_modules/next/dist/docs/`.
 3. Revisar un ejemplo cercano antes de editar; preferir `Table{EntityPlural}.tsx`.
 4. Crear o mantener la tabla en un componente encapsulado junto a la vista/feature que la consume.
-5. Usar `createColumnHelper<RowData>()`; no declarar `any`.
+5. Usar `createColumnHelper<MyTableFeatures, RowData>()` y `columnHelper.columns([...])`; no declarar `any`.
 6. Importar `MyTable` y `TableWrapper*` desde `lkd-web-kit`.
 7. Usar `MyTable` para renderizar la tabla.
 8. Usar `TableWrapper` como raiz visual de la tabla.
@@ -67,9 +67,9 @@ type UserInformationRow = {
   email: string | undefined;
 };
 
-const columnHelper = createColumnHelper<UserInformationRow>();
+const columnHelper = createColumnHelper<MyTableFeatures, UserInformationRow>();
 
-const columns = [
+const columns = columnHelper.columns([
   columnHelper.accessor("name", {
     header: "Nombre",
     cell: (cell) => cell.getValue() ?? "-",
@@ -82,7 +82,7 @@ const columns = [
     header: "Email",
     cell: (cell) => cell.getValue() ?? "-",
   }),
-];
+]);
 
 <TableWrapper>
   <TableWrapperHeader>
@@ -93,6 +93,13 @@ const columns = [
   <MyTable columns={columns} data={[user]} variant="vertical" />
 </TableWrapper>;
 ```
+
+## Columnas sticky / pinned
+
+- Para dejar una columna fija al scrollear horizontalmente, pasar `pinnedColumns` a `MyTable`.
+- Usar regiones logicas de TanStack Table v9: `start` y `end`, no `left` ni `right`.
+- Para una columna de acciones sticky al final, definir un `id` estable y pasar `pinnedColumns={{ end: ["actions"] }}`.
+- Si la columna sticky tiene ancho compacto, definir `size` en la columna para que los offsets sean precisos.
 
 ## Encapsulacion
 
@@ -110,6 +117,7 @@ const columns = [
 import { createColumnHelper } from "@tanstack/react-table";
 import {
   MyTable,
+  MyTableFeatures,
   TableWrapper,
   TableWrapperFooter,
   TableWrapperHeader,
@@ -127,18 +135,25 @@ type TableItemsProps = {
   selectedFilters: Record<string, unknown>;
 };
 
-const columnHelper = createColumnHelper<ItemTableData>();
+const columnHelper = createColumnHelper<MyTableFeatures, ItemTableData>();
 
 const TableItems = ({ selectedFilters }: TableItemsProps) => {
   const [pageIndex, setPageIndex] = useState(0);
 
   const columns = useMemo(
-    () => [
-      columnHelper.accessor("name", {
-        header: "Nombre",
-        cell: (cell) => cell.getValue(),
-      }),
-    ],
+    () =>
+      columnHelper.columns([
+        columnHelper.accessor("name", {
+          header: "Nombre",
+          cell: (cell) => cell.getValue(),
+        }),
+        columnHelper.display({
+          id: "actions",
+          header: "",
+          cell: () => null,
+          size: 96,
+        }),
+      ]),
     [],
   );
 
@@ -147,7 +162,7 @@ const TableItems = ({ selectedFilters }: TableItemsProps) => {
       <TableWrapperHeader>
         <TableWrapperTitle>Items</TableWrapperTitle>
       </TableWrapperHeader>
-      <MyTable columns={columns} data={[]} />
+      <MyTable columns={columns} data={[]} pinnedColumns={{ end: ["actions"] }} />
       <TableWrapperFooter>
         <TableWrapperPagination
           total={1}
