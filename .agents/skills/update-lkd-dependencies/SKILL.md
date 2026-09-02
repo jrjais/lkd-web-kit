@@ -42,6 +42,21 @@ node .agents/skills/update-lkd-dependencies/scripts/collect-npm-metadata.mjs
 4. Actualiza solo a versiones estables publicadas. Evita prereleases, canary, alpha, beta, rc y next salvo instruccion explicita.
 5. Mantiene alineadas familias peer que deben avanzar juntas: `react`/`react-dom`, paquetes `@mantine/*` y paquetes `@tanstack/*` cuando compartan contrato.
 
+## Auditoria de changelog y compatibilidad
+
+Antes de decidir o reportar una actualizacion, revisa cambios publicados para cada peer que vaya a cambiar. No alcanza con metadata de npm:
+
+- Consulta changelogs, release notes oficiales, guias de migracion o, si no existen, compara el paquete con `npm diff --diff=<pkg>@<actual> --diff=<pkg>@<nuevo>`.
+- Cruza cada cambio con el uso real del kit usando `rg` en `src`, `vite.config.ts`, scripts publicos y skills distribuidas cuando correspondan.
+- Distingue explicitamente entre:
+  - breaking changes o cambios de comportamiento que exigen migracion;
+  - cambios de tipos que pueden afectar wrappers, props exportadas, helpers o consumidores;
+  - mejoras nuevas que conviene exponer, documentar o adoptar;
+  - parches internos sin accion requerida.
+- Si una mejora nueva ya queda expuesta por pass-through de props o tipos heredados, documenta que no requiere cambio de codigo.
+- Si detectas una mejora valiosa pero fuera del alcance de peers, registrala como deuda o recomendacion separada en vez de mezclarla con la actualizacion.
+- Si no puedes encontrar changelog oficial para un paquete, dilo en el reporte y deja evidencia del fallback usado (`npm diff`, metadata de npm, cambios de tipos o build).
+
 ## Politica de riesgo
 
 Detente y reporta antes de aplicar si encuentras:
@@ -82,7 +97,9 @@ Termina siempre con un resumen en espanol:
 
 - Peer dependencies actualizadas.
 - Peer dependencies retenidas y motivo.
-- Breaking changes o riesgos detectados.
+- Changelogs, release notes o diffs revisados, con las fuentes/fallbacks usados.
+- Breaking changes, riesgos, cambios de comportamiento y mejoras detectadas.
+- Cambios de codigo o documentacion aplicados por compatibilidad o mejora; si no hubo, explicar por que no hizo falta.
 - Si se regenero `docs/generated/lkd-web-kit.md`, indica por que cambio la superficie publica.
 - Validaciones ejecutadas y resultado.
 - Recomendacion SemVer para una futura publicacion: `major`, `minor` o `patch`, con una frase de justificacion.

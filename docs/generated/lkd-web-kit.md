@@ -1,6 +1,6 @@
 # lkd-web-kit
 
-**Version lkd-web-kit:** `0.10.12` | **Mantine core:** `^9.5.1`
+**Version lkd-web-kit:** `0.11.1` | **Mantine core:** `^9.6.0`
 
 ## Descripcion del Paquete
 

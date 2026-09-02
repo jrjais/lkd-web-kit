@@ -7,10 +7,11 @@ import preserveDirectives from 'rollup-preserve-directives'
 import type { Plugin } from 'vite'
 import { defineConfig } from 'vite'
 import dts from 'vite-plugin-dts'
-import { dependencies, peerDependencies } from './package.json'
+import packageJson from './package.json'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const srcRoot = resolve(__dirname, 'src').replaceAll('\\', '/')
+const { dependencies, peerDependencies } = packageJson
 
 const stripSrcPrefix = (): Plugin => ({
   name: 'strip-src-prefix',
