@@ -1,6 +1,6 @@
 # lkd-web-kit
 
-**Version lkd-web-kit:** `0.11.1` | **Mantine core:** `^9.6.0`
+**Version lkd-web-kit:** `0.12.0` | **Mantine core:** `^9.6.1`
 
 ## Descripcion del Paquete
 
@@ -78,6 +78,12 @@ Todos los componentes de esta seccion heredan props de Mantine o `@mantine/dates
 
 Estos componentes son visuales o de interaccion general. Cuando envuelven Mantine, consultar tambien https://mantine.dev/llms.txt para props heredadas.
 
+- **`DashboardLayout` / `DashboardContent` / `DashboardTitle`**
+  - Uso: shell responsive para aplicaciones Next.js, contenedor semantico de pagina y encabezado de dashboard.
+  - Custom props: `DashboardLayout` recibe `navigation`, slots opcionales `brand`, `headerActions`, `userMenu` y `navbarFooter`, busqueda opcional, labels y classNames; `DashboardContent` hereda props de `section`; `DashboardTitle` exige `title: ReactNode` y acepta `description?` y `action?`.
+  - Comportamiento propio: administra navbar mobile y desktop, filtra secciones sin distinguir acentos y marca rutas activas por segmento o `activePaths`.
+  - Integracion: requiere Next.js y que Tailwind escanee las clases distribuidas por `lkd-web-kit`.
+
 - **`EmptyState`** _(deprecated: usar `EmptyState` de `@mantine/core`)_
   - Uso: estado vacio estandar para listas, tablas o pantallas sin datos.
   - Custom props: `label: ReactNode`, `action?: ReactNode`, `icon?: IconFC`, `size?: 'sm' | 'md' | 'lg'`.
@@ -90,7 +96,7 @@ Estos componentes son visuales o de interaccion general. Cuando envuelven Mantin
 
 - **`NavItems`**
   - Uso: lista vertical de `NavLink` compatible con Next.js.
-  - Custom props: `items` con `label`, `href?`, `isActive?`, `leftSection?`, `rightSection?`, `onClick?`, `disabled?`, `className?`, `children?`; `activeStrategy?: 'equals' | 'includes'`.
+  - Custom props: `items` con `key?`, `label`, `href?`, `isActive?`, `leftSection?`, `rightSection?`, `onClick?`, `disabled?`, `className?`, `children?`; `activeStrategy?: 'equals' | 'includes'`.
   - Comportamiento propio: si un item tiene `href`, renderiza `NavLink` como `Link` con `prefetch={false}`; si no, lo renderiza como `button`. Calcula `active` con `usePathname`.
 
 - **`MyTable`**

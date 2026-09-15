@@ -2,10 +2,11 @@
 import { NavLink, Stack } from '@mantine/core'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { MouseEvent, ReactNode } from 'react'
+import { Key, MouseEvent, ReactNode } from 'react'
 
 export interface NavItemsProps {
   items: {
+    key?: Key
     leftSection?: ReactNode
     rightSection?: ReactNode
     onClick?: (e: MouseEvent<Element>) => void
@@ -26,14 +27,14 @@ export const NavItems = ({ items, activeStrategy = 'includes' }: NavItemsProps) 
 
   return (
     <Stack gap={0}>
-      {items.map(({ href, isActive, ...navLinkProps }) => {
+      {items.map(({ href, isActive, key, ...navLinkProps }) => {
         if (href) {
           const active =
             isActive ?? (activeStrategy === 'equals' ? href === pathname : href.includes(pathname))
           return (
             <NavLink
               active={active}
-              key={navLinkProps.label}
+              key={key ?? navLinkProps.label}
               component={Link}
               prefetch={false}
               href={href}
@@ -44,7 +45,7 @@ export const NavItems = ({ items, activeStrategy = 'includes' }: NavItemsProps) 
 
         return (
           <NavLink
-            key={navLinkProps.label}
+            key={key ?? navLinkProps.label}
             active={isActive}
             component="button"
             {...navLinkProps}

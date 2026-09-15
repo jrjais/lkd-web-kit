@@ -9,4 +9,4 @@ Pendientes, deuda tecnica, riesgos e ideas del proyecto.
 ## Deuda tecnica
 
 - Revisar documentacion funcional y arquitectura vigente.
-- Remediar vulnerabilidades de tooling reportadas por `npm audit --json` el `2026-09-02`: `14` totales, `6` moderadas y `8` altas, incluyendo `vite` directo. Requiere tarea separada porque implica `devDependencies`/tooling fuera del alcance de actualización de peers.
+- Remediar vulnerabilidades de tooling reportadas por `npm install --package-lock-only` el `2026-09-14`: `18` totales, `10` moderadas y `8` altas. Requiere una tarea separada porque implica `devDependencies`/tooling fuera del alcance de actualización de peers.

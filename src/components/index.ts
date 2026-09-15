@@ -1,3 +1,4 @@
+export * from './DashboardLayout'
 export * from './EmptyState'
 export * from './Icon'
 export * from './InfinityLoadMoreButton'
