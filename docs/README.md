@@ -15,3 +15,5 @@ Indice de documentacion funcional, tecnica y operativa del proyecto.
 - [Actualización de peers 2026-10-07](planes-ejecutados/2026-10-07-actualizar-peer-dependencies.md).
 
 - [Publicar 0.12.1](planes-pendientes/2026-10-07-publicar-0-12-1.md).
+
+- [Publicación 0.12.1 completada](planes-ejecutados/2026-10-07-publicar-0-12-1.md).
