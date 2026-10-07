@@ -40,7 +40,7 @@ export default defineConfig({
     react(),
     preserveDirectives(),
     stripSrcPrefix(),
-    dts({ bundleTypes: true }), // Output .d.ts files
+    dts(), // Output .d.ts files
   ],
   resolve: {
     alias: {
