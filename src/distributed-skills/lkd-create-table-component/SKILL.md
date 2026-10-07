@@ -19,6 +19,8 @@ Usar este skill para crear o refactorizar tablas del proyecto.
 8. Usar `TableWrapper` como raiz visual de la tabla.
 9. No usar `MyTablePagination` para nuevas tablas.
 
+Cuando el usuario pida agregar un borde a la tabla, pasar `withBorder` a `TableWrapper`. No usar `withTableBorder` en `MyTable` para interpretar ese pedido, salvo que el usuario indique expresamente que quiere bordes en la tabla interna o en sus celdas.
+
 ## Checklist antes de escribir columnas
 
 - Definir si la tabla es horizontal o `variant="vertical"`.
@@ -84,7 +86,7 @@ const columns = columnHelper.columns([
   }),
 ]);
 
-<TableWrapper>
+<TableWrapper withBorder>
   <TableWrapperHeader>
     <TableWrapperTitle>Informacion del usuario</TableWrapperTitle>
     <span>{user.email}</span>
@@ -100,6 +102,32 @@ const columns = columnHelper.columns([
 - Usar regiones logicas de TanStack Table v9: `start` y `end`, no `left` ni `right`.
 - Para una columna de acciones sticky al final, definir un `id` estable y pasar `pinnedColumns={{ end: ["actions"] }}`.
 - Si la columna sticky tiene ancho compacto, definir `size` en la columna para que los offsets sean precisos.
+
+## Acciones por fila
+
+- Cuando una fila tenga acciones como Editar y Eliminar, usar obligatoriamente un `ActionIcon` con icono de menú (`IconDotsVertical` o el equivalente ya instalado) como `Menu.Target` de un `Menu` de Mantine.
+- Colocar cada acción dentro de `Menu.Dropdown` como `Menu.Item` y acompañarla con su icono. Las acciones destructivas deben usar `color="red"`.
+- Aplicar este patrón aunque solo existan dos acciones. Usar botones visibles, iconos independientes u otro patrón únicamente cuando el usuario lo indique expresamente.
+- Dar al `ActionIcon` un `aria-label` específico de la entidad y usar `withinPortal` para evitar que el menú quede recortado por la tabla.
+- Mantener la columna con `id: "actions"`, ancho compacto y `pinnedColumns={{ end: ["actions"] }}` cuando sea sticky.
+
+```tsx
+<Menu position="bottom-end" withinPortal>
+  <Menu.Target>
+    <ActionIcon aria-label="Acciones del registro" variant="subtle">
+      <IconDotsVertical aria-hidden size={18} />
+    </ActionIcon>
+  </Menu.Target>
+  <Menu.Dropdown>
+    <Menu.Item leftSection={<IconEdit aria-hidden size={16} />} onClick={onEdit}>
+      Editar
+    </Menu.Item>
+    <Menu.Item color="red" leftSection={<IconTrash aria-hidden size={16} />} onClick={onDelete}>
+      Eliminar
+    </Menu.Item>
+  </Menu.Dropdown>
+</Menu>
+```
 
 ## Encapsulacion
 
@@ -158,7 +186,7 @@ const TableItems = ({ selectedFilters }: TableItemsProps) => {
   );
 
   return (
-    <TableWrapper>
+    <TableWrapper withBorder>
       <TableWrapperHeader>
         <TableWrapperTitle>Items</TableWrapperTitle>
       </TableWrapperHeader>
@@ -202,3 +230,4 @@ Ejemplo short:
 - No agregar abstracciones compartidas antes de tener reutilizacion real.
 - No crear `MyTableVertical` si `MyTable variant="vertical"` resuelve el caso.
 - No poner titulos de seccion como "Datos personales" o "Informacion del usuario" como headers de columna.
+- No mostrar Editar y Eliminar como botones directos dentro de la celda salvo indicacion expresa del usuario.
