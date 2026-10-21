@@ -1,5 +1,9 @@
 # Documentacion - lkd-web-kit
 
+- [Publicar 0.12.2](planes-ejecutados/2026-10-21-publicar-0-12-2.md) y [guía para consumidores](generated/upgrade-guides/upgrade-v0.12.1-to-v0.12.2.md).
+
+- [Actualización de peers 2026-10-20](planes-ejecutados/2026-10-20-actualizar-peer-dependencies.md): versiones, compatibilidad y evidencia.
+
 Indice de documentacion funcional, tecnica y operativa del proyecto.
 
 ## Estructura
