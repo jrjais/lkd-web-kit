@@ -36,6 +36,7 @@ Antes: mismos componentes, props propias y utilidades del kit sobre peers anteri
 
 - Mantine Select corrige el segundo argumento de onChange para admitir null. Revisar callbacks que desestructuren option sin comprobarlo. MySelect/FormSelect heredan el tipo.
 - Ky normaliza a minúsculas los headers de hooks init, valida opciones y pasa errores de lectura del body por beforeError. Usar claves de headers en minúsculas y no suponer que todo error es HTTPError. addBodyJsonHook ya comprueba isHTTPError.
+- Comprobación adicional en consumidor: los guards de Ky reconocen sus errores por instancia o marca isKyError, no solo por name. En tests, usar instancias TimeoutError/NetworkError reales; los callbacks asíncronos de mocks de fetch deben esperarse antes de responder.
 - Zod rechaza colecciones que exceden max/length antes de validar elementos y refinamientos posteriores. Revisar dependencias de errores por elemento o efectos secundarios en refinamientos.
 - React Hook Form corrige Controller tras reset, useWatch con Activity y suscripciones. TanStack actualiza suscripciones y virtualización. No se detectaron migraciones adicionales necesarias en el kit.
 - Next 16.4.2 incluye correcciones de seguridad de 16.4.1 y fixes de Turbopack. Revisar el build de cada consumidor.
