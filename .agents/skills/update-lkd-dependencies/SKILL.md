@@ -5,6 +5,25 @@ description: Audita y actualiza con cautela solo las peerDependencies de lkd-web
 
 # Actualizar dependencias LKD
 
+## Trazabilidad documental
+
+Al crear o actualizar documentacion, pendientes, planes, handoffs o evidencias de
+cada ejecucion, registrar por documento y por entrada/evento: fecha y hora ISO 8601
+con offset y zona horaria, autor real y, si intervino IA, agente/producto,
+proveedor, modelo/version solo si es verificable y usuario del sistema logueado.
+Obtenerlo con `whoami` en Windows o `id -un` en Linux y registrar la fuente;
+si no se obtiene o solo identifica una cuenta de servicio, preguntar al usuario.
+Preservar creacion y autoria anteriores y registrar cada actualizacion sustancial.
+No inventar fechas, modelos ni autores historicos; marcar lo desconocido como
+`no consta` o `no verificado`. No atribuir al usuario la ejecucion del agente.
+En esquemas controlados, usar campos compatibles o referencia al registro con
+estos metadatos, sin romper consumidores ni exponer secretos. Esta regla no
+amplia permisos de escritura, publicacion ni despliegue.
+
+Actualizacion de esta regla: 2026-11-12T15:35:31-03:00 (America/Buenos_Aires); autor Codex
+(OpenAI), modelo no verificado; usuario SO `pc-desktop-joni\administrador` (Windows, `whoami`).
+
+
 ## Principio
 
 Trabaja como auditor de compatibilidad de una libreria React corporativa. No actualices a ciegas: primero descubre versiones, peers, engines y riesgos; despues edita de forma acotada y valida el paquete.
