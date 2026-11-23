@@ -1,6 +1,6 @@
 ---
 name: lkd-web-dashboard-layout
-description: Crear o refactorizar dashboards en aplicaciones Next.js App Router que consumen lkd-web-kit, usando DashboardLayout como shell, DashboardContent para el contenido y DashboardTitle para el encabezado. Usar cuando se implemente navegación lateral, búsqueda, marca, acciones de cabecera o un adaptador con sesión y permisos. No usar para páginas sin shell de dashboard.
+description: Crear o refactorizar dashboards en aplicaciones Next.js App Router que consumen lkd-web-kit, usando DashboardLayout como shell, DashboardPage para el contenido y DashboardTitle para el encabezado. Usar cuando se implemente navegación lateral, búsqueda, marca, acciones de cabecera o un adaptador con sesión y permisos. No usar para páginas sin shell de dashboard.
 ---
 
 # Dashboard con lkd-web-kit
@@ -30,7 +30,7 @@ Usar los componentes públicos de `lkd-web-kit`; no copiar ni recrear su `AppShe
 
 1. Leer `AGENTS.md`, la documentación local de `lkd-web-kit` y la documentación de Next.js disponible en `node_modules/next/dist/docs/`.
 2. Revisar el `layout.tsx`, una Page y los providers cercanos. Respetar aliases, route groups, autenticación, autorización, iconos y convenciones locales.
-3. Confirmar la versión instalada y que exporta `DashboardLayout`, `DashboardContent` y `DashboardTitle`.
+3. Confirmar la versión instalada y que exporta `DashboardLayout`, `DashboardPage` y `DashboardTitle`.
 
 ## Separar responsabilidades
 
@@ -94,20 +94,25 @@ export function AppDashboardLayout({ children, session }: { children: ReactNode;
   })
 
   return (
-    <DashboardLayout
-      brand={<span>Mi aplicación</span>}
-      brandHref="/inicio"
-      navigation={sections}
-      search={{ ariaLabel: 'Buscar en el menú', placeholder: 'Buscar módulo o pantalla' }}
-      headerActions={<button type="button">Notificaciones</button>}
-      userMenu={<button type="button">Mi cuenta</button>}
-      navbarFooter={<span>Acceso interno</span>}
-    >
-      {children}
+    <DashboardLayout>
+      <DashboardLayout.Header
+        brand={<span>Mi aplicación</span>}
+        brandHref="/inicio"
+        headerActions={<button type="button">Notificaciones</button>}
+        userMenu={<button type="button">Mi cuenta</button>}
+      />
+      <DashboardLayout.Navbar
+        navigation={sections}
+        search={{ ariaLabel: 'Buscar en el menú', placeholder: 'Buscar módulo o pantalla' }}
+        navbarFooter={<span>Acceso interno</span>}
+      />
+      <DashboardLayout.Main>{children}</DashboardLayout.Main>
     </DashboardLayout>
   )
 }
 ```
+
+En la API compuesta, no pasar `navigation` a la raíz: sus hijos definen la estructura. Pasarlo activa el armado automático anterior, que continúa siendo compatible. `Header`, `Navbar` y `Main` requieren un `DashboardLayout` padre y aceptan refs y estilos locales; la raíz centraliza `classNames`, `styles` y `unstyled` y permite `DashboardLayout.extend()` en el tema. `DashboardLayout.Page` y `.Title` son aliases de los componentes independientes.
 
 Si existen hijos con permisos, filtrarlos recursivamente y retirar padres que queden vacíos. Usar `activePaths` para rutas relacionadas que no descienden del `href`; la coincidencia normal ya funciona por segmentos. Los items pueden usar `href`, `onClick`, `disabled`, `icon`, `rightSection` y `children`.
 
@@ -117,23 +122,23 @@ Mantener `page.tsx` como entrypoint de routing y renderizar la UI real desde `sr
 
 ```tsx
 import { Button } from '@mantine/core'
-import { DashboardContent, DashboardTitle } from 'lkd-web-kit'
+import { DashboardPage, DashboardTitle } from 'lkd-web-kit'
 
 export function CustomersPage() {
   return (
-    <DashboardContent aria-label="Clientes">
+    <DashboardPage aria-label="Clientes">
       <DashboardTitle
         title="Clientes"
         description="Consulta y administra los clientes disponibles."
         action={<Button>Nuevo cliente</Button>}
       />
       <div>Contenido de la página</div>
-    </DashboardContent>
+    </DashboardPage>
   )
 }
 ```
 
-- `DashboardContent` renderiza un `section` y acepta props HTML y `className`.
+- `DashboardPage` renderiza un `section` y acepta props HTML y `className`.
 - `DashboardTitle` renderiza un `header`; requiere `title` y acepta `description`, `action`, props HTML y `className`.
 - Usar `classNames` de `DashboardLayout` sólo para adaptar una necesidad visual real, no para duplicar sus estilos base.
 
@@ -151,3 +156,5 @@ No reemplazar una configuración que ya cubra el paquete.
 - Comprobar navegación activa, items autorizados, búsqueda, navbar mobile y desktop, slots y páginas con/sin acción.
 - Ejecutar lint, typecheck, tests y build disponibles.
 - Verificar visualmente al menos una ruta desktop y una mobile cuando exista navegador local.
+
+DashboardPage / DashboardLayout.Page: contenedor section independiente del contexto, con factory, useProps, Styles API y extend de Mantine. El padding predeterminado es 16 px; se puede cambiar con p (incluido responsive), y centrar con maw y mx="auto". DashboardTitle conserva title, description y action y expone los selectores root, body, title, description y action; admite refs, unstyled y DashboardTitle.extend().

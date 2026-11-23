@@ -2,7 +2,7 @@
 import { NavLink, Stack } from '@mantine/core'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Key, MouseEvent, ReactNode } from 'react'
+import { CSSProperties, Key, MouseEvent, ReactNode } from 'react'
 
 export interface NavItemsProps {
   items: {
@@ -12,6 +12,7 @@ export interface NavItemsProps {
     onClick?: (e: MouseEvent<Element>) => void
     disabled?: boolean
     className?: string
+    style?: CSSProperties
     children?: ReactNode
     label: string
 
