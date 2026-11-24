@@ -16,8 +16,8 @@ import { usePathname } from 'next/navigation'
 import { type CSSProperties, type MouseEvent, type ReactNode, useMemo, useState } from 'react'
 import { MyTextInput } from '../MyTextInput'
 import { NavItems, type NavItemsProps } from '../NavItems'
-import type { DashboardLayoutStylesNames } from './DashboardLayout'
-import { useDashboardLayoutContext, usePartStyles } from './DashboardLayout.context'
+import type { LKDDashboardLayoutStylesNames } from './LKDDashboardLayout'
+import { useLKDDashboardLayoutContext, usePartStyles } from './LKDDashboardLayout.context'
 
 export interface DashboardNavItem {
   key?: string
@@ -44,21 +44,21 @@ export interface DashboardSearchConfig {
   icon?: ReactNode
 }
 
-export interface DashboardLayoutNavbarProps
+export interface LKDDashboardLayoutNavbarProps
   extends BoxProps,
-    Omit<CompoundStylesApiProps<DashboardLayoutNavbarFactory>, 'vars'>,
+    Omit<CompoundStylesApiProps<LKDDashboardLayoutNavbarFactory>, 'vars'>,
     ElementProps<'div'> {
   navigation: readonly DashboardNavSection[]
   search?: DashboardSearchConfig | false
   navbarFooter?: ReactNode
 }
-export type DashboardLayoutNavbarFactory = Factory<{
-  props: DashboardLayoutNavbarProps
+export type LKDDashboardLayoutNavbarFactory = Factory<{
+  props: LKDDashboardLayoutNavbarProps
   ref: HTMLDivElement
-  stylesNames: DashboardLayoutStylesNames
+  stylesNames: LKDDashboardLayoutStylesNames
   compound: true
 }>
-export const DashboardLayoutNavbar = factory<DashboardLayoutNavbarFactory>((_props) => {
+export const LKDDashboardLayoutNavbar = factory<LKDDashboardLayoutNavbarFactory>((_props) => {
   const {
     navigation,
     search = false,
@@ -69,8 +69,8 @@ export const DashboardLayoutNavbar = factory<DashboardLayoutNavbarFactory>((_pro
     classNames,
     styles,
     ...others
-  } = useProps('DashboardLayoutNavbar', {}, _props)
-  const { closeMobile, labels } = useDashboardLayoutContext()
+  } = useProps('LKDDashboardLayoutNavbar', {}, _props)
+  const { closeMobile, labels } = useLKDDashboardLayoutContext()
   const getStyles = usePartStyles('navbar', { className, style, classNames, styles })
   const pathname = usePathname()
   const [query, setQuery] = useState('')
@@ -121,7 +121,7 @@ export const DashboardLayoutNavbar = factory<DashboardLayoutNavbarFactory>((_pro
   )
 })
 
-DashboardLayoutNavbar.displayName = 'lkd-web-kit/DashboardLayoutNavbar'
+LKDDashboardLayoutNavbar.displayName = 'lkd-web-kit/LKDDashboardLayoutNavbar'
 
 const filterSections = (
   sections: readonly DashboardNavSection[],

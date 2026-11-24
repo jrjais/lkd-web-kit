@@ -25,3 +25,7 @@ unbooks/: pasos operativos para deploys, incidentes, jobs, backups y verificacio
 - [Publicar 0.12.1](planes-pendientes/2026-10-07-publicar-0-12-1.md).
 
 - [Publicación 0.12.1 completada](planes-ejecutados/2026-10-07-publicar-0-12-1.md).
+
+- [Renombre LKDDashboardLayout, sin publicar](planes-ejecutados/2026-11-24-renombrar-lkd-dashboard-layout.md). Registro: 2026-11-24T14:53:40-04:00 (America/La_Paz). Codex/OpenAI, modelo no verificado; usuario hugo\hugos (fuente: whoami de la sesión).
+
+- [Release 0.12.4](planes-ejecutados/2026-11-24-publicar-0-12-4.md). Registro: 2026-11-24T15:17:10-04:00 (America/La_Paz). Autor: Codex/OpenAI, modelo no verificado; usuario hugo\hugos (fuente: whoami).

@@ -31,8 +31,8 @@ export type DashboardTitleFactory = Factory<{
 const classes = {
   root: 'mb-5 flex w-full flex-wrap items-center justify-between gap-3',
   body: 'min-w-0',
-  title: 'm-0 font-semibold text-2xl leading-tight text-slate-950',
-  description: 'mt-1.5 text-sm leading-relaxed text-slate-600',
+  title: 'm-0 font-semibold text-2xl leading-tight text-[var(--mantine-color-text)]',
+  description: 'mt-1.5 text-sm leading-relaxed text-[var(--mantine-color-dimmed)]',
   action: 'flex shrink-0 flex-wrap items-center gap-2',
 }
 

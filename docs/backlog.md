@@ -15,3 +15,5 @@ Pendientes, deuda tecnica, riesgos e ideas del proyecto.
 - Remediar vulnerabilidades de tooling reportadas por `npm install --package-lock-only` el `2026-09-14`: `18` totales, `10` moderadas y `8` altas. Requiere una tarea separada porque implica `devDependencies`/tooling fuera del alcance de actualización de peers.
 
 - 2026-10-07: remediar 9 vulnerabilidades de tooling (4 moderadas, 5 altas) y revisar rangos dev/peer de TanStack. API Extractor fue eliminado. [Evidencia](planes-ejecutados/2026-10-07-actualizar-peer-dependencies.md).
+
+- Publicación futura y adopción del renombre incompatible LKDDashboardLayout en consumidores, cuando el usuario lo solicite. [Registro](planes-ejecutados/2026-11-24-renombrar-lkd-dashboard-layout.md). Registro: 2026-11-24T14:53:40-04:00 (America/La_Paz). Codex/OpenAI, modelo no verificado; usuario hugo\hugos (fuente: whoami de la sesión).

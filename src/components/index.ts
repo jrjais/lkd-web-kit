@@ -1,8 +1,8 @@
-export * from './DashboardLayout'
 export * from './EmptyState'
 export * from './Icon'
 export * from './InfinityLoadMoreButton'
 export * from './InfinitySelect'
+export * from './LKDDashboardLayout'
 export * from './MyCheckboxGroup'
 export * from './MyDateInput'
 // fields

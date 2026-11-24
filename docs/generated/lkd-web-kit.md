@@ -1,6 +1,8 @@
 # lkd-web-kit
 
-**Version lkd-web-kit:** `0.12.3` | **Mantine core:** `^9.8.2`
+**Version lkd-web-kit:** `0.12.4` | **Mantine core:** `^9.8.2`
+
+Cambio en 0.12.4: `LKDDashboardLayout` reemplaza DashboardLayout y requiere composición explícita. [Registro del cambio](../planes-ejecutados/2026-11-24-renombrar-lkd-dashboard-layout.md).
 
 ## Descripción
 
@@ -90,41 +92,17 @@ Librería de componentes React, formularios RHF/Zod, contexto de dashboard y uti
 
 ## Componentes UI
 
-- **`DashboardLayout`**: Shell responsive Next.js
-  - Base: `AppShell`.
-  - Props custom: `children`, `navigation?`, `brand?`, `brandHref?`, `headerActions?`, `userMenu?`, `navbarFooter?`, `search?`, `labels?`.
-  - Props heredadas: BoxProps, StylesApiProps, HTML div.
-  - Notas: Header/Navbar/Main comparten contexto seguro. Con navigation arma el shell; sin navigation renderiza la composición explícita. Page y Title son estaticos tipados. Soporta extend y refs.
-
-- **`DashboardLayoutHeader`**: Cabecera del shell; también DashboardLayout.Header
-  - Base: `AppShell.Header`.
-  - Props custom: `brand?`, `brandHref?`, `headerActions?`, `userMenu?`.
-  - Props heredadas: BoxProps, CompoundStylesApiProps sin vars, HTML header.
-  - Notas: Requiere DashboardLayout; comparte burgers mobile/desktop. children se agrega a acciones.
-
-- **`DashboardLayoutMain`**: Área principal; también DashboardLayout.Main
-  - Base: `AppShell.Main`.
-  - Props custom: ninguna.
-  - Props heredadas: BoxProps, CompoundStylesApiProps sin vars, HTML main.
-  - Notas: Requiere DashboardLayout y usa sus estilos.
-
-- **`DashboardLayoutNavbar`**: Navegación lateral; también DashboardLayout.Navbar
-  - Base: `AppShell.Navbar`.
-  - Props custom: `navigation`, `search?`, `navbarFooter?`.
-  - Props heredadas: BoxProps, CompoundStylesApiProps sin vars, HTML div.
-  - Notas: Requiere DashboardLayout; busqueda sin acentos, rutas por segmento y activePaths, cierra mobile al navegar.
-
-- **`DashboardPage`**: Contenedor semántico de página; también DashboardLayout.Page
+- **`DashboardPage`**: Contenedor semántico de página; también LKDDashboardLayout.Page
   - Base: `Box component section`.
   - Props custom: ninguna.
   - Props heredadas: BoxProps, StylesApiProps, HTML section.
   - Notas: p=16 y w=100% por defecto. p admite responsive; maw y mx permiten centrar. factory, extend y ref; independiente del contexto.
 
-- **`DashboardTitle`**: Encabezado semántico de página; también DashboardLayout.Title
+- **`DashboardTitle`**: Encabezado semántico de página; también LKDDashboardLayout.Title
   - Base: `Box component header`.
   - Props custom: `title: ReactNode`, `description?`, `action?`.
   - Props heredadas: BoxProps, StylesApiProps, HTML header excepto title.
-  - Notas: factory, extend y ref; selectores root, body, title, description, action. No requiere DashboardLayout.
+  - Notas: factory, extend y ref; selectores root, body, title, description, action. No requiere LKDDashboardLayout.
 
 - **`EmptyState`**: Estado vacío obsoleto; preferir Mantine EmptyState
   - Base: `N/A`.
@@ -150,6 +128,30 @@ Librería de componentes React, formularios RHF/Zod, contexto de dashboard y uti
   - Props heredadas: Consultar InfinitySelectProps.
   - Notas: Paginación infinita y teclado con useVirtualizedCombobox.
 
+- **`LKDDashboardLayout`**: Shell responsive Next.js
+  - Base: `AppShell`.
+  - Props custom: `children`, `header?: LKDDashboardLayoutHeaderConfig`, `navbar?: LKDDashboardLayoutNavbarConfig`, `labels?`.
+  - Props heredadas: BoxProps, StylesApiProps, HTML div.
+  - Notas: Composición explícita con Header/Navbar/Main; header 56 px, navbar 200 px y breakpoint sm por defecto. Dimensiones responsive y offset delegados a AppShell; breakpoint compartido con botones. Colores del tema. Soporta extend y refs; sin armado automático ni slots en la raíz.
+
+- **`LKDDashboardLayoutHeader`**: Cabecera del shell; también LKDDashboardLayout.Header
+  - Base: `AppShell.Header`.
+  - Props custom: `brand?`, `brandHref?`, `headerActions?`, `userMenu?`, `burgerProps?: LKDDashboardLayoutBurgerProps`.
+  - Props heredadas: BoxProps, CompoundStylesApiProps sin vars, HTML header.
+  - Notas: Requiere LKDDashboardLayout; comparte burgers mobile/desktop y breakpoint. burgerProps configura el aspecto, sin reemplazar estado, click, visibilidad ni accesibilidad. children se agrega a acciones.
+
+- **`LKDDashboardLayoutMain`**: Área principal; también LKDDashboardLayout.Main
+  - Base: `AppShell.Main`.
+  - Props custom: ninguna.
+  - Props heredadas: BoxProps, CompoundStylesApiProps sin vars, HTML main.
+  - Notas: Requiere LKDDashboardLayout y usa sus estilos.
+
+- **`LKDDashboardLayoutNavbar`**: Navegación lateral; también LKDDashboardLayout.Navbar
+  - Base: `AppShell.Navbar`.
+  - Props custom: `navigation`, `search?`, `navbarFooter?`.
+  - Props heredadas: BoxProps, CompoundStylesApiProps sin vars, HTML div.
+  - Notas: Requiere LKDDashboardLayout; busqueda sin acentos, rutas por segmento y activePaths, cierra mobile al navegar.
+
 - **`ModalManagerProvider`**: Proveedor de modales tipados
   - Base: `React Context`.
   - Props custom: `modals`, `children`, `loadModals?`.
@@ -162,17 +164,17 @@ Librería de componentes React, formularios RHF/Zod, contexto de dashboard y uti
   - Props heredadas: Mantine TableProps segun MyTableProps.
   - Notas: Columnas con createColumnHelper<MyTableFeatures, RowData>().
 
-- **`NavItems`**: Navegación vertical con Next Link
-  - Base: `NavLink`.
-  - Props custom: `items`, `activeStrategy?: equals | includes`; items admiten key, label, href, isActive, iconos, onClick, disabled, className, style y children.
-  - Props heredadas: N/A.
-  - Notas: prefetch false; sin href usa button.
-
 - **`NavigationHistoryProvider`**: Historial de rutas
   - Base: `React Context`.
   - Props custom: `children`.
   - Props heredadas: N/A.
   - Notas: Tracker con Suspense; incluye query string.
+
+- **`NavItems`**: Navegación vertical con Next Link
+  - Base: `NavLink`.
+  - Props custom: `items`, `activeStrategy?: equals | includes`; items admiten key, label, href, isActive, iconos, onClick, disabled, className, style y children.
+  - Props heredadas: N/A.
+  - Notas: prefetch false; sin href usa button.
 
 - **`PageDataProvider`**: Datos compartidos de página
   - Base: `React Context`.
@@ -512,49 +514,9 @@ Librería de componentes React, formularios RHF/Zod, contexto de dashboard y uti
   - Tipo: `interface`.
   - Uso: Consultar la declaración exportada; tipos de props, navegación, factory o datos del componente correspondiente.
 
-- **`DashboardLayoutClassNames`**: Contrato público tipado
-  - Tipo: `interface`.
-  - Uso: Consultar la declaración exportada; tipos de props, navegación, factory o datos del componente correspondiente.
-
-- **`DashboardLayoutFactory`**: Contrato público tipado
-  - Tipo: `type`.
-  - Uso: Consultar la declaración exportada; tipos de props, navegación, factory o datos del componente correspondiente.
-
-- **`DashboardLayoutHeaderFactory`**: Contrato público tipado
-  - Tipo: `type`.
-  - Uso: Consultar la declaración exportada; tipos de props, navegación, factory o datos del componente correspondiente.
-
-- **`DashboardLayoutHeaderProps`**: Contrato público tipado
-  - Tipo: `interface`.
-  - Uso: Consultar la declaración exportada; tipos de props, navegación, factory o datos del componente correspondiente.
-
-- **`DashboardLayoutLabels`**: Contrato público tipado
-  - Tipo: `interface`.
-  - Uso: Consultar la declaración exportada; tipos de props, navegación, factory o datos del componente correspondiente.
-
-- **`DashboardLayoutMainFactory`**: Contrato público tipado
-  - Tipo: `type`.
-  - Uso: Consultar la declaración exportada; tipos de props, navegación, factory o datos del componente correspondiente.
-
-- **`DashboardLayoutMainProps`**: Contrato público tipado
-  - Tipo: `interface`.
-  - Uso: Consultar la declaración exportada; tipos de props, navegación, factory o datos del componente correspondiente.
-
-- **`DashboardLayoutNavbarFactory`**: Contrato público tipado
-  - Tipo: `type`.
-  - Uso: Consultar la declaración exportada; tipos de props, navegación, factory o datos del componente correspondiente.
-
-- **`DashboardLayoutNavbarProps`**: Contrato público tipado
-  - Tipo: `interface`.
-  - Uso: Consultar la declaración exportada; tipos de props, navegación, factory o datos del componente correspondiente.
-
-- **`DashboardLayoutProps`**: Contrato público tipado
-  - Tipo: `interface`.
-  - Uso: Consultar la declaración exportada; tipos de props, navegación, factory o datos del componente correspondiente.
-
-- **`DashboardLayoutStylesNames`**: Contrato público tipado
-  - Tipo: `type`.
-  - Uso: Consultar la declaración exportada; tipos de props, navegación, factory o datos del componente correspondiente.
+- **`breakpointsWithPx`**: xs 540px, sm 640px, md 768px, lg 1024px, xl 1280px, 2xl 1536px, 3xl 1680px
+  - Tipo: `const`.
+  - Uso: xs 540px, sm 640px, md 768px, lg 1024px, xl 1280px, 2xl 1536px, 3xl 1680px.
 
 - **`DashboardNavItem`**: Contrato público tipado
   - Tipo: `interface`.
@@ -644,11 +606,11 @@ Librería de componentes React, formularios RHF/Zod, contexto de dashboard y uti
   - Tipo: `type`.
   - Uso: Consultar la declaración exportada; tipos de props, navegación, factory o datos del componente correspondiente.
 
-- **`FormTextInputProps`**: Contrato público tipado
+- **`FormTextareaProps`**: Contrato público tipado
   - Tipo: `type`.
   - Uso: Consultar la declaración exportada; tipos de props, navegación, factory o datos del componente correspondiente.
 
-- **`FormTextareaProps`**: Contrato público tipado
+- **`FormTextInputProps`**: Contrato público tipado
   - Tipo: `type`.
   - Uso: Consultar la declaración exportada; tipos de props, navegación, factory o datos del componente correspondiente.
 
@@ -680,6 +642,62 @@ Librería de componentes React, formularios RHF/Zod, contexto de dashboard y uti
   - Tipo: `interface`.
   - Uso: Consultar la declaración exportada; tipos de props, navegación, factory o datos del componente correspondiente.
 
+- **`LKDDashboardLayoutBurgerProps`**: Configuración pública tipada
+  - Tipo: `type`.
+  - Uso: Props visuales seguras de Burger; excluye controles y atributos accesibles gestionados por el shell.
+
+- **`LKDDashboardLayoutClassNames`**: Contrato público tipado
+  - Tipo: `interface`.
+  - Uso: Consultar la declaración exportada; tipos de props, navegación, factory o datos del componente correspondiente.
+
+- **`LKDDashboardLayoutFactory`**: Contrato público tipado
+  - Tipo: `type`.
+  - Uso: Consultar la declaración exportada; tipos de props, navegación, factory o datos del componente correspondiente.
+
+- **`LKDDashboardLayoutHeaderConfig`**: Configuración pública tipada
+  - Tipo: `type`.
+  - Uso: Height responsive y offset heredados de AppShell; altura por defecto 56 px.
+
+- **`LKDDashboardLayoutHeaderFactory`**: Contrato público tipado
+  - Tipo: `type`.
+  - Uso: Consultar la declaración exportada; tipos de props, navegación, factory o datos del componente correspondiente.
+
+- **`LKDDashboardLayoutHeaderProps`**: Contrato público tipado
+  - Tipo: `interface`.
+  - Uso: Consultar la declaración exportada; tipos de props, navegación, factory o datos del componente correspondiente.
+
+- **`LKDDashboardLayoutLabels`**: Contrato público tipado
+  - Tipo: `interface`.
+  - Uso: Consultar la declaración exportada; tipos de props, navegación, factory o datos del componente correspondiente.
+
+- **`LKDDashboardLayoutMainFactory`**: Contrato público tipado
+  - Tipo: `type`.
+  - Uso: Consultar la declaración exportada; tipos de props, navegación, factory o datos del componente correspondiente.
+
+- **`LKDDashboardLayoutMainProps`**: Contrato público tipado
+  - Tipo: `interface`.
+  - Uso: Consultar la declaración exportada; tipos de props, navegación, factory o datos del componente correspondiente.
+
+- **`LKDDashboardLayoutNavbarConfig`**: Configuración pública tipada
+  - Tipo: `type`.
+  - Uso: Width responsive de AppShell y breakpoint del tema; defaults 200 px y sm.
+
+- **`LKDDashboardLayoutNavbarFactory`**: Contrato público tipado
+  - Tipo: `type`.
+  - Uso: Consultar la declaración exportada; tipos de props, navegación, factory o datos del componente correspondiente.
+
+- **`LKDDashboardLayoutNavbarProps`**: Contrato público tipado
+  - Tipo: `interface`.
+  - Uso: Consultar la declaración exportada; tipos de props, navegación, factory o datos del componente correspondiente.
+
+- **`LKDDashboardLayoutProps`**: Contrato público tipado
+  - Tipo: `interface`.
+  - Uso: Consultar la declaración exportada; tipos de props, navegación, factory o datos del componente correspondiente.
+
+- **`LKDDashboardLayoutStylesNames`**: Contrato público tipado
+  - Tipo: `type`.
+  - Uso: Consultar la declaración exportada; tipos de props, navegación, factory o datos del componente correspondiente.
+
 - **`ModalKey`**: Contrato público tipado
   - Tipo: `type`.
   - Uso: Consultar la declaración exportada; tipos de props, navegación, factory o datos del componente correspondiente.
@@ -704,10 +722,17 @@ Librería de componentes React, formularios RHF/Zod, contexto de dashboard y uti
   - Tipo: `type`.
   - Uso: Consultar la declaración exportada; tipos de props, navegación, factory o datos del componente correspondiente.
 
+- **`myDefaultTheme`**: Defaults Mantine, Container xl custom, AppShell padding 0 y reglas de Select/Menu/Tooltip
+  - Tipo: `const`.
+  - Uso: Defaults Mantine, Container xl custom, AppShell padding 0 y reglas de Select/Menu/Tooltip.
+
 - **`MyTableFeatures`**: Features de TanStack Table v9
   - Tipo: `type`.
   - Uso: Features de TanStack Table v9.
 
+- **`myTableFeatures`**: Feature set de MyTable
+  - Tipo: `const`.
+  - Uso: Feature set de MyTable.
 - **`PageProps`**: Contrato público tipado
   - Tipo: `interface`.
   - Uso: Consultar la declaración exportada; tipos de props, navegación, factory o datos del componente correspondiente.
@@ -728,17 +753,6 @@ Librería de componentes React, formularios RHF/Zod, contexto de dashboard y uti
   - Tipo: `interface`.
   - Uso: Consultar la declaración exportada; tipos de props, navegación, factory o datos del componente correspondiente.
 
-- **`breakpointsWithPx`**: xs 540px, sm 640px, md 768px, lg 1024px, xl 1280px, 2xl 1536px, 3xl 1680px
-  - Tipo: `const`.
-  - Uso: xs 540px, sm 640px, md 768px, lg 1024px, xl 1280px, 2xl 1536px, 3xl 1680px.
-
-- **`myDefaultTheme`**: Defaults Mantine, Container xl custom, AppShell padding 0 y reglas de Select/Menu/Tooltip
-  - Tipo: `const`.
-  - Uso: Defaults Mantine, Container xl custom, AppShell padding 0 y reglas de Select/Menu/Tooltip.
-
-- **`myTableFeatures`**: Feature set de MyTable
-  - Tipo: `const`.
-  - Uso: Feature set de MyTable.
 
 ## Notas de Uso
 
@@ -751,3 +765,7 @@ Librería de componentes React, formularios RHF/Zod, contexto de dashboard y uti
 ## No Exportado
 
 `getPathValue` existe en src/utils/get-path-value.ts y no se exporta desde el barrel. El contexto del dashboard y usePartStyles son internos.
+
+Registro: 2026-11-24T15:03:35-04:00 (America/La_Paz). Codex/OpenAI, modelo no verificado; hugo\hugos (whoami de la sesión).
+
+API configurable de 0.12.4: defaults 56/200, burgerProps visuales, colores del tema y composición explícita.

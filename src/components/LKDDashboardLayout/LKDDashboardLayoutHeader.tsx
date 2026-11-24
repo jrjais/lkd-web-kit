@@ -4,6 +4,7 @@ import {
   AppShell,
   type BoxProps,
   Burger,
+  type BurgerProps,
   type CompoundStylesApiProps,
   type ElementProps,
   type Factory,
@@ -13,26 +14,43 @@ import {
 } from '@mantine/core'
 import Link from 'next/link'
 import type { ReactNode } from 'react'
-import type { DashboardLayoutStylesNames } from './DashboardLayout'
-import { useDashboardLayoutContext, usePartStyles } from './DashboardLayout.context'
+import type { LKDDashboardLayoutStylesNames } from './LKDDashboardLayout'
+import { useLKDDashboardLayoutContext, usePartStyles } from './LKDDashboardLayout.context'
 
-export interface DashboardLayoutHeaderProps
+export type LKDDashboardLayoutBurgerProps = Pick<
+  BurgerProps,
+  | 'color'
+  | 'size'
+  | 'lineSize'
+  | 'transitionDuration'
+  | 'transitionTimingFunction'
+  | 'className'
+  | 'classNames'
+  | 'style'
+  | 'styles'
+  | 'vars'
+  | 'unstyled'
+>
+
+export interface LKDDashboardLayoutHeaderProps
   extends BoxProps,
-    Omit<CompoundStylesApiProps<DashboardLayoutHeaderFactory>, 'vars'>,
+    Omit<CompoundStylesApiProps<LKDDashboardLayoutHeaderFactory>, 'vars'>,
     ElementProps<'header'> {
+  burgerProps?: LKDDashboardLayoutBurgerProps
   brand?: ReactNode
   brandHref?: string
   headerActions?: ReactNode
   userMenu?: ReactNode
 }
-export type DashboardLayoutHeaderFactory = Factory<{
-  props: DashboardLayoutHeaderProps
+export type LKDDashboardLayoutHeaderFactory = Factory<{
+  props: LKDDashboardLayoutHeaderProps
   ref: HTMLElement
-  stylesNames: DashboardLayoutStylesNames
+  stylesNames: LKDDashboardLayoutStylesNames
   compound: true
 }>
-export const DashboardLayoutHeader = factory<DashboardLayoutHeaderFactory>((_props) => {
+export const LKDDashboardLayoutHeader = factory<LKDDashboardLayoutHeaderFactory>((_props) => {
   const {
+    burgerProps,
     brand,
     brandHref,
     headerActions,
@@ -43,9 +61,9 @@ export const DashboardLayoutHeader = factory<DashboardLayoutHeaderFactory>((_pro
     classNames,
     styles,
     ...others
-  } = useProps('DashboardLayoutHeader', {}, _props)
-  const { mobileOpened, desktopOpened, toggleMobile, toggleDesktop, labels } =
-    useDashboardLayoutContext()
+  } = useProps('LKDDashboardLayoutHeader', {}, _props)
+  const { mobileOpened, desktopOpened, toggleMobile, toggleDesktop, labels, navbarBreakpoint } =
+    useLKDDashboardLayoutContext()
   const getStyles = usePartStyles('header', { className, style, classNames, styles })
   const brandContent =
     brand && brandHref ? (
@@ -59,20 +77,22 @@ export const DashboardLayoutHeader = factory<DashboardLayoutHeaderFactory>((_pro
     <AppShell.Header {...getStyles('header')} {...others}>
       <Group {...getStyles('headerStart')} wrap="nowrap">
         <Burger
+          size="sm"
+          {...burgerProps}
           aria-label={labels?.openMenu ?? 'Abrir menú'}
           aria-expanded={mobileOpened}
-          hiddenFrom="sm"
+          hiddenFrom={navbarBreakpoint}
           opened={mobileOpened}
           onClick={toggleMobile}
-          size="sm"
         />
         <Burger
+          size="sm"
+          {...burgerProps}
           aria-label={labels?.toggleMenu ?? 'Alternar menú'}
           aria-expanded={desktopOpened}
-          visibleFrom="sm"
+          visibleFrom={navbarBreakpoint}
           opened={desktopOpened}
           onClick={toggleDesktop}
-          size="sm"
         />
         {brandContent}
       </Group>
@@ -85,4 +105,4 @@ export const DashboardLayoutHeader = factory<DashboardLayoutHeaderFactory>((_pro
   )
 })
 
-DashboardLayoutHeader.displayName = 'lkd-web-kit/DashboardLayoutHeader'
+LKDDashboardLayoutHeader.displayName = 'lkd-web-kit/LKDDashboardLayoutHeader'

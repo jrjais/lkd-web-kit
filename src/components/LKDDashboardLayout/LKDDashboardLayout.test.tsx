@@ -2,7 +2,7 @@ import { createTheme, MantineProvider } from '@mantine/core'
 import { fireEvent, render, screen, within } from '@testing-library/react'
 import { type ComponentProps, createRef, type ReactNode } from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { DashboardLayout, type DashboardNavSection, DashboardPage, DashboardTitle } from '.'
+import { type DashboardNavSection, DashboardPage, DashboardTitle, LKDDashboardLayout } from '.'
 
 let pathname = '/crm/clientes/42'
 
@@ -54,16 +54,48 @@ const navigation: readonly DashboardNavSection[] = [
   },
 ]
 
-const renderLayout = (props: Partial<Parameters<typeof DashboardLayout>[0]> = {}) =>
+type TestLayoutProps = Partial<ComponentProps<typeof LKDDashboardLayout>> &
+  Pick<
+    ComponentProps<typeof LKDDashboardLayout.Header>,
+    'brand' | 'brandHref' | 'headerActions' | 'userMenu' | 'burgerProps'
+  > &
+  Partial<
+    Pick<ComponentProps<typeof LKDDashboardLayout.Navbar>, 'navigation' | 'search' | 'navbarFooter'>
+  >
+
+const TestLayout = ({
+  navigation: sections = navigation,
+  brand,
+  brandHref,
+  headerActions,
+  userMenu,
+  burgerProps,
+  search,
+  navbarFooter,
+  children = 'Contenido',
+  ...props
+}: TestLayoutProps) => (
+  <LKDDashboardLayout {...props}>
+    <LKDDashboardLayout.Header
+      brand={brand}
+      brandHref={brandHref}
+      headerActions={headerActions}
+      userMenu={userMenu}
+      burgerProps={burgerProps}
+    />
+    <LKDDashboardLayout.Navbar navigation={sections} search={search} navbarFooter={navbarFooter} />
+    <LKDDashboardLayout.Main>{children}</LKDDashboardLayout.Main>
+  </LKDDashboardLayout>
+)
+
+const renderLayout = (props: TestLayoutProps = {}) =>
   render(
     <MantineProvider>
-      <DashboardLayout navigation={navigation} {...props}>
-        <main>Contenido</main>
-      </DashboardLayout>
+      <TestLayout {...props} />
     </MantineProvider>,
   )
 
-describe('DashboardLayout', () => {
+describe('LKDDashboardLayout', () => {
   beforeEach(() => {
     pathname = '/crm/clientes/42'
   })
@@ -93,7 +125,7 @@ describe('DashboardLayout', () => {
     pathname = '/resumen/hoy'
     rerender(
       <MantineProvider>
-        <DashboardLayout navigation={navigation}>Contenido</DashboardLayout>
+        <TestLayout />
       </MantineProvider>,
     )
     expect(screen.getByRole('link', { name: 'Panel diario', hidden: true })).toHaveAttribute(
@@ -178,21 +210,101 @@ describe('DashboardLayout', () => {
   })
 })
 
-describe('DashboardLayout compuesto', () => {
+describe('LKDDashboardLayout configurable', () => {
+  const shellStyles = (container: HTMLElement) =>
+    Array.from(container.querySelectorAll('style'))
+      .map((node) => node.textContent)
+      .join('')
+
+  it('mantiene header 56 y navbar 200 con offsets gestionados por AppShell', () => {
+    const { container } = renderLayout()
+    const css = shellStyles(container)
+    expect(css).toMatch(/--app-shell-header-height:\s*calc\(3\.5rem/)
+    expect(css).toMatch(/--app-shell-header-offset:\s*calc\(3\.5rem/)
+    expect(css).toMatch(/--app-shell-navbar-width:\s*calc\(12\.5rem/)
+    expect(css).toMatch(/--app-shell-navbar-offset:\s*calc\(12\.5rem/)
+    expect(screen.getByRole('banner')).not.toHaveClass('h-16')
+  })
+
+  it('admite medidas responsive y usa el mismo breakpoint en navbar y botones', () => {
+    const { container } = renderLayout({
+      header: { height: { base: 48, md: 72 } },
+      navbar: { width: { base: 180, md: 240 }, breakpoint: 'md' },
+    })
+    const css = shellStyles(container)
+    expect(css).toMatch(/--app-shell-header-height:\s*calc\(3rem/)
+    expect(css).toMatch(/--app-shell-header-height:\s*calc\(4\.5rem/)
+    expect(css).toMatch(/--app-shell-navbar-width:\s*calc\(15rem/)
+    expect(css).toContain('62em')
+    expect(screen.getByRole('button', { name: 'Abrir menú' })).toHaveClass('mantine-hidden-from-md')
+    const desktop = screen.getByRole('button', { name: 'Alternar menú' })
+    expect(desktop).toHaveClass('mantine-visible-from-md')
+    fireEvent.click(desktop)
+    expect(desktop).toHaveAttribute('aria-expanded', 'false')
+    expect(shellStyles(container)).toMatch(/--app-shell-navbar-offset:\s*0px\s*!important/)
+  })
+
+  it('aplica burgerProps a ambos botones sin permitir reemplazar controles internos', () => {
+    const injectedClick = vi.fn()
+    const burgerProps = {
+      color: 'white',
+      size: 24,
+      opened: true,
+      onClick: injectedClick,
+      hiddenFrom: 'xl',
+      visibleFrom: 'xl',
+      'aria-expanded': true,
+    }
+    renderLayout({ burgerProps })
+    const mobile = screen.getByRole('button', { name: 'Abrir menú' })
+    const desktop = screen.getByRole('button', { name: 'Alternar menú' })
+    for (const button of [mobile, desktop]) {
+      expect(button.style.getPropertyValue('--burger-color')).toBe('var(--mantine-color-white)')
+    }
+    expect(mobile).toHaveClass('mantine-hidden-from-sm')
+    expect(desktop).toHaveClass('mantine-visible-from-sm')
+    expect(mobile).toHaveAttribute('aria-expanded', 'false')
+    fireEvent.click(mobile)
+    fireEvent.click(desktop)
+    expect(mobile).toHaveAttribute('aria-expanded', 'true')
+    expect(desktop).toHaveAttribute('aria-expanded', 'false')
+    expect(injectedClick).not.toHaveBeenCalled()
+  })
+
+  it('resuelve dimensiones desde el tema y admite overrides locales', () => {
+    const theme = createTheme({
+      components: {
+        LKDDashboardLayout: LKDDashboardLayout.extend({
+          defaultProps: { header: { height: 68 }, navbar: { width: 240, breakpoint: 'lg' } },
+        }),
+      },
+    })
+    const { container } = render(
+      <MantineProvider theme={theme}>
+        <TestLayout header={{ height: 80 }} />
+      </MantineProvider>,
+    )
+    expect(shellStyles(container)).toMatch(/--app-shell-header-height:\s*calc\(5rem/)
+    expect(shellStyles(container)).toMatch(/--app-shell-navbar-width:\s*calc\(15rem/)
+    expect(screen.getByRole('button', { name: 'Abrir menú' })).toHaveClass('mantine-hidden-from-lg')
+  })
+})
+
+describe('LKDDashboardLayout compuesto', () => {
   it('compone las partes y comparte el estado del menú sin duplicar el shell', () => {
     const rootRef = createRef<HTMLDivElement>()
     const navbarRef = createRef<HTMLDivElement>()
     render(
       <MantineProvider>
-        <DashboardLayout ref={rootRef}>
-          <DashboardLayout.Header brand="Marca compuesta">Acciones</DashboardLayout.Header>
-          <DashboardLayout.Navbar navigation={navigation} search={{}} ref={navbarRef} />
-          <DashboardLayout.Main>
-            <DashboardLayout.Page>
-              <DashboardLayout.Title title="Panel compuesto" />
-            </DashboardLayout.Page>
-          </DashboardLayout.Main>
-        </DashboardLayout>
+        <LKDDashboardLayout ref={rootRef}>
+          <LKDDashboardLayout.Header brand="Marca compuesta">Acciones</LKDDashboardLayout.Header>
+          <LKDDashboardLayout.Navbar navigation={navigation} search={{}} ref={navbarRef} />
+          <LKDDashboardLayout.Main>
+            <LKDDashboardLayout.Page>
+              <LKDDashboardLayout.Title title="Panel compuesto" />
+            </LKDDashboardLayout.Page>
+          </LKDDashboardLayout.Main>
+        </LKDDashboardLayout>
       </MantineProvider>,
     )
     expect(rootRef.current).toContainElement(navbarRef.current)
@@ -212,7 +324,7 @@ describe('DashboardLayout compuesto', () => {
   it('integra extend, estilos del tema, estilos locales y unstyled', () => {
     const theme = createTheme({
       components: {
-        DashboardLayout: DashboardLayout.extend({
+        LKDDashboardLayout: LKDDashboardLayout.extend({
           classNames: { header: 'tema-header' },
           styles: { navItem: { color: 'rgb(1, 2, 3)' } },
         }),
@@ -220,14 +332,14 @@ describe('DashboardLayout compuesto', () => {
     })
     const { container } = render(
       <MantineProvider theme={theme}>
-        <DashboardLayout unstyled>
-          <DashboardLayout.Header className="local-header" />
-          <DashboardLayout.Navbar
+        <LKDDashboardLayout unstyled>
+          <LKDDashboardLayout.Header className="local-header" />
+          <LKDDashboardLayout.Navbar
             navigation={navigation}
             classNames={{ sectionLabel: 'local-label' }}
           />
-          <DashboardLayout.Main style={{ padding: 12 }}>Contenido</DashboardLayout.Main>
-        </DashboardLayout>
+          <LKDDashboardLayout.Main style={{ padding: 12 }}>Contenido</LKDDashboardLayout.Main>
+        </LKDDashboardLayout>
       </MantineProvider>,
     )
     expect(container.querySelector('.tema-header')).toHaveClass('local-header')
@@ -242,10 +354,10 @@ describe('DashboardLayout compuesto', () => {
     expect(() =>
       render(
         <MantineProvider>
-          <DashboardLayout.Main />
+          <LKDDashboardLayout.Main />
         </MantineProvider>,
       ),
-    ).toThrow('must be rendered inside DashboardLayout')
+    ).toThrow('must be rendered inside LKDDashboardLayout')
   })
 })
 
@@ -277,7 +389,7 @@ describe('DashboardPage y DashboardTitle', () => {
 })
 
 describe('DashboardPage y DashboardTitle: Mantine', () => {
-  it('aplica defaults del tema, estilos y refs sin requerir DashboardLayout', () => {
+  it('aplica defaults del tema, estilos y refs sin requerir LKDDashboardLayout', () => {
     const pageRef = createRef<HTMLElement>()
     const titleRef = createRef<HTMLElement>()
     const theme = createTheme({
