@@ -60,7 +60,10 @@ type TestLayoutProps = Partial<ComponentProps<typeof LKDDashboardLayout>> &
     'brand' | 'brandHref' | 'headerActions' | 'userMenu' | 'burgerProps'
   > &
   Partial<
-    Pick<ComponentProps<typeof LKDDashboardLayout.Navbar>, 'navigation' | 'search' | 'navbarFooter'>
+    Pick<
+      ComponentProps<typeof LKDDashboardLayout.Navbar>,
+      'navigation' | 'search' | 'navbarFooter' | 'pathPrefix'
+    >
   >
 
 const TestLayout = ({
@@ -72,6 +75,7 @@ const TestLayout = ({
   burgerProps,
   search,
   navbarFooter,
+  pathPrefix,
   children = 'Contenido',
   ...props
 }: TestLayoutProps) => (
@@ -83,7 +87,12 @@ const TestLayout = ({
       userMenu={userMenu}
       burgerProps={burgerProps}
     />
-    <LKDDashboardLayout.Navbar navigation={sections} search={search} navbarFooter={navbarFooter} />
+    <LKDDashboardLayout.Navbar
+      navigation={sections}
+      search={search}
+      navbarFooter={navbarFooter}
+      pathPrefix={pathPrefix}
+    />
     <LKDDashboardLayout.Main>{children}</LKDDashboardLayout.Main>
   </LKDDashboardLayout>
 )
@@ -98,6 +107,49 @@ const renderLayout = (props: TestLayoutProps = {}) =>
 describe('LKDDashboardLayout', () => {
   beforeEach(() => {
     pathname = '/crm/clientes/42'
+  })
+
+  it('prefija enlaces y activePaths sin mutar la navegación y propaga hijos activos', () => {
+    pathname = '/es-ar/resumen/hoy'
+    const original = JSON.stringify(navigation)
+    renderLayout({ pathPrefix: '/es-ar' })
+    expect(screen.getByRole('link', { name: 'Clientes' })).toHaveAttribute(
+      'href',
+      '/es-ar/crm/clientes',
+    )
+    expect(screen.getByRole('link', { name: 'Panel diario', hidden: true })).toHaveAttribute(
+      'data-active',
+      'true',
+    )
+    expect(screen.getByRole('link', { name: 'Reportes' })).toHaveAttribute('data-active', 'true')
+    expect(JSON.stringify(navigation)).toBe(original)
+  })
+
+  it('admite match exacto y enlaces ya prefijados o externos', () => {
+    pathname = '/es-ar/clientes/42'
+    renderLayout({
+      pathPrefix: '/es-ar/',
+      navigation: [
+        {
+          label: 'Menú',
+          items: [
+            { label: 'Inicio', href: '/' },
+            { label: 'Exacto', href: '/clientes', match: 'exact' },
+            { label: 'Sección', href: '/es-ar/clientes', match: 'section' },
+            { label: 'Externo', href: 'https://example.com/clientes' },
+          ],
+        },
+      ],
+    })
+    expect(screen.getByRole('link', { name: 'Inicio' })).not.toHaveAttribute('data-active')
+    expect(screen.getByRole('link', { name: 'Exacto' })).not.toHaveAttribute('data-active')
+    expect(screen.getByRole('link', { name: 'Sección' })).toHaveAttribute('href', '/es-ar/clientes')
+    expect(screen.getByRole('link', { name: 'Sección' })).toHaveAttribute('data-active', 'true')
+    expect(screen.getByRole('link', { name: 'Externo' })).toHaveAttribute(
+      'href',
+      'https://example.com/clientes',
+    )
+    expect(screen.getByRole('link', { name: 'Externo' })).not.toHaveAttribute('data-active')
   })
 
   it('renderiza slots y marca rutas activas por segmento', () => {

@@ -16,6 +16,11 @@ import { usePathname } from 'next/navigation'
 import { type CSSProperties, type MouseEvent, type ReactNode, useMemo, useState } from 'react'
 import { MyTextInput } from '../MyTextInput'
 import { NavItems, type NavItemsProps } from '../NavItems'
+import {
+  matchesNavigationPath,
+  type NavigationMatch,
+  prefixNavigationPath,
+} from '../navigation-paths'
 import type { LKDDashboardLayoutStylesNames } from './LKDDashboardLayout'
 import { useLKDDashboardLayoutContext, usePartStyles } from './LKDDashboardLayout.context'
 
@@ -28,6 +33,7 @@ export interface DashboardNavItem {
   rightSection?: ReactNode
   disabled?: boolean
   activePaths?: readonly string[]
+  match?: NavigationMatch
   children?: readonly DashboardNavItem[]
 }
 
@@ -49,6 +55,7 @@ export interface LKDDashboardLayoutNavbarProps
     Omit<CompoundStylesApiProps<LKDDashboardLayoutNavbarFactory>, 'vars'>,
     ElementProps<'div'> {
   navigation: readonly DashboardNavSection[]
+  pathPrefix?: string
   search?: DashboardSearchConfig | false
   navbarFooter?: ReactNode
 }
@@ -61,6 +68,7 @@ export type LKDDashboardLayoutNavbarFactory = Factory<{
 export const LKDDashboardLayoutNavbar = factory<LKDDashboardLayoutNavbarFactory>((_props) => {
   const {
     navigation,
+    pathPrefix = '',
     search = false,
     navbarFooter,
     children,
@@ -98,7 +106,7 @@ export const LKDDashboardLayoutNavbar = factory<LKDDashboardLayoutNavbarFactory>
                 <p {...getStyles('sectionLabel')}>{section.label}</p>
                 <NavItems
                   items={section.items.map((item) =>
-                    toNavItem(item, pathname, closeMobile, getStyles('navItem')),
+                    toNavItem(item, pathname, closeMobile, getStyles('navItem'), pathPrefix),
                   )}
                 />
               </Box>
@@ -151,26 +159,21 @@ const normalize = (value: string) =>
     .replace(/[\u0300-\u036f]/g, '')
     .toLocaleLowerCase('es')
 
-const routeMatches = (pathname: string, route: string) => {
-  const normalizedRoute = route !== '/' ? route.replace(/\/$/, '') : route
-  return (
-    pathname === normalizedRoute ||
-    (normalizedRoute !== '/' && pathname.startsWith(`${normalizedRoute}/`))
-  )
-}
-
 const toNavItem = (
   item: DashboardNavItem,
   pathname: string,
   closeMobile: () => void,
   itemStyles: { className: string; style: CSSProperties },
+  pathPrefix: string,
 ): NavItemsProps['items'][number] => {
   const children = item.children?.map((child) =>
-    toNavItem(child, pathname, closeMobile, itemStyles),
+    toNavItem(child, pathname, closeMobile, itemStyles, pathPrefix),
   )
   const isActive = Boolean(
-    (item.href && routeMatches(pathname, item.href)) ||
-      item.activePaths?.some((path) => routeMatches(pathname, path)) ||
+    (item.href && matchesNavigationPath(pathname, item.href, item.match, pathPrefix)) ||
+      item.activePaths?.some((path) =>
+        matchesNavigationPath(pathname, path, item.match, pathPrefix),
+      ) ||
       children?.some((child) => child.isActive),
   )
   const onClick = (event: MouseEvent<Element>) => {
@@ -181,7 +184,7 @@ const toNavItem = (
   return {
     key: item.key,
     label: item.label,
-    href: item.href,
+    href: item.href ? prefixNavigationPath(item.href, pathPrefix) : undefined,
     leftSection: item.icon,
     rightSection: item.rightSection,
     disabled: item.disabled,

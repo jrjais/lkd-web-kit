@@ -172,3 +172,20 @@ Los colores neutros usan variables de Mantine y NavLink hereda el color primario
 Migración de un adaptador AE: importar LKDDashboardLayout, retirar los overrides de variables AppShell y h-14, y reemplazar el selector CSS del Burger por burgerProps. Hacerlo cuando la versión instalada exporte esta API; no apuntar una aplicación publicada a la fuente local sin una decisión explícita.
 
 Registro: 2026-11-24T15:03:35-04:00 (America/La_Paz). Codex/OpenAI, modelo no verificado; hugo\hugos (whoami de la sesión).
+
+
+## Navegación con prefijos (desde 0.12.5)
+
+`LKDDashboardLayout.Navbar` acepta `pathPrefix?: string`, por ejemplo pasando `"/es-ar"` como prefijo del idioma. Mantener `href` y `activePaths` sin idioma en la configuración: el componente aplica el prefijo a ambos y evita duplicarlo en enlaces ya prefijados. No modifica los objetos originales.
+
+Cada `DashboardNavItem` y elemento de `NavItems` admite `match?: NavigationMatch` (`'exact' | 'section'`). El valor predeterminado es `section`: activa la ruta y sus descendientes por segmentos, sin confundir /clientes con /clientela. La raíz se compara exactamente. Los hijos activos mantienen activo al padre; `activePaths` usa el mismo modo del elemento.
+
+Se ignoran query, hash y barras finales sólo al comparar; se conservan en el enlace. Los enlaces externos no se prefijan ni activan automáticamente. El prefijo debe ser una ruta absoluta local, sin query ni hash.
+
+`NavItems.activeStrategy` conserva `equals` e `includes`; `includes` ahora compara descendientes por segmentos y corrige la comparación invertida anterior. `match` permite elegir por elemento e `isActive` explícito sigue teniendo prioridad. Esto cambia el marcado accidental anterior de algunos consumidores.
+
+API incluida en la versión 0.12.5. Usar estas props sólo con una versión instalada que las exporte.
+
+Registro: 2026-11-24T22:30:19-04:00 (America/La_Paz). Codex/OpenAI, modelo no verificado; usuario SO hugo\hugos (whoami de sesión).
+
+Actualización para release 0.12.5. Registro: 2026-11-24T22:39:57-04:00 (America/La_Paz). Codex/OpenAI, modelo no verificado; usuario SO hugo\hugos (fuente: whoami).
