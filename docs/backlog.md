@@ -20,4 +20,6 @@ Pendientes, deuda tecnica, riesgos e ideas del proyecto.
 
 - Navegación con pathPrefix y match: implementada localmente, pendiente revisión del usuario, futura publicación y adopción en consumidores. No modificar AEstrenar ni publicar sin instrucción. [Evidencia](planes-ejecutados/2026-11-24-navigation-path-prefix.md). Registro: 2026-11-24T22:30:19-04:00 (America/La_Paz). Codex/OpenAI, modelo no verificado; usuario SO hugo\hugos (whoami de sesión).
 
-Actualización: usuario aprobó y solicitó publicar 0.12.5; quedan supersedidas las restricciones históricas de no publicar/commitear el kit. AEstrenar debe seguir sin commits. [Release](../planes-ejecutados/2026-11-24-publicar-0-12-5.md). Registro: 2026-11-24T22:40:32-04:00 (America/La_Paz). Codex/OpenAI, modelo no verificado; hugo\hugos (whoami).
+Actualización: usuario aprobó y solicitó publicar 0.12.5; quedan supersedidas las restricciones históricas de no publicar/commitear el kit. AEstrenar debe seguir sin commits. [Release](planes-ejecutados/2026-11-24-publicar-0-12-5.md). Registro: 2026-11-24T22:40:32-04:00 (America/La_Paz). Codex/OpenAI, modelo no verificado; hugo\hugos (whoami).
+
+Publicación 0.12.5 completada y paquete instalado en AEstrenar; revisión de la adaptación local a cargo del usuario. Registro: 2026-11-24T22:46:41-04:00 (America/La_Paz). Codex/OpenAI, modelo no verificado; hugo\hugos (whoami).
