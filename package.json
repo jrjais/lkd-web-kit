@@ -19,14 +19,11 @@
       "import": "./dist/index.js"
     }
   },
-  "bin": {
-    "lkd-install-agent-skills": "./scripts/install-agent-skills.mjs"
-  },
   "sideEffects": false,
   "engines": {
     "node": ">=22.12.0"
   },
-  "files": ["dist", "src/distributed-skills", "scripts/install-agent-skills.mjs"],
+  "files": ["dist"],
   "scripts": {
     "test": "vitest run --passWithNoTests",
     "test:watch": "vitest",
